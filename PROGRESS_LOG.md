@@ -2,6 +2,80 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:00) — výpočetní jádro hotové, 20/20 testů
+
+**Napsáno:**
+```
+tenants/tutani/rules/barf-core.json           metodika jako DATA (R5)
+src/engine/feeding-calculator/resolveDoseRule.ts   řešení překryvů pásem
+src/engine/feeding-calculator/calculateDose.ts     výpočet + audit
+tests/unit/calculateDose.test.ts              20 testů
+```
+
+Ověřeno: dospělý pes 24 kg, střední aktivita → **540 g/den**
+(2,25 % z 24 kg), rozpad 405/54/27/27/27 g. Součet složek vždy
+přesně odpovídá celkové dávce (zaokrouhlení se dorovná na největší
+složce, jinak by drobné rozdíly ovlivnily nákup).
+
+### CHYBA, KTEROU NAŠLY TESTY: kondice vs. aktivita
+
+První verze řešení překryvů řadila podle `specificity` (počtu
+omezených dimenzí) a teprve pak podle priority dimenzí. Důsledek:
+
+- `adult-medium` omezuje 2 dimenze (lifeStage + activity)
+- `over-weight` omezovalo 1 (bodyCondition)
+
+→ pes s nadváhou dostal **2,25 % místo 1,25 %** a nikdy by nezhubl.
+
+**Oprava:** rozhoduje NEJSILNĚJŠÍ dimenze podle `dimensionPriority`,
+specificity až při rovnosti. Priorita dimenzí je zdravotní rozhodnutí,
+počet podmínek jen technický detail. Strategie přejmenována na
+`DIMENSION_THEN_SPECIFICITY`.
+
+### DRUHÝ NÁLEZ (matice 480 kombinací): štěně s nadváhou
+
+Po opravě začalo `over-weight` vyhrávat i u štěňat → rostoucí štěně
+by šlo na redukční dietu 1–1,5 %. To může poškodit vývoj kostí
+a kloubů.
+
+**Oprava:** `over-weight` rozděleno na `over-weight-adult`,
+`over-weight-senior` a nové `puppy-over-weight` (6–7 %, ze
+skutečné hmotnosti, s výslovným varováním „v růstu se nehladoví").
+Obojí je v datech, ne v kódu.
+
+### Pokrytí metodiky po opravách (480 kombinací)
+
+| případ | pásmo | % |
+|---|---|---|
+| nadváha, střední aktivita | `over-weight-adult` | 1–1,5 IDEAL |
+| nadváha + laktace | `lactating` | 4–6 ACTUAL |
+| kastrovaný + vysoká aktivita | `adult-high` | 2,5–3,5 |
+| podváha + vysoká aktivita | `under-weight` | 3–4 |
+| **štěně + nadváha** | `puppy-over-weight` | **6–7 ACTUAL** |
+| březí + nadváha | `pregnant` | 3–4 |
+
+**Bez pásma zůstává 6 kombinací z 480 (1 %)** — senior se střední,
+vysokou nebo pracovní aktivitou. V dodané tabulce má senior jen
+„nízká aktivita". Systém vrátí `INCOMPLETE` s odkazem na veterináře,
+NEDOPOČÍTÁVÁ (R7). **Otázka na klienta.**
+
+### Co jádro dělá a nedělá
+
+- ✅ audit každého kroku → vysvětlení „proč 540 g" bez LLM (R1)
+- ✅ `Decimal`, ne float
+- ✅ renormalizace po zdravotním limitu (sníží-li CKD kosti z 10 na
+  8 %, ta 2 % se přerozdělí mezi složky, které mají v metodice
+  prostor — a nikdy nad jejich `pctMax`)
+- ✅ `BLOCKED` u závažné diagnózy — dávka se nevydá
+- ✅ `INCOMPLETE` při chybějící ideální hmotnosti u nadváhy
+- ❌ nezná ani jeden produktový kód (R6)
+
+### Další krok
+
+Product matching (`engine/product-matching/`) — z gramů na balení
+z katalogu Tutani, s filtrem alergií a vyřazením 26 produktů
+s rozpornou gramáží.
+
 ## 2026-09-08 (23:40) — scraper hotový, dry-run na celém katalogu
 
 **Napsáno:** `src/adapters/tutani-catalog/parseProductPage.ts`,

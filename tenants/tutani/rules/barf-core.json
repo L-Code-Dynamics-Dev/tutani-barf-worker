@@ -1,0 +1,219 @@
+{
+  "ruleSetId": "barf-core@1",
+  "displayName": "Metodika BARF — základ",
+  "source": "Ladislav Švihel, tutani.cz, e-mail 2026-09-08",
+  "sourceVersion": "1.0",
+  "updatedAt": "2026-09-08",
+  "note": "Metodika je DATA, ne kód (R5). Engine ji jen interpretuje. Změna procenta nebo poměru = úprava tohoto souboru, žádný deploy logiky.",
+
+  "doseMatrix": [
+    {
+      "id": "puppy-0-6",
+      "lifeStage": "PUPPY_0_6",
+      "pctMin": 8.0,
+      "pctMax": 10.0,
+      "baseWeight": "ACTUAL",
+      "portions": 4,
+      "labelCs": "štěně do 6 měsíců"
+    },
+    {
+      "id": "puppy-6-12",
+      "lifeStage": "PUPPY_6_12",
+      "pctMin": 6.0,
+      "pctMax": 8.0,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "štěně 6–12 měsíců"
+    },
+    {
+      "id": "junior",
+      "lifeStage": "JUNIOR",
+      "pctMin": 4.0,
+      "pctMax": 6.0,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "junior 1–2 roky"
+    },
+
+    {
+      "id": "adult-low",
+      "lifeStage": "ADULT",
+      "activity": "LOW",
+      "pctMin": 1.5,
+      "pctMax": 2.0,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "dospělý pes, nízká aktivita"
+    },
+    {
+      "id": "adult-neutered",
+      "lifeStage": "ADULT",
+      "neutered": true,
+      "pctMin": 1.5,
+      "pctMax": 2.0,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "dospělý kastrovaný pes"
+    },
+    {
+      "id": "adult-medium",
+      "lifeStage": "ADULT",
+      "activity": "MEDIUM",
+      "pctMin": 2.0,
+      "pctMax": 2.5,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "dospělý pes, střední aktivita"
+    },
+    {
+      "id": "adult-high",
+      "lifeStage": "ADULT",
+      "activity": "HIGH",
+      "pctMin": 2.5,
+      "pctMax": 3.5,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "dospělý pes, vysoká aktivita"
+    },
+    {
+      "id": "adult-working",
+      "lifeStage": "ADULT",
+      "activity": "WORKING",
+      "pctMin": 2.5,
+      "pctMax": 3.5,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "pracovní pes"
+    },
+
+    {
+      "id": "senior-low",
+      "lifeStage": "SENIOR",
+      "activity": "LOW",
+      "pctMin": 1.5,
+      "pctMax": 2.0,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "senior, nízká aktivita"
+    },
+
+    {
+      "id": "over-weight-adult",
+      "lifeStage": "ADULT",
+      "bodyCondition": "OVER",
+      "pctMin": 1.0,
+      "pctMax": 1.5,
+      "baseWeight": "IDEAL",
+      "portions": 2,
+      "labelCs": "dospělý pes, redukční dieta (z ideální hmotnosti)",
+      "warningCs": "Dávka se počítá z ideální hmotnosti, ne z aktuální. Hubnutí musí být pozvolné — kontrolujte hmotnost a poraďte se s veterinářem."
+    },
+    {
+      "id": "over-weight-senior",
+      "lifeStage": "SENIOR",
+      "bodyCondition": "OVER",
+      "pctMin": 1.0,
+      "pctMax": 1.5,
+      "baseWeight": "IDEAL",
+      "portions": 2,
+      "labelCs": "senior, redukční dieta (z ideální hmotnosti)",
+      "warningCs": "Dávka se počítá z ideální hmotnosti. U seniora hubnutí konzultujte s veterinářem — může jít o příznak jiného onemocnění."
+    },
+    {
+      "id": "puppy-over-weight",
+      "lifeStage": "PUPPY_6_12",
+      "bodyCondition": "OVER",
+      "pctMin": 6.0,
+      "pctMax": 7.0,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "štěně 6–12 měsíců s nadváhou",
+      "warningCs": "ROSTOUCÍ ŠTĚNĚ SE NEHLADOVÍ. Dávka je na spodní hranici pásma pro štěně, ne redukční — omezení energie v růstu může poškodit vývoj kostí a kloubů. Řešte s veterinářem."
+    },
+    {
+      "id": "under-weight",
+      "bodyCondition": "UNDER",
+      "pctMin": 3.0,
+      "pctMax": 4.0,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "podváha, rekonvalescence"
+    },
+
+    {
+      "id": "pregnant",
+      "physiologicalState": "PREGNANT",
+      "pctMin": 3.0,
+      "pctMax": 4.0,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "březí fena"
+    },
+    {
+      "id": "lactating",
+      "physiologicalState": "LACTATING",
+      "pctMin": 4.0,
+      "pctMax": 6.0,
+      "baseWeight": "ACTUAL",
+      "portions": 4,
+      "labelCs": "laktující fena",
+      "warningCs": "U laktující feny se potřeba mění podle počtu štěňat a fáze laktace. Dávku upravujte podle kondice feny."
+    },
+    {
+      "id": "recovery",
+      "physiologicalState": "RECOVERY",
+      "pctMin": 3.0,
+      "pctMax": 4.0,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "rekonvalescence"
+    }
+  ],
+
+  "conflictResolution": {
+    "note": "ŘEŠENÍ PŘEKRYVŮ v dodané tabulce (návrh L-Code, ČEKÁ NA POTVRZENÍ KLIENTA). Bez tohoto pravidla by systém u části psů hádal.",
+    "openCases": [
+      "kastrovaný dospělý s vysokou aktivitou → adult-neutered (1,5–2 %) vs. adult-high (2,5–3,5 %)",
+      "senior s vysokou aktivitou → senior-low neplatí, ADULT pásma na SENIOR nesedí",
+      "laktující fena s nadváhou → over-weight (1–1,5 %) vs. lactating (4–6 %)",
+      "štěně s nadváhou → doplněno puppy-over-weight (6–7 %), redukce v růstu je riziková; potvrdit s klientem/veterinářem"
+    ],
+    "strategy": "DIMENSION_THEN_SPECIFICITY",
+    "dimensionPriority": [
+      "physiologicalState",
+      "bodyCondition",
+      "activity",
+      "neutered",
+      "lifeStage"
+    ],
+    "rationale": "Rozhoduje NEJSILNĚJŠÍ dimenze, kterou pravidlo omezuje (podle dimensionPriority); teprve při rovnosti vyhrává konkrétnější pravidlo. Pořadí je zdravotní rozhodnutí: fyziologický stav nad kondicí (laktující fena s nadváhou se nesmí hladovět) a kondice nad aktivitou (jinak by obecné pásmo pro aktivitu přebilo redukční dietu a pes by nezhubl). Rostoucí štěňata mají vlastní pásmo i při nadváze — v růstu se nehladoví."
+  },
+
+  "compositionProfile": {
+    "note": "Poměry z celkové denní dávky. Součet výchozích hodnot musí dát 100 % — kontroluje validace při načtení.",
+    "groups": [
+      { "group": "MUSCLE", "pctMin": 70, "pctMax": 80, "pctDefault": 75, "labelCs": "svalové maso" },
+      { "group": "BONE",   "pctMin": 10, "pctMax": 10, "pctDefault": 10, "labelCs": "mleté kosti" },
+      { "group": "LIVER",  "pctMin": 5,  "pctMax": 5,  "pctDefault": 5,  "labelCs": "játra" },
+      { "group": "ORGAN",  "pctMin": 5,  "pctMax": 5,  "pctDefault": 5,  "labelCs": "ostatní orgány" },
+      { "group": "PLANT",  "pctMin": 5,  "pctMax": 10, "pctDefault": 5,  "labelCs": "zelenina a ovoce" }
+    ]
+  },
+
+  "safety": {
+    "note": "Bezpečnostní pravidla vynucená v enginu, ne v UI (§9 zadání).",
+    "neverCookedBones": true,
+    "cookedBonesReasonCs": "Vařené kosti se lámou na střepy a mohou psovi propíchnout zažívací trakt. Do dávky se nikdy nezařazují.",
+    "disclaimerCs": "Výsledek je orientační doporučení. Doporučujeme konzultaci s veterinářem, který zná zdravotní stav vašeho psa.",
+    "toxicIngredientIds": [
+      "hrozny",
+      "rozinky",
+      "cibule",
+      "cesnek",
+      "cokolada",
+      "xylitol",
+      "avokado",
+      "makadamove-orechy"
+    ]
+  }
+}
