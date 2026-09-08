@@ -1,0 +1,29 @@
+{
+    // Worker běží na V8 bez Node API — types jsou VÝHRADNĚ workers-types,
+    // aby se do Workeru nedostal omylem `fs` nebo `process`. Skripty
+    // v `scripts/` běží pod tsx (Node) a jsou proto z kontroly vyjmuté
+    // přes samostatný tsconfig.scripts.json.
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022"],
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "types": ["@cloudflare/workers-types"],
+
+        // Zero Error Tolerance: nejtvrdší nastavení, jaké TS má.
+        "strict": true,
+        "noUncheckedIndexedAccess": false,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "exactOptionalPropertyTypes": false,
+        "verbatimModuleSyntax": true,
+
+        "resolveJsonModule": true,
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src/**/*.ts", "tenants/**/*.ts"]
+}

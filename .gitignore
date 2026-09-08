@@ -1,0 +1,9 @@
+node_modules/
+.wrangler/
+dist/
+*.log
+.DS_Store
+# vygenerované snímky katalogu (fixture v tests/fixtures/ se verzuje)
+/tmp/
+katalog*.json
+!tests/fixtures/katalog-*.json

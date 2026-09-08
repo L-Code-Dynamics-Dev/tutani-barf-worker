@@ -1,0 +1,54 @@
+{
+  "ruleSetId": "tutani-ingredients@1",
+  "displayName": "Surovinový slovník — Tutani",
+  "source": "Katalog obchod.tutani.cz (scrape 2026-09-08, 264 produktů) + ASPCA Animal Poison Control (toxické)",
+  "sourceVersion": "1.0",
+  "updatedAt": "2026-09-09",
+  "note": "Mezivrstva mezi pravidly a produkty (ARCHITEKTURA §2.3). Bez ní by alergie musela znát produktové kódy a rozbila by R4. `fatLevel` je zařazení SUROVINY, ne měřený obsah tuku produktu — ten katalog Tutani nenese (dry-run 2026-09-08), takže se nehádá (R7): pravidla na tuk pracují se surovinou, ne s procentem.",
+
+  "fatLevelNote": "LOW / MEDIUM / HIGH podle běžného zařazení suroviny v BARF praxi. Není to nutriční analýza — u sporných surovin je hodnota označená v `confidence`.",
+
+  "ingredients": [
+    { "id": "hovezi",  "nameCs": "hovězí",          "species": "BEEF",    "barfGroup": "MUSCLE", "fatLevel": "MEDIUM", "isToxic": false, "commonAllergen": true,  "confidence": "HIGH" },
+    { "id": "kure",    "nameCs": "kuřecí",          "species": "POULTRY", "barfGroup": "MUSCLE", "fatLevel": "LOW",    "isToxic": false, "commonAllergen": true,  "confidence": "HIGH" },
+    { "id": "kruti",   "nameCs": "krůtí",           "species": "POULTRY", "barfGroup": "MUSCLE", "fatLevel": "LOW",    "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "kachna",  "nameCs": "kachní",          "species": "POULTRY", "barfGroup": "MUSCLE", "fatLevel": "HIGH",   "isToxic": false, "commonAllergen": false, "confidence": "MEDIUM" },
+    { "id": "vepr",    "nameCs": "vepřové",         "species": "PORK",    "barfGroup": "MUSCLE", "fatLevel": "HIGH",   "isToxic": false, "commonAllergen": false, "confidence": "MEDIUM" },
+    { "id": "kralik",  "nameCs": "králičí",         "species": "GAME",    "barfGroup": "MUSCLE", "fatLevel": "LOW",    "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "kun",     "nameCs": "koňské",          "species": "HORSE",   "barfGroup": "MUSCLE", "fatLevel": "LOW",    "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "jehneci", "nameCs": "jehněčí",         "species": "LAMB",    "barfGroup": "MUSCLE", "fatLevel": "HIGH",   "isToxic": false, "commonAllergen": true,  "confidence": "MEDIUM" },
+    { "id": "zverina", "nameCs": "zvěřina",         "species": "GAME",    "barfGroup": "MUSCLE", "fatLevel": "LOW",    "isToxic": false, "commonAllergen": false, "confidence": "MEDIUM" },
+    { "id": "ryba",    "nameCs": "ryba (obecně)",   "species": "FISH",    "barfGroup": "MUSCLE", "fatLevel": "MEDIUM", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "losos",   "nameCs": "losos",           "species": "FISH",    "barfGroup": "MUSCLE", "fatLevel": "HIGH",   "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+
+    { "id": "mrkev",   "nameCs": "mrkev",           "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "repa",    "nameCs": "červená řepa",    "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "dyne",    "nameCs": "dýně",            "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "spenat",  "nameCs": "špenát",          "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "jablko",  "nameCs": "jablko",          "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "pohanka", "nameCs": "pohanka",         "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "jahly",   "nameCs": "jáhly",           "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+    { "id": "kuskus",  "nameCs": "kuskus",          "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": true,  "confidence": "MEDIUM", "noteCs": "Kuskus je z pšeničné semoliny — pro psa s alergií na pšenici nevhodný." },
+    { "id": "ryze",    "nameCs": "rýže",            "species": "PLANT", "barfGroup": "PLANT", "fatLevel": "LOW", "isToxic": false, "commonAllergen": false, "confidence": "HIGH" },
+
+    { "id": "hrozny",            "nameCs": "hrozny",            "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "LOW",  "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Kyselina vinná — pes ji neumí odbourat, hrozí akutní poškození ledvin." },
+    { "id": "rozinky",           "nameCs": "rozinky",           "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "LOW",  "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Sušené hrozny — stejný mechanismus, v menším objemu vyšší dávka." },
+    { "id": "cibule",            "nameCs": "cibule",            "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "LOW",  "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Poškozuje červené krvinky, dráždí zažívací trakt." },
+    { "id": "cesnek",            "nameCs": "česnek",            "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "LOW",  "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Stejná skupina jako cibule — riziko poškození červených krvinek." },
+    { "id": "cokolada",          "nameCs": "čokoláda",          "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "HIGH", "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Theobromin a kofein — zrychlený tep, vysoký tlak, křeče. Čím tmavší, tím nebezpečnější." },
+    { "id": "xylitol",           "nameCs": "xylitol",           "species": "OTHER", "barfGroup": "OTHER", "fatLevel": "LOW",  "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Prudký pokles cukru v krvi a poškození jater do 12–24 hodin." },
+    { "id": "avokado",           "nameCs": "avokádo",           "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "HIGH", "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Persin ve dužině, listech i jádru — zvracení a průjem." },
+    { "id": "makadamove-orechy", "nameCs": "makadamové ořechy", "species": "PLANT", "barfGroup": "OTHER", "fatLevel": "HIGH", "isToxic": true, "commonAllergen": false, "confidence": "HIGH", "toxicReasonCs": "Slabost, třes, zvracení a horečka do 12 hodin po požití." }
+  ],
+
+  "speciesGroups": {
+    "note": "Skupinové alergie: majitel často neví, na které konkrétní ptačí maso pes reaguje. `INGREDIENT_EXCLUDE` s targetem `species:POULTRY` vyloučí celou skupinu.",
+    "POULTRY": ["kure", "kruti", "kachna"],
+    "FISH": ["ryba", "losos"],
+    "BEEF": ["hovezi"],
+    "PORK": ["vepr"],
+    "LAMB": ["jehneci"],
+    "GAME": ["kralik", "zverina"],
+    "HORSE": ["kun"]
+  }
+}

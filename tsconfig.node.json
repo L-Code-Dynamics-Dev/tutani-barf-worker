@@ -1,0 +1,13 @@
+{
+    // Node-side kód: dry-run skripty a testy. Čtou rulesety z disku
+    // (`node:fs`), takže potřebují Node typy — do Workeru se ale
+    // nikdy nebalí. Oddělené od `tsconfig.json`, aby se do Workeru
+    // nemohl vloudit import Node API.
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "types": ["node", "@cloudflare/workers-types"],
+        "module": "ESNext",
+        "moduleResolution": "bundler"
+    },
+    "include": ["scripts/**/*.ts", "tests/**/*.ts", "src/**/*.ts", "tenants/**/*.ts"]
+}

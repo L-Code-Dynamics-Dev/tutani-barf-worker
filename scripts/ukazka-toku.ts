@@ -17,6 +17,7 @@ import { matchProducts } from '../src/engine/product-matching/matchProducts.js';
 import { resolveBarfGroup } from '../src/adapters/tutani-catalog/parseProductPage.js';
 import { resolveWeightConflict, medianPricePerKg } from '../src/adapters/tutani-catalog/resolveWeightConflict.js';
 import { TUTANI_TENANT } from '../tenants/tutani/config/tenant.js';
+import type { CompositionLimit, ResolvedConstraints } from '../src/domain/health/Condition.js';
 
 const raw=JSON.parse(readFileSync(new URL('../tenants/tutani/rules/barf-core.json', import.meta.url),'utf-8'));
 const M={doseMatrix:raw.doseMatrix,conflictResolution:raw.conflictResolution,compositionProfile:raw.compositionProfile,sourceVersion:raw.sourceVersion};
@@ -44,7 +45,7 @@ for(const p of scraped){
 }
 console.log(`katalog: ${catalog.length} pouzitelnych, ${skip} bez gramaze/ceny\n`);
 
-const C=()=>({useIdealWeight:false,compositionLimits:[],excludedIngredientIds:new Set<string>(),preferredIngredientIds:new Set<string>(),productAttrFilters:[],warnings:[],blocked:false,blockedBy:[],requiresVet:false});
+const C=():ResolvedConstraints=>({useIdealWeight:false,compositionLimits:[] as CompositionLimit[],excludedIngredientIds:new Set<string>(),preferredIngredientIds:new Set<string>(),productAttrFilters:[],warnings:[],blocked:false,blockedBy:[],requiresVet:false});
 
 function run(label:string,dog:any,c=C(),days=30){
   const d=calculateDose(dog,M,c);
