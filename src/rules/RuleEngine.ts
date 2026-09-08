@@ -170,6 +170,11 @@ export function resolveConstraints(
 
     const unappliedRules: UnappliedRule[] = [];
     const excluded = new Set<string>(kb.alwaysExcludedIngredientIds ?? []);
+    /**
+     * Zákazy ze ZADANÝCH alergií a diagnóz, bez toxických surovin.
+     * Řídí fail-closed v matchingu — viz `ownerExcludedIngredientIds`.
+     */
+    const ownerExcluded = new Set<string>();
     const preferred = new Set<string>();
     const attrFilters: ProductAttrFilter[] = [];
     /** Limity po skupinách, průběžně zpřísňované. */
@@ -191,6 +196,16 @@ export function resolveConstraints(
                     break;
                 }
                 excluded.add(rule.target);
+                /**
+                 * Do `ownerExcluded` jen zákazy ze SKUTEČNĚ ZADANÝCH
+                 * podmínek. `alwaysActive` (toxické potraviny) platí
+                 * vždy, takže by tuhle množinu naplnila i u zdravého
+                 * psa a fail-closed by vyřadil celý katalog bez
+                 * složení (odchyceno testem 2026-09-09).
+                 */
+                if (!(cond as { alwaysActive?: boolean }).alwaysActive) {
+                    ownerExcluded.add(rule.target);
+                }
                 break;
             }
 
@@ -360,10 +375,54 @@ export function resolveConstraints(
     // nemá papír od veterináře.
     const unknownAllergyIngredientIds: string[] = [];
     const hasDictionary = (kb.alwaysExcludedIngredientIds ?? []).length > 0;
+
     for (const ing of dedupeSorted(allergyIngredientIds)) {
+        /**
+         * PŘIJÍMÁ SE OBOJÍ: id suroviny (`kure`) i id ALERGICKÉ
+         * PODMÍNKY (`alergie-kure`).
+         *
+         * NÁLEZ 2026-09-09: `/v1/knowledge` posílá do UI id podmínek
+         * (`alergie-kure`, `alergie-drubez`), protože ta nesou
+         * srozumitelný název pro majitele. Zákazník je zaškrtl, backend
+         * je dostal v `alergie[]` a zacházel s nimi jako s NÁZVEM
+         * SUROVINY — vyloučila se neexistující surovina `alergie-kure`,
+         * zatímco produkty mají `kure`. **Filtr nevyřadil nic.**
+         *
+         * Kontrakt se proto nesjednocuje jen v UI (kde by to spravila
+         * jedna změna a rozbila druhá), ale TADY: přijde-li id
+         * podmínky, rozloží se na suroviny, které její pravidla
+         * `INGREDIENT_EXCLUDE` vylučují. `alergie-drubez` tak správně
+         * vyřadí kuře, krůtu i kachnu naráz.
+         */
+        const jakoPodminka = conditionById.get(ing);
+        if (
+            jakoPodminka &&
+            (jakoPodminka.kind === 'ALLERGY' || jakoPodminka.kind === 'INTOLERANCE')
+        ) {
+            const suroviny = (kb.conditionRules ?? [])
+                .filter(
+                    (r) =>
+                        r.conditionId === jakoPodminka.id &&
+                        r.ruleType === 'INGREDIENT_EXCLUDE' &&
+                        typeof r.target === 'string'
+                )
+                .map((r) => r.target as string);
+
+            if (suroviny.length > 0) {
+                for (const s of suroviny) {
+                    excluded.add(s);
+                    ownerExcluded.add(s);
+                }
+                continue;
+            }
+            // Podmínka bez pravidel je chyba v datech — vyloučí se
+            // aspoň sama a přizná se to.
+        }
+
         // Vyloučí se VŽDY — neznámou surovinu je bezpečnější vyloučit
         // než ignorovat. Zároveň se přizná, že ji slovník nezná.
         excluded.add(ing);
+        ownerExcluded.add(ing);
         if (hasDictionary && !knownIngredientIds.has(ing) && !isKnownIngredient(ing, kb)) {
             unknownAllergyIngredientIds.push(ing);
         }
@@ -441,6 +500,7 @@ export function resolveConstraints(
         useIdealWeight,
         compositionLimits,
         excludedIngredientIds: excluded,
+        ownerExcludedIngredientIds: ownerExcluded,
         preferredIngredientIds: preferred,
         productAttrFilters: attrFilters.sort(
             (a, b) => a.attr.localeCompare(b.attr) || a.ruleId.localeCompare(b.ruleId)

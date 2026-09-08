@@ -2,6 +2,124 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (01:30) — OPRAVY PO 5STUPŇOVÉM AUDITU (187/187)
+
+Audit odhalil, že **zdravotní vrstva v produkci vůbec neběžela**.
+Opraveno včetně tří chyb, které audit nenašel a vylezly až při
+opravování.
+
+### Audit — co proběhlo
+
+| stupeň | výsledek |
+|---|---|
+| 1 validace vstupu | ✅ 3 kritické |
+| 2 výpočet | ✅ 5 kritických |
+| 3 bezpečnost a zdraví | ✅ 6 kritických |
+| 4 integrace | ❌ spadl (auth) |
+| 5 adversariální | ❌ spadl (session limit), ale předtím našel 2 nálezy |
+
+### KRITICKÉ — opraveno
+
+**1. Rule engine nebyl zapojený.** `buildDeps` měl výchozí
+`NOOP_RULE_ENGINE`, který vracel prázdná omezení. Nasazený Worker
+tedy pro KAŽDÉHO psa ignoroval diagnózy i alergie — pes v pokročilém
+renálním selhání by dostal plnou dávku. Znalostní vrstva byla hotová,
+jen nikdo nespojil oba konce. Napsán `src/rules/KnowledgeRuleEngine.ts`
+a zapojen v `index.ts`.
+
+**2. Nesplnitelné limity → vymyšlená čísla.** Čtyři způsoby:
+`MUSCLE maxPct 0` vyhnalo zeleninu na 80 % (metodika 10 %);
+`PLANT minPct 30` dalo 9,2 %, ale audit hlásil „→ 30 %";
+`max 5 + min 90` oba limity tiše zahodilo; limity na všech složkách
+vrátily `grams: 450` s `pct: 0`. `splitComposition` přepsán —
+nesplnitelný stav vrací `UNSATISFIABLE_LIMITS`, dávka se nevydá.
+
+**3. Negativní dávka.** `dosePctOverride: {min:-10,max:-10}` vydalo
+**-2000 g** se statusem OK. Doplněna sanity kontrola.
+
+**4. `ingredientIds: []` natvrdo v syncu.** Filtr alergií neměl na
+čem pracovat — psovi s alergií na kuře se doporučilo kuřecí, cibule
+se nabízela každému, a API hlásilo `knowledgeEngineReady: true`.
+Napsán `detectIngredients.ts` (surovina z názvu i složení)
++ **fail-closed**: neznámou surovinu nelze prohlásit za bezpečnou.
+
+**5. Vařené produkty jen u BONE.** Vařené kuře zařazené jako MUSCLE
+prošlo. Filtr teď platí ve všech skupinách.
+
+**6. `priceId: null` v syncu.** Ukládá se z hidden inputu, párováno
+na `productId` hlavního produktu (na homepage je 36 párů, na detailu
+1 — ověřeno).
+
+**7. 108 bound params při limitu D1 = 100.** Konstanta říkala 16
+sloupců, SQL i `bind` posílaly 18. Počet se teď DERIVUJE ze seznamu
+`UPSERT_COLUMNS` a nemůže se rozejít. Nyní 20 sloupců × 4 = 80.
+
+### TŘI CHYBY, které audit nenašel
+
+**A. Rozpojený kontrakt alergií.** `/v1/knowledge` posílá do UI id
+podmínek (`alergie-kure`), backend je dostával jako id SUROVIN —
+vyloučila se neexistující surovina `alergie-kure`, zatímco produkty
+mají `kure`. **Filtr by nevyřadil nic.** Engine teď přijímá obojí
+a `alergie-drubez` správně vyřadí kuře, krůtu i kachnu naráz.
+
+**B. Vlastní regrese: CKD přestalo fungovat.** Moje kontrola
+splnitelnosti označila `BONE ≤ 8 %` za nesplnitelné, protože metodika
+má kosti pevně `10–10`. Opraveno: **zdravotní limit metodiku PŘEBÍJÍ**,
+nekoliduje s ní.
+
+**C. Fail-closed vyřadil celý katalog.** `excludedIngredientIds`
+obsahuje 8 toxických surovin VŽDY, takže podmínka `size > 0` platila
+i u zdravého psa a vypadlo by všech 219 produktů bez složení.
+Doplněna `ownerExcludedIngredientIds` (jen zadané alergie), `alwaysActive`
+se do ní nepočítá.
+
+### FEEDY SHOPTETU — podnět Lucky, změřeno
+
+`obchod.tutani.cz` má **6 feedů bez hashe**: `universal.xml`,
+`heureka`, `seznam`, `google`, `facebook`, `glami`, `arukereso`.
+
+| přínos | dopad |
+|---|---|
+| popis z `universal.xml` | **+25 produktů** pro filtr alergií (61 % → 70 %) |
+| dostupnost z Google feedu | +31 produktů, kde scraper sklad nepřečetl |
+| `priceId` | ❌ v žádném feedu není → scraper zůstává |
+
+**DŮLEŽITÉ ZJIŠTĚNÍ:** Google feed u všech 26 konfliktů v gramáži
+„potvrzoval admin" — tedy opak toho, co vybírá `resolveWeightConflict`.
+Chvíli to vypadalo na 26 chyb. Prověření cenou ale ukázalo, že **feed
+pravdu nemá**: mrkev by měla 390 Kč/kg, zeleninová směs 1 440 Kč/kg,
+vemínko 10 Kč/kg. Důvod: `g:shipping_weight` se plní z TÉHOŽ pole
+v adminu jako `dataLayer.weight` — není to nezávislý zdroj, jen druhý
+výstup stejného nevyplněného údaje. **Cena zůstává jediným nezávislým
+zdrojem.** Zapsáno do kódu, aby to nikdo „neopravil" podle feedu.
+
+### Stav
+
+**187/187 testů** (9 souborů), `tsc --noEmit` čistý. Nový test
+`alergieKontrakt.test.ts` hlídá, aby se kontrakt UI↔filtr znovu
+nerozešel.
+
+Ověřeno naostro: zdravý pes 856 Kč/30 dní, CKD 839 Kč + 2 varování,
+pokročilé CKD BLOCKED, alergie na drůbež přehodí produkty.
+
+### ZBÝVÁ z auditu (neblokuje, ale řešit)
+
+1. **Limity nejsou citace** — `BONE ≤ 8 %` u CKD je `L-CODE-INFERENCE`,
+   převod z g/1000 kcal. **Musí potvrdit veterinář.**
+2. **Disclaimer se u BLOCKED a INCOMPLETE nevykreslí** — frontend má
+   `return` před tím řádkem.
+3. **Štěně do 6 měsíců s nadváhou → 2700 g/den** z nadvážné hmotnosti
+   (`puppy-over-weight` je jen pro PUPPY_6_12).
+4. **`warningCs` z metodiky se nikde nepropisuje** do odpovědi —
+   text „ROSTOUCÍ ŠTĚNĚ SE NEHLADOVÍ" zákazník neuvidí.
+5. **Samec může být březí/laktující** — chybí křížová validace
+   (1200 g místo 540 g).
+6. **Frontend hádá ideální hmotnost** 0,85× — porušuje R7.
+7. **Frontend neumí zobrazit chybové kódy** — čte `data.error`,
+   backend posílá `data.code` + `issues[]`.
+8. Sync může smazat katalog, když parser vrátí málo produktů
+   (chybí procentní pojistka).
+
 ## 2026-09-09 (00:40) — BLOKÁTOR KOŠÍKU VYŘEŠEN (178/178)
 
 Agent hlásil, že `priceId` je vždy NULL a blokuje tlačítko „Vložit

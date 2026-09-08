@@ -23,6 +23,8 @@ import type { BarfGroup, TenantConfiguration } from '../../domain/tenant.js';
 import type { ProductStore, StoredProduct, SyncRunRecord } from '../../infrastructure/D1ProductStore.js';
 import { parseProductPage, resolveBarfGroup, type ScrapedProduct } from './parseProductPage.js';
 import { medianPricePerKg, resolveWeightConflict } from './resolveWeightConflict.js';
+import { detectIngredients } from './detectIngredients.js';
+import { parseUniversalFeed, universalFeedUrl, type FeedDescriptions } from './universalFeed.js';
 
 export interface SyncOptions {
     /** `true` = nic se nezapíše, vrátí se jen diff. */
@@ -171,6 +173,32 @@ export async function syncCatalog(
     if (options.limitUrls !== undefined) urls = urls.slice(0, options.limitUrls);
     log('sync.started', { urlsTotal: urls.length });
 
+    /**
+     * ---- 1b. POPISY Z `universal.xml` ----
+     *
+     * Veřejný feed Shoptetu (bez hashe) nese popis u 100 % produktů,
+     * zatímco detail jen u 17 %. Používá se VÝHRADNĚ k určení surovin
+     * pro filtr alergií — SKU, `priceId` ani sklad ve feedu nejsou,
+     * takže scraper nenahrazuje.
+     *
+     * Selhání feedu sync NESMÍ zastavit: je to obohacení, ne zdroj
+     * pravdy. Bez něj se suroviny určí jen z názvu a detailu, což je
+     * horší, ale funkční — a `ingredientsUnknown` to přizná.
+     */
+    let feedPopisy: FeedDescriptions = new Map();
+    try {
+        const feedUrl = universalFeedUrl(tenant.catalog.baseUrl);
+        const xml = await fetchWithRetry(feedUrl, doFetch, retries);
+        if (xml) {
+            feedPopisy = parseUniversalFeed(xml);
+            log('sync.feed_loaded', { url: feedUrl, descriptions: feedPopisy.size });
+        } else {
+            log('sync.feed_unavailable', { url: feedUrl });
+        }
+    } catch (e) {
+        log('sync.feed_failed', { error: errMsg(e) });
+    }
+
     // ---- 2. STAŽENÍ A PARSOVÁNÍ ----
     const scraped: ScrapedProduct[] = [];
     const failedUrls: string[] = [];
@@ -277,6 +305,20 @@ export async function syncCatalog(
             unusable.push({ sku: p.sku, name: p.name, reasonCs: 'produkt nemá cenu' });
         }
 
+        /**
+         * Suroviny se odvodí JEDNOU — `detectIngredients` prochází
+         * ~30 vzorů a volat ho dvakrát na 264 produktů je zbytečné.
+         *
+         * Popis z `universal.xml` se přidává ke složení z detailu:
+         * detail ho má jen u 17 % produktů, feed u 100 %, takže
+         * určení surovin stoupne ze 61 % na 70 % (změřeno 2026-09-09).
+         */
+        const popisFeed = feedPopisy.get(p.url);
+        const suroviny = detectIngredients(
+            p.name,
+            [p.compositionText, popisFeed].filter(Boolean).join(' ')
+        );
+
         products.push({
             sku: p.sku,
             name: p.name,
@@ -286,17 +328,45 @@ export async function syncCatalog(
             packGrams,
             packGramsSource,
             priceCzk: p.priceWithVat ?? 0,
-            // Shoptet `priceId` není v `dataLayer` na detailu produktu
-            // (ověřeno 2026-09-08) — NEHÁDÁ se, zůstává NULL a řeší se
-            // ve frontendu přes formulář košíku. Viz hlášení.
-            priceId: null,
+            /**
+             * `priceId` z hidden inputu formuláře na detailu produktu
+             * (doplněno 2026-09-09). V `dataLayer` není, ale v HTML ano:
+             * `<input type="hidden" name="priceId" value="973">`.
+             * Bez něj nejde produkt vložit do košíku.
+             *
+             * POZOR u variantních produktů: hodnotu tam přepisuje JS
+             * podle vybrané varianty, takže platí jen pro výchozí.
+             * Dnes to nevadí — žádný produkt tutani varianty nemá — ale
+             * `hasVariants` se ukládá a sync na výskyt upozorní.
+             */
+            priceId: p.priceId,
+            hasVariants: p.hasVariants,
             productId: p.productId,
             inStock: (p.stockQuantity ?? 0) > 0,
             stockQuantity: p.stockQuantity,
-            // Suroviny vyplní znalostní vrstva (druhý agent) z
-            // `compositionText`. Zatím prázdné — filtr alergií tedy
-            // nemá na čem pracovat a je to vidět, ne skryté.
-            ingredientIds: [],
+            /**
+             * Suroviny pro filtr alergií a toxických potravin.
+             *
+             * KRITICKÝ NÁLEZ AUDITU 2026-09-09: dřív tu bylo natvrdo
+             * `[]`, takže filtr v `matchProducts` neměl na čem pracovat
+             * — psovi s alergií na kuře se doporučilo kuřecí maso
+             * a cibule se nabízela každému, přičemž API hlásilo
+             * `knowledgeEngineReady: true`. Systém tvrdil, že alergii
+             * vyhodnotil, a nevyhodnotil ji.
+             *
+             * Suroviny se teď odvozují z názvu a složení produktu
+             * (`detectIngredients`). Je to heuristika nad reálnými
+             * daty, ne odhad chybějících: co se nepozná, zůstane
+             * nezařazené a produkt se u zadané alergie NEDOPORUČÍ
+             * (fail-closed) — viz `ingredientsUnknown`.
+             */
+            ingredientIds: suroviny,
+            /**
+             * `true` = surovinu nelze z dat určit. `matchProducts` pak
+             * produkt u zadané alergie vyřadí, místo aby předstíral,
+             * že je bezpečný.
+             */
+            ingredientsUnknown: suroviny.length === 0,
             // Vařené produkty katalog neoznačuje; zůstává `false` a řeší
             // to znalostní vrstva podle složení.
             isCooked: false,

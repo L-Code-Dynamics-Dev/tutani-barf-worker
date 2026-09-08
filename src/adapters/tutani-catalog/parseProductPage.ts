@@ -182,9 +182,60 @@ export function parseGramsFromText(text: string): number | null {
  *
  * Bere se PRVNÍ výskyt: stránka může mít další formuláře (upsell,
  * „podobné produkty"), které nesou cizí `priceId`.
+ *
+ * ZNÁMÉ OMEZENÍ — AŽ KLIENT ZAVEDE VARIANTY (Lucky 2026-09-09:
+ * „priceId je vlastně ve feedu variantid"):
+ *
+ * U variantních produktů Shoptet `priceId` v hidden inputu PŘEPISUJE
+ * JS podle vybrané varianty, takže hodnota v HTML patří jen výchozí
+ * variantě. Autoritativní zdroj je pak `VARIANT id` v
+ * `productsComplete.xml` — stejný vzor, jaký se řešil na hecmania.cz,
+ * kde se tím opravilo 15 špatných `priceId` a zákazník přestal
+ * dostávat jinou variantu, než si vybral.
+ *
+ * Dnes to tutani nepotřebuje: ověřeno na fixture 2026-09-09, že
+ * **0 z 264 produktů má varianty** (`hasVariants: false` u všech),
+ * takže hidden input je jednoznačný. Feed navíc má v URL hash a je
+ * dostupný jen z adminu (veřejné cesty vracejí 404).
+ *
+ * KDY TO ZMĚNIT: jakmile `hasVariants` bude u některého produktu
+ * `true`, hidden input přestane stačit a musí se vyžádat feed
+ * s hashem od klienta. Scraper na to upozorní — `hasVariants` se
+ * ukládá do D1.
  */
-export function parsePriceId(html: string): string | null {
-    // Atributy mohou být v libovolném pořadí, proto dvě varianty.
+export function parsePriceId(html: string, productId?: string | null): string | null {
+    /**
+     * Páruje se na `productId` hlavního produktu, když je k dispozici.
+     *
+     * PROČ (ověřeno 2026-09-09 na homepage tutani): výpis karet nese
+     * **36 párů** `priceId`/`productId` za sebou. Na detailu produktu
+     * je dnes právě jeden pár, takže „první výskyt" stačí — ale kdyby
+     * Shoptet na detail přidal upsell nebo „podobné produkty",
+     * vybral by parser cizí `priceId` a zákazník by si koupil jiný
+     * produkt, než mu konfigurátor ukázal.
+     *
+     * Proto se nejdřív hledá `priceId` ve stejném formuláři jako
+     * `productId` hlavního produktu; „první výskyt" je až záloha.
+     */
+    if (productId) {
+        // Blok mezi productId a priceId (v obou pořadích) v jednom formuláři.
+        const dvojice = [
+            new RegExp(
+                `name="productId"[^>]*value="${escapeRe(productId)}"[\\s\\S]{0,800}?name="priceId"[^>]*value="(\\d+)"`,
+                'i'
+            ),
+            new RegExp(
+                `name="priceId"[^>]*value="(\\d+)"[\\s\\S]{0,800}?name="productId"[^>]*value="${escapeRe(productId)}"`,
+                'i'
+            ),
+        ];
+        for (const re of dvojice) {
+            const m = html.match(re);
+            if (m) return m[1];
+        }
+    }
+
+    // Záloha: první výskyt. Atributy mohou být v libovolném pořadí.
     const patterns = [
         /<input[^>]*name="priceId"[^>]*value="(\d+)"/i,
         /<input[^>]*value="(\d+)"[^>]*name="priceId"/i,
@@ -194,6 +245,11 @@ export function parsePriceId(html: string): string | null {
         if (m) return m[1];
     }
     return null;
+}
+
+/** Escapuje hodnotu pro vložení do regexu. */
+function escapeRe(s: string): string {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /** Parametry z tabulky na detailu, např. `Hmotnost = 1 kg`. */
@@ -380,7 +436,7 @@ export function parseProductPage(html: string, url: string): ScrapedProduct | nu
         name,
         url,
         productId: p.id !== undefined && p.id !== null ? String(p.id) : null,
-        priceId: parsePriceId(html),
+        priceId: parsePriceId(html, p.id !== undefined && p.id !== null ? String(p.id) : null),
         guid: typeof p.guid === 'string' ? p.guid : null,
         priceWithVat: typeof p.priceWithVat === 'number' ? p.priceWithVat : null,
         packGrams,

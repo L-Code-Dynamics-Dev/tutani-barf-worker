@@ -11,7 +11,10 @@
  */
 
 import barfCore from '../tenants/tutani/rules/barf-core.json';
+import tutaniHealth from '../tenants/tutani/rules/tutani-health.json';
+import ingredients from '../tenants/tutani/rules/ingredients.json';
 import { TUTANI_TENANT } from '../tenants/tutani/config/tenant.js';
+import { KnowledgeRuleEngine } from './rules/KnowledgeRuleEngine.js';
 import type { TenantConfiguration } from './domain/tenant.js';
 import type { BarfMethodology } from './engine/feeding-calculator/calculateDose.js';
 import type { ConflictResolution, DoseRule } from './engine/feeding-calculator/resolveDoseRule.js';
@@ -24,7 +27,6 @@ import {
     handleHealth,
     handleKnowledge,
     jsonResponse,
-    NOOP_RULE_ENGINE,
     type Deps,
     type RuleEngine,
 } from './api/handlers.js';
@@ -178,7 +180,25 @@ async function route(request: Request, path: string, env: Env): Promise<Response
     return apiError('NOT_FOUND', 404);
 }
 
-export function buildDeps(env: Env, rules: RuleEngine = NOOP_RULE_ENGINE): Deps {
+/**
+ * Znalostní vrstva — postaví se JEDNOU na isolate a drží se v paměti.
+ *
+ * KRITICKÝ NÁLEZ AUDITU 2026-09-09: `buildDeps` měl jako výchozí
+ * `NOOP_RULE_ENGINE`, který vracel prázdná omezení. Nasazený Worker
+ * tedy pro KAŽDÉHO psa ignoroval diagnózy i alergie — pes v pokročilém
+ * renálním selhání by dostal plnou dávku a alergik produkt
+ * s alergenem, přičemž API hlásilo, že s nimi počítalo.
+ *
+ * Znalostní vrstva byla hotová, jen nikdo nespojil oba konce. Tady se
+ * spojují.
+ */
+const RULES: RuleEngine = new KnowledgeRuleEngine({
+    health: tutaniHealth,
+    ingredients,
+    barfCore,
+});
+
+export function buildDeps(env: Env, rules: RuleEngine = RULES): Deps {
     return {
         tenant: resolveTenant(env),
         store: new D1ProductStore(env.DB),

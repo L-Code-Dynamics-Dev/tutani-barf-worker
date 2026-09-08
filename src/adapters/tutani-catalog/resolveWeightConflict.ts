@@ -28,6 +28,28 @@
  * Když ani jedna varianta nedává smysl, produkt se z doporučení
  * vyřadí a jde do reportu pro klienta. Radši nedoporučit než
  * doporučit špatné množství (R7).
+ *
+ * OVĚŘENO PROTI TŘETÍMU ZDROJI (2026-09-09, podnět Lucky).
+ *
+ * Shoptet nabízí veřejné feedy bez hashe (`universal.xml`,
+ * `google/export/products.xml` a další). Google feed nese
+ * `g:shipping_weight` a u všech 26 konfliktů „potvrzoval" hodnotu
+ * z adminu — tedy pravý opak toho, co vybírá tenhle kód.
+ *
+ * Prověření cenou ale ukázalo, že **feed pravdu nemá**:
+ *
+ *   TUT196 Mrkev 500g, 39 Kč → feed 100 g = 390 Kč/kg
+ *   TUT143 Sušená zeleninová směs 1kg, 144 Kč → feed 100 g = 1 440 Kč/kg
+ *   ZP12 Krájené vemínko 1kg, 50 Kč → feed 5 kg = 10 Kč/kg
+ *
+ * Důvod: `g:shipping_weight` se plní z TÉHOŽ pole v adminu jako
+ * `dataLayer.weight`. Není to nezávislý zdroj, jen druhý výstup
+ * stejného nevyplněného údaje — proto sedí 134/134 tam, kde je
+ * vyplněný správně, a proto „potvrzuje admin" u všech konfliktů.
+ *
+ * Cena zůstává jediným skutečně nezávislým zdrojem. Feed se proto
+ * k rozhodování gramáže NEPOUŽÍVÁ; slouží jen k popisům
+ * (`universalFeed.ts`) a dostupnosti.
  */
 
 import type { BarfGroup } from '../../domain/tenant.js';

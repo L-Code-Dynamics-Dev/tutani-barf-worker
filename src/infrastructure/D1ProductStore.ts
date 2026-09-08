@@ -36,6 +36,25 @@ export interface StoredProduct extends Omit<CatalogProduct, 'packGrams'> {
     weightConflict: WeightConflictRecord | null;
     /** Kdy byla data přečtena z e-shopu. */
     sourceFeedAt: string | null;
+    /**
+     * Surovinu produktu nelze z názvu ani složení určit.
+     *
+     * `matchProducts` takový produkt u zadané alergie NEDOPORUČÍ
+     * (fail-closed) — nikdy se netvrdí „neobsahuje alergen", jen
+     * „nevíme, co obsahuje". Katalog tutani má složení jen u 17 %
+     * produktů, takže tenhle stav je běžný, ne výjimečný.
+     */
+    ingredientsUnknown: boolean;
+    /**
+     * Má produkt varianty?
+     *
+     * Ukládá se kvůli `priceId`: u variantních produktů ho na detailu
+     * přepisuje JS podle vybrané varianty, takže hodnota z HTML platí
+     * jen pro výchozí. Autoritativní zdroj je pak `VARIANT id` ve
+     * feedu (Lucky 2026-09-09). Dnes je `false` u všech 264 produktů
+     * tutani; kdyby se objevilo `true`, je potřeba feed s hashem.
+     */
+    hasVariants: boolean;
 }
 
 export interface WeightConflictRecord {
@@ -104,50 +123,54 @@ export interface ProductStore {
 
 /**
  * D1 má limit na počet vázaných parametrů v jednom dotazu (100)
- * a na velikost SQL. Produkt má 16 sloupců, takže 6 produktů na dotaz
- * je 96 parametrů — pod limitem s rezervou.
+ * a na velikost SQL.
+ *
+ * CHYBA NALEZENÁ AUDITEM 2026-09-09: konstanta říkala 16 sloupců,
+ * ale SQL i `bind()` posílaly 18 → 18 × 6 = **108 parametrů**, tedy
+ * nad limitem. Komentář tvrdil „96, pod limitem s rezervou", zatímco
+ * skutečnost byla přes. Dávka se nesmí počítat z konstanty, kterou
+ * někdo zapomene aktualizovat — proto se teď počet DERIVUJE ze
+ * seznamu sloupců a `bind` se proti němu kontroluje.
  *
  * Zápis se posílá přes `batch()`, což je jedna transakce: sync buď
  * projde celý, nebo se katalog nezmění vůbec. Půlka katalogu by
  * znamenala doporučení z nekonzistentních dat.
  */
-const COLUMNS_PER_PRODUCT = 16;
+/**
+ * Sloupce zápisu v PŘESNÉM pořadí, v jakém je posílá `productToBind`.
+ * Jediný zdroj pravdy — z něj se generuje SQL i počet parametrů.
+ */
+const UPSERT_COLUMNS = [
+    'tenant_id', 'sku', 'name', 'url', 'category_path', 'barf_group',
+    'pack_grams', 'pack_grams_source', 'price_czk', 'price_id', 'product_id',
+    'in_stock', 'stock_quantity', 'ingredients', 'ingredients_unknown',
+    'is_cooked', 'has_variants', 'weight_conflict', 'source_feed_at', 'updated_at',
+] as const;
+
+const COLUMNS_PER_PRODUCT = UPSERT_COLUMNS.length;
+/** Skutečný limit D1 je 100; rezerva na jistotu. */
 const MAX_BOUND_PARAMS = 96;
-const UPSERT_CHUNK = Math.floor(MAX_BOUND_PARAMS / COLUMNS_PER_PRODUCT); // = 6
+const UPSERT_CHUNK = Math.max(1, Math.floor(MAX_BOUND_PARAMS / COLUMNS_PER_PRODUCT));
 
 /** Kolik SKU se vejde do jednoho `DELETE ... IN (?)`. */
 const DELETE_CHUNK = 90;
 
-const UPSERT_SQL_HEAD = `INSERT INTO products (
-    tenant_id, sku, name, url, category_path, barf_group,
-    pack_grams, pack_grams_source, price_czk, price_id, product_id,
-    in_stock, stock_quantity, ingredients, is_cooked, weight_conflict,
-    source_feed_at, updated_at
-) VALUES `;
+const UPSERT_SQL_HEAD = `INSERT INTO products (\n    ${UPSERT_COLUMNS.join(', ')}\n) VALUES `;
 
 /**
  * `ON CONFLICT` místo `DELETE` + `INSERT`: katalog nesmí být ani na
  * okamžik prázdný, protože ve stejnou chvíli může běžet dotaz
  * zákazníka. `updated_at` se nastavuje serverovým časem, ne z dat.
  */
+/**
+ * `ON CONFLICT` se generuje ze `UPSERT_COLUMNS` bez klíčových sloupců —
+ * nový sloupec se tak nemůže zapomenout v UPDATE větvi.
+ */
 const UPSERT_SQL_TAIL = `
 ON CONFLICT (tenant_id, sku) DO UPDATE SET
-    name = excluded.name,
-    url = excluded.url,
-    category_path = excluded.category_path,
-    barf_group = excluded.barf_group,
-    pack_grams = excluded.pack_grams,
-    pack_grams_source = excluded.pack_grams_source,
-    price_czk = excluded.price_czk,
-    price_id = excluded.price_id,
-    product_id = excluded.product_id,
-    in_stock = excluded.in_stock,
-    stock_quantity = excluded.stock_quantity,
-    ingredients = excluded.ingredients,
-    is_cooked = excluded.is_cooked,
-    weight_conflict = excluded.weight_conflict,
-    source_feed_at = excluded.source_feed_at,
-    updated_at = excluded.updated_at`;
+${UPSERT_COLUMNS.filter((c) => c !== 'tenant_id' && c !== 'sku')
+    .map((c) => `    ${c} = excluded.${c}`)
+    .join(',\n')}`;
 
 /**
  * Použitelný produkt = má gramáž i cenu a gramáž je kladná.
@@ -312,6 +335,16 @@ function rowToProduct(row: Record<string, unknown>): StoredProduct {
         isCooked: Number(row.is_cooked ?? 0) === 1,
         weightConflict: parseJsonObject<WeightConflictRecord>(row.weight_conflict),
         sourceFeedAt: row.source_feed_at === null ? null : String(row.source_feed_at ?? ''),
+        /**
+         * Chybějící sloupec (starší schéma) se čte jako „suroviny
+         * neznáme" — bezpečnější strana: produkt se u zadané alergie
+         * vyřadí, místo aby se tvářil jako bezpečný.
+         */
+        ingredientsUnknown:
+            row.ingredients_unknown === undefined || row.ingredients_unknown === null
+                ? true
+                : Number(row.ingredients_unknown) === 1,
+        hasVariants: Number(row.has_variants ?? 0) === 1,
     };
 }
 
@@ -335,7 +368,9 @@ function productToBinds(
         p.inStock ? 1 : 0,
         p.stockQuantity,
         JSON.stringify(p.ingredientIds ?? []),
+        p.ingredientsUnknown ? 1 : 0,
         p.isCooked ? 1 : 0,
+        p.hasVariants ? 1 : 0,
         p.weightConflict ? JSON.stringify(p.weightConflict) : null,
         p.sourceFeedAt,
         now,

@@ -112,6 +112,21 @@ export interface ResolvedConstraints {
     compositionLimits: CompositionLimit[];
     /** Sjednocená množina zakázaných surovin (alergie + toxické + nemoci). */
     excludedIngredientIds: Set<string>;
+    /**
+     * Zákazy plynoucí ze ZADANÉ alergie nebo diagnózy — BEZ toxických
+     * surovin, které platí vždy.
+     *
+     * Rozlišení je potřebné pro fail-closed v `matchProducts`: produkt
+     * s neurčitelnou surovinou se má vyřadit jen tehdy, když pes
+     * skutečně něco nesnáší. Kdyby se použila celá
+     * `excludedIngredientIds`, byla by neprázdná vždy (8 toxických
+     * surovin) a u zdravého psa by vypadlo všech 219 produktů bez
+     * složení — konfigurátor by nedoporučil nic.
+     *
+     * Volitelné kvůli existujícím testům; chybějící hodnota se čte
+     * jako prázdná množina (žádná zadaná alergie).
+     */
+    ownerExcludedIngredientIds?: Set<string>;
     /** Preferované suroviny — ovlivní řazení, ne filtr. */
     preferredIngredientIds: Set<string>;
     /** Filtry na atributy produktu, např. `fatPct LTE 10`. */

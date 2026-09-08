@@ -48,9 +48,21 @@ CREATE TABLE IF NOT EXISTS products (
     -- D1 nemá spolehlivé JSON operátory pro `IN` nad polem.
     ingredients       TEXT    NOT NULL DEFAULT '[]',
 
+    -- Surovinu nelze z názvu ani složení určit. DEFAULT 1 = neznáme:
+    -- u zadané alergie se takový produkt NEDOPORUČÍ (fail-closed).
+    -- Bezpečnější je vyřadit než tvrdit, že produkt alergen neobsahuje
+    -- (nález auditu 2026-09-09 — dřív se `ingredients` ukládalo jako
+    -- prázdné pole a filtr alergií neměl na čem pracovat).
+    ingredients_unknown INTEGER NOT NULL DEFAULT 1,
+
     -- Vařené kosti se NIKDY nedoporučují (§7, §9 zadání). Tvrdý filtr
     -- je v enginu; tady je jen zdroj dat.
     is_cooked         INTEGER NOT NULL DEFAULT 0,
+
+    -- Má produkt varianty? U variantních produktů platí `price_id`
+    -- z HTML jen pro výchozí variantu — autoritativní je `VARIANT id`
+    -- ve feedu (Lucky 2026-09-09). Dnes 0 u všech 264 produktů tutani.
+    has_variants      INTEGER NOT NULL DEFAULT 0,
 
     -- JSON `{authoritative, fromName, decidedGrams, source, reasonCs}`
     -- nebo NULL. Uchovává se, i když je rozpor vyřešen — je to chyba

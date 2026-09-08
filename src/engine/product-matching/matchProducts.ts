@@ -40,6 +40,13 @@ export interface CatalogProduct {
     ingredientIds: string[];
     /** Vařené kosti se nikdy nedoporučují (§9 zadání). */
     isCooked: boolean;
+    /**
+     * Surovinu nelze z dat určit — u zadané alergie se produkt
+     * NEDOPORUČÍ (fail-closed, nález auditu 2026-09-09).
+     * Volitelné kvůli zpětné kompatibilitě testů; chybějící hodnota
+     * se čte jako `false` (suroviny známe).
+     */
+    ingredientsUnknown?: boolean;
 }
 
 export interface MatchedProduct {
@@ -195,18 +202,64 @@ function filterReason(
     group: BarfGroup,
     constraints: ResolvedConstraints
 ): string | null {
-    // BEZPEČNOST: vařené kosti nikdy — nebezpečí střepů.
-    if (group === 'BONE' && p.isCooked) {
-        return 'vařené kosti se nikdy nedoporučují — hrozí střepy a poranění zažívacího traktu';
+    /**
+     * BEZPEČNOST: vařený produkt se nedoporučí NIKDY, ne jen u kostí.
+     *
+     * NÁLEZ AUDITU 2026-09-09: podmínka byla `group === 'BONE' &&
+     * p.isCooked`, takže vařené celé kuře nebo vařený krk zařazený
+     * jako MUSCLE prošel bez námitky. Kostní střep ale nezávisí na
+     * tom, do jaké skupiny produkt zařadil `resolveBarfGroup` z názvu
+     * — a mražené maso s kostí se do MUSCLE dostává běžně.
+     */
+    if (p.isCooked) {
+        return group === 'BONE'
+            ? 'vařené kosti se nikdy nedoporučují — hrozí střepy a poranění zažívacího traktu'
+            : 'vařený produkt se do surové dávky nezařazuje — může obsahovat vařenou kost';
     }
 
-    // ALERGIE a toxické suroviny. `excludedIngredientIds` už obsahuje
-    // sjednocení alergií zadaných majitelem, zákazů z diagnóz
-    // a toxických potravin — matching sám nerozhoduje, co je zakázané.
+    /**
+     * ALERGIE a toxické suroviny. `excludedIngredientIds` už obsahuje
+     * sjednocení alergií zadaných majitelem, zákazů z diagnóz
+     * a toxických potravin — matching sám nerozhoduje, co je zakázané.
+     */
     for (const ing of p.ingredientIds) {
         if (constraints.excludedIngredientIds.has(ing)) {
             return `obsahuje ${ing}, který má pes vyloučený`;
         }
+    }
+
+    /**
+     * FAIL-CLOSED: neznámou surovinu nelze prohlásit za bezpečnou.
+     *
+     * NÁLEZ AUDITU 2026-09-09: filtr výše je allowlist nad
+     * `ingredientIds` — u produktu s prázdným polem neudělá nic.
+     * Psovi s alergií na kuře se tak doporučilo kuřecí maso, protože
+     * se surovina nedala určit. Katalog tutani má složení jen u 17 %
+     * produktů, takže to není hraniční případ, ale běžný stav.
+     *
+     * Když má pes vyloučenou aspoň jednu surovinu a u produktu
+     * nevíme, co obsahuje, produkt se NEDOPORUČÍ. Zákazník uvidí
+     * v `excluded` proč — je to poctivější než tichá záměna.
+     *
+     * U psa BEZ alergií a diagnóz se nic nemění: `excludedIngredientIds`
+     * obsahuje jen toxické suroviny, které se z názvu poznají.
+     */
+    /**
+     * Řídí se `ownerExcludedIngredientIds` (zadané alergie a diagnózy),
+     * NE celou `excludedIngredientIds`.
+     *
+     * Ta totiž obsahuje 8 toxických surovin VŽDY, takže by byla
+     * neprázdná i u zdravého psa — a fail-closed by vyřadil všech 219
+     * produktů bez určeného složení. Konfigurátor by nedoporučil nic.
+     * Odchyceno testem 2026-09-09.
+     *
+     * Toxické suroviny se přitom pořád filtrují: mají charakteristické
+     * názvy (cibule, česnek, hrozny), takže `detectIngredients` je
+     * z názvu i popisu pozná — u nich se na fail-closed nespoléhá.
+     */
+    const zadaneAlergie = constraints.ownerExcludedIngredientIds;
+    if (p.ingredientsUnknown === true && zadaneAlergie !== undefined && zadaneAlergie.size > 0) {
+        return 'nevíme, z jaké suroviny je — u psa s vyloučenou potravinou ho nedoporučujeme';
     }
 
     // Filtry na atributy produktu ze zdravotních pravidel
