@@ -2,6 +2,88 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:10) — product matching hotový, celý tok jede naostro (50/50)
+
+**Napsáno:** `src/engine/product-matching/matchProducts.ts`,
+`tests/unit/matchProducts.test.ts` (19), `scripts/ukazka-toku.ts`.
+
+Tím jsou hotové **všechny výpočetní vrstvy**: profil psa → dávka →
+rozpad → konkrétní balení → cena. Bez UI, bez databáze.
+
+### Ukázka toku proti REÁLNÉMU katalogu (212 použitelných produktů)
+
+```
+Rex, 24 kg, dospělý, střední aktivita → 540 g/den (2× 270 g)
+  svalové maso      405 g/den →  5× Barf Mleté kuře 3kg          545 Kč
+  mleté kosti        54 g/den →  1× Barf Kuřecí vemínko 3kg      115 Kč
+  játra              27 g/den →  1× Pašíkova játra mletá 1kg      69 Kč
+  ostatní orgány     27 g/den →  1× Plíce jako kráva mleté 1kg    49 Kč
+  zelenina a ovoce   27 g/den →  2× Barf Mrkev 500g               78 Kč
+  CELKEM na 30 dní: 856 Kč (29 Kč/den)
+```
+
+Další ověřené scénáře:
+
+| pes | dávka | cena/30 dní |
+|---|---|---|
+| Bela, štěně 4 měsíce, 8 kg | 720 g/den (9 %) | 1 122 Kč |
+| Max, 30 kg, nadváha (ideál 24) | 300 g/den (1,25 %) | 599 Kč |
+| Rex s alergií na drůbež | 540 g/den | 864 Kč — **maso vyměněno na Salmo Salar, kosti na Pašíkovy** |
+| Rex s onemocněním ledvin | 540 g/den, kosti 54 → 43 g | 856 Kč |
+| Rex, týdenní zásoba | 540 g/den | 381 Kč |
+
+Filtr alergií funguje: při vyloučení drůbeže se doporučení samo
+překlopilo na rybí a vepřové produkty, bez zásahu do výpočtu.
+
+### Přiměřenost balení (nová podmínka)
+
+Ukázka toku vypadala, že se doporučuje předimenzovaný nákup, tak jsem
+do výběru přidal strop `MAX_OVERSHOOT = 2.0` — balení nesmí potřebu
+překročit víc než dvojnásobně, pokud existuje menší alternativa.
+
+**Prověření ale ukázalo, že původní doporučení bylo správné:**
+`TUT9/15` Kuřecí vemínko má po vyřešení konfliktu 3 kg za 115 Kč =
+**38 Kč/kg, nejlevnější v kategorii BONE** (ostatní 49–115 Kč/kg).
+Overshoot 1,85 je pod limitem. Podmínka tedy nic nezměnila a zůstává
+jako pojistka pro případ, kdy klient zavede opravdu velká balení.
+
+Zároveň jsem si ověřil druhou domněnku: „Kuřecí vemínko jako kosti"
+není chyba mapování — klient ho má v kategorii **„Barf - Drůbeží
+kosti"**, takže BONE je jeho vlastní zařazení.
+
+### Pravidla, která matching drží
+
+- **celá balení, zaokrouhlení nahoru** — maso se nekrájí na gramy
+  a zákazník musí mít na celé období
+- **cena za kilogram**, ne cena balení
+- **deterministický výběr** (poslední rozhodčí SKU) — po obnovení
+  stránky stejný výsledek, dohledatelné při reklamaci
+- **vařené kosti nikdy** (tvrdý filtr)
+- **nepokrytá složka se PŘIZNÁ**, nikdy nesubstituuje jinou složkou
+  (ověřeno testem: chybí-li játra, svalovina se nenavýší)
+- **`priceId` + `productId`** ve výstupu pro vložení do košíku
+
+### Stav projektu
+
+| vrstva | stav |
+|---|---|
+| tenant model | ✅ bez `if (client === …)` |
+| scraper katalogu | ✅ 264 produktů, 0 chyb |
+| řešení konfliktů gramáže | ✅ 26/26, cenou za kg |
+| výpočet dávky | ✅ metodika jako data |
+| product matching | ✅ včetně alergií a bezpečnosti |
+| knowledge engine (nemoci) | ⬜ typy hotové, pravidla chybí |
+| API Workeru | ⬜ |
+| UI konfigurátoru | ⬜ |
+
+**Testy: 50/50.**
+
+### Další krok
+
+Knowledge / rule engine — `ResolvedConstraints` z diagnóz a alergií.
+Do matchingu i výpočtu už jsou zapojené, chybí jen vrstva, která je
+z pravidel v JSONu složí.
+
 ## 2026-09-09 (00:10) — rozpor v gramáži se ŘEŠÍ, nevyřazuje (31/31 testů)
 
 **Lucky zpochybnil moje řešení („proč vyřazením?") a měl pravdu.**
