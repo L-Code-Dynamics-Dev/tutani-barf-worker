@@ -2,6 +2,75 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:10) — rozpor v gramáži se ŘEŠÍ, nevyřazuje (31/31 testů)
+
+**Lucky zpochybnil moje řešení („proč vyřazením?") a měl pravdu.**
+Vyřadit 26 produktů s rozporem by znamenalo vyhodit z konfigurátoru
+**16 produktů, které do dávky patří** — vemínko, dršťky, bachory,
+droby, chrupavka, mrkev, červená řepa, zeleninová směs. To je zboží,
+které klient prodává.
+
+**Nové řešení: rozhodnout CENOU ZA KG**
+(`src/adapters/tutani-catalog/resolveWeightConflict.ts`).
+
+Cena je nezávislý třetí zdroj, který jednu variantu obvykle vylučuje:
+
+```
+ZP12 „Krájené vemínko 1kg", 50 Kč
+  1 kg →  50 Kč/kg  ✅ v pásmu MUSCLE (medián 147)
+  5 kg →  10 Kč/kg  ❌ nereálné
+→ 1 kg z názvu, produkt ZŮSTÁVÁ
+```
+
+Hranice se počítají z **mediánu skupiny** (0,25× až 4×), ne
+z natvrdo zapsaných čísel — ceny se mění a pevné hranice by za rok
+lhaly. Medián se počítá jen z produktů BEZ konfliktu, aby si
+nezkreslil vstup.
+
+### Výsledek na reálných datech: 26/26 vyřešeno, 0 vyřazeno
+
+Naměřené mediány Kč/kg: MUSCLE 147, BONE 76, LIVER 537, ORGAN 122,
+PLANT 204, SUPPLEMENT 931.
+
+| SKU | rozhodnuto | Kč/kg | admin by dal |
+|---|---|---|---|
+| `ZP12` vemínko | **1 kg** | 50 | 10 Kč/kg |
+| `TUT117` směs 3kg | **3 kg** | 48 | 144 Kč/kg |
+| `TUT196` mrkev | **500 g** | 78 | 390 Kč/kg |
+| `ZP28` dršťky 2 kg | **2 kg** | 52 | 104 Kč/kg |
+| `TUT9/15` kuřecí vemínko 3kg | **3 kg** | 38 | 115 Kč/kg |
+
+**Ve všech 26 případech vyhrál NÁZEV.** To potvrzuje hypotézu: v
+adminu zůstala nepřepsaná výchozí hodnota (1 kg nebo 0,1 kg),
+zatímco název píše obchodník ručně. Přesto se rozhoduje cenou, ne
+domněnkou — kdyby se někdy spletl název, cena to odchytí.
+
+### Kdy se produkt přesto nedoporučí
+
+- ani jedna varianta cenově neobstojí
+- chybí cena nebo medián skupiny
+- gramáž není nikde uvedená (52 produktů — poukázky, hračky, kapky
+  v ml; do dávky nepatří, správně)
+
+Ve všech případech `UNRESOLVED` → produkt jde do reportu pro klienta,
+nedopočítává se (R7).
+
+### Testy: 31/31
+
+`resolveWeightConflict.test.ts` (11) staví na REÁLNÝCH případech
+z katalogu, ne na vymyšlených datech.
+
+### Pro klienta zůstává
+
+Rozpor se pořád **reportuje** — je to hodnota pro klienta (26 chyb
+v datech, které vidí jeho zákazníci), jen už nám neblokuje
+doporučení.
+
+### Další krok
+
+Product matching — z gramů na balení, filtr alergií, sestavení
+košíku na období.
+
 ## 2026-09-09 (00:00) — výpočetní jádro hotové, 20/20 testů
 
 **Napsáno:**
