@@ -64,6 +64,12 @@ CREATE TABLE IF NOT EXISTS products (
     -- ve feedu (Lucky 2026-09-09). Dnes 0 u všech 264 produktů tutani.
     has_variants      INTEGER NOT NULL DEFAULT 0,
 
+    -- JSON rozpad na BARF složky podle procent ve složení
+    -- (`70% hovězí ořez, 30% droby`). Prázdné pole = produkt patří
+    -- celý do `barf_group` podle kategorie. Zjištěno 2026-09-09:
+    -- 9 produktů má víc složek a dosud se počítaly celé do jedné.
+    composition_parts TEXT    NOT NULL DEFAULT '[]',
+
     -- JSON `{authoritative, fromName, decidedGrams, source, reasonCs}`
     -- nebo NULL. Uchovává se, i když je rozpor vyřešen — je to chyba
     -- v datech e-shopu, kterou má klient opravit, a report ji čerpá odsud.

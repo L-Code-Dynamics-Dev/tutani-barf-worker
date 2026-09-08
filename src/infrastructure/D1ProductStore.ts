@@ -13,6 +13,7 @@
  * vždy `WHERE tenant_id = ?`.
  */
 
+import type { CompositionPart } from '../adapters/tutani-catalog/parseComposition.js';
 import type { BarfGroup } from '../domain/tenant.js';
 import type { CatalogProduct } from '../engine/product-matching/matchProducts.js';
 
@@ -55,6 +56,17 @@ export interface StoredProduct extends Omit<CatalogProduct, 'packGrams'> {
      * tutani; kdyby se objevilo `true`, je potřeba feed s hashem.
      */
     hasVariants: boolean;
+    /**
+     * Rozpad produktu na BARF složky podle procent ve složení
+     * (`70% hovězí ořez, 30% droby`). Prázdné = produkt patří celý
+     * do `group` podle kategorie.
+     *
+     * Zjištěno 2026-09-09: 9 produktů má víc složek a dosud se
+     * počítaly celé do jedné skupiny — `kuře mleté s játry` je
+     * 70 % MUSCLE + 30 % LIVER, což u hepatopatie (játra max 1 %)
+     * dělá rozdíl.
+     */
+    compositionParts: CompositionPart[];
 }
 
 export interface WeightConflictRecord {
@@ -144,7 +156,7 @@ const UPSERT_COLUMNS = [
     'tenant_id', 'sku', 'name', 'url', 'category_path', 'barf_group',
     'pack_grams', 'pack_grams_source', 'price_czk', 'price_id', 'product_id',
     'in_stock', 'stock_quantity', 'ingredients', 'ingredients_unknown',
-    'is_cooked', 'has_variants', 'weight_conflict', 'source_feed_at', 'updated_at',
+    'is_cooked', 'has_variants', 'composition_parts', 'weight_conflict', 'source_feed_at', 'updated_at',
 ] as const;
 
 const COLUMNS_PER_PRODUCT = UPSERT_COLUMNS.length;
@@ -345,6 +357,7 @@ function rowToProduct(row: Record<string, unknown>): StoredProduct {
                 ? true
                 : Number(row.ingredients_unknown) === 1,
         hasVariants: Number(row.has_variants ?? 0) === 1,
+        compositionParts: parseCompositionPartsJson(row.composition_parts),
     };
 }
 
@@ -371,6 +384,7 @@ function productToBinds(
         p.ingredientsUnknown ? 1 : 0,
         p.isCooked ? 1 : 0,
         p.hasVariants ? 1 : 0,
+        JSON.stringify(p.compositionParts ?? []),
         p.weightConflict ? JSON.stringify(p.weightConflict) : null,
         p.sourceFeedAt,
         now,
@@ -404,6 +418,29 @@ function rowToSyncRun(row: Record<string, unknown>): SyncRunRecord {
  * prázdno a produkt prostě nemá vyplněné suroviny. Chyba je čitelná
  * v logu, ne v podobě 500 pro zákazníka (observabilita).
  */
+/**
+ * Rozpad na složky z JSONu. Poškozený nebo cizí tvar se zahodí —
+ * produkt pak platí celý do své `group` podle kategorie, což je
+ * bezpečný default.
+ */
+function parseCompositionPartsJson(raw: unknown): CompositionPart[] {
+    if (typeof raw !== 'string' || raw.length === 0) return [];
+    try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(
+            (x): x is CompositionPart =>
+                x !== null &&
+                typeof x === 'object' &&
+                typeof (x as CompositionPart).group === 'string' &&
+                typeof (x as CompositionPart).pct === 'number' &&
+                Number.isFinite((x as CompositionPart).pct)
+        );
+    } catch {
+        return [];
+    }
+}
+
 function parseJsonArray(raw: unknown): string[] {
     if (typeof raw !== 'string' || raw.length === 0) return [];
     try {

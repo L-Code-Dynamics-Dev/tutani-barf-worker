@@ -25,6 +25,7 @@ import { parseProductPage, resolveBarfGroup, type ScrapedProduct } from './parse
 import { medianPricePerKg, resolveWeightConflict } from './resolveWeightConflict.js';
 import { detectIngredients } from './detectIngredients.js';
 import { parseUniversalFeed, universalFeedUrl, type FeedDescriptions } from './universalFeed.js';
+import { parseCompositionParts } from './parseComposition.js';
 
 export interface SyncOptions {
     /** `true` = nic se nezapíše, vrátí se jen diff. */
@@ -341,6 +342,14 @@ export async function syncCatalog(
              */
             priceId: p.priceId,
             hasVariants: p.hasVariants,
+            /**
+             * Rozpad podle procent ve složení — u produktů jako
+             * „70 % ořez, 30 % droby" jinak celý objem padne do jedné
+             * skupiny a zdravotní limit na játra ho mine.
+             */
+            compositionParts: parseCompositionParts(
+                [p.compositionText, popisFeed].filter(Boolean).join(' ')
+            ),
             productId: p.productId,
             inStock: (p.stockQuantity ?? 0) > 0,
             stockQuantity: p.stockQuantity,
