@@ -2,6 +2,77 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:30) — frontend konfigurátoru, ověřený v prohlížeči
+
+**Napsáno:** `frontend/konfigurator.js` (27 KB), `konfigurator.css`,
+`nahled.html` (náhled pro klienta bez nasazení).
+
+### Ověřeno v REÁLNÉM Chrome (Playwright), 0 chyb v konzoli
+
+| test | výsledek |
+|---|---|
+| výchozí 15 kg | 338 g/den, 2× 169 g, 621 Kč/30 dní |
+| posuvník na 24 kg | **540 g** — sedí na engine |
+| nadváha | vyžádá cílovou hmotnost, 1,25 % z 20,5 kg, varování |
+| nemocné ledviny | kosti 10 → **8 %**, zelenina 5 → **7 %** (renormalizace), 2 hodnoty oranžově |
+| alergie na kuřecí | maso se překlopilo na **Barf Mletý Salmo Salar** |
+| „proč právě 540 g?" | 4 kroky auditu, bez AI |
+| zásoba na týden | 320 Kč (46 Kč/den) vs. měsíc 839 Kč (28 Kč/den) |
+| mobil 390 px | scrollWidth 390 = **bez horizontálního scrollu**, výsledek nahoře |
+
+### Rozhodnutí ve frontendu
+
+- **jedna obrazovka, dva sloupce** — vlevo pes, vpravo dávka;
+  přepočítává se při každé změně, žádné tlačítko „Vypočítat"
+- **na mobilu je výsledek PRVNÍ** (`order: -1`) — zákazník musí
+  vidět číslo bez scrollování
+- **debounce 250 ms** + pořadové číslo požadavku, aby starší odpověď
+  nepřebila novější při tahání posuvníkem
+- při přepočtu výsledek **zešedne, ale zůstane vidět** — obrazovka
+  nebliká
+- **věk lidsky**: štěňata v měsících, dospělí v letech, se správným
+  skloňováním
+- **ideální hmotnost se ukáže jen při nadvázi**; předvyplní se odhad
+  (85 %), který zákazník musí potvrdit — systém si hodnotu nevymýšlí
+- **březost a laktace jen u fen**
+- **diagnózy a alergie se tahají z `/v1/knowledge`** — frontend je
+  nemá natvrdo; když endpoint selže, konfigurátor funguje dál bez
+  zdravotních voleb
+- **vložení do košíku SEKVENČNĚ** — Shoptet nemá dávkové vložení
+  a paralelní volání si přepisují stav košíku
+- **disclaimer se vykresluje z odpovědi Workeru**, ne ze šablony →
+  nedá se odstranit úpravou frontendu (§9 zadání)
+- **tisk**: formulář a tlačítka se skryjí, jídelníček se dá vzít
+  k veterináři
+
+### Náhled pro klienta
+
+`frontend/nahled.html` podvrhne `fetch` a ukáže konfigurátor bez
+Workeru — na odsouhlasení vzhledu. Zjednodušený výpočet v náhledu je
+označený jako náhledový, aby nevznikla druhá neautoritativní
+implementace.
+
+### Poznámka k testování
+
+Playwright nepodporuje Chromium na tomhle macOS (Darwin 21.6 /
+macOS 12) — použit systémový Chrome přes `channel="chrome"`.
+Testovací skript: `/tmp/tb_test.py` (mimo repo, jednorázový).
+
+### Stav projektu
+
+| vrstva | stav |
+|---|---|
+| tenant model, scraper, konflikty gramáže | ✅ |
+| výpočet dávky, product matching | ✅ 50 testů |
+| **frontend konfigurátoru** | ✅ ověřen v prohlížeči |
+| knowledge engine (nemoci) | 🔄 běží agent |
+| API Workeru + D1 | 🔄 běží agent |
+
+### Další krok
+
+Počkat na oba agenty, zapojit `/v1/knowledge` a `/v1/davka` na reálný
+Worker, nasadit.
+
 ## 2026-09-09 (00:10) — product matching hotový, celý tok jede naostro (50/50)
 
 **Napsáno:** `src/engine/product-matching/matchProducts.ts`,

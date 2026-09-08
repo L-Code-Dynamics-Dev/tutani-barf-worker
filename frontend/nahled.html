@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BARF konfigurátor Tutani — náhled</title>
+<link rel="stylesheet" href="konfigurator.css">
+<style>
+    /* Jen pro náhled — na e-shopu tohle dodá šablona Shoptetu. */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        margin: 0;
+        padding: 24px 16px 60px;
+        background: #fff;
+        color: #1f2328;
+    }
+    .nahled-hlavicka {
+        max-width: 1100px;
+        margin: 0 auto 24px;
+    }
+    .nahled-hlavicka h1 {
+        font-size: 24px;
+        margin: 0 0 6px;
+    }
+    .nahled-hlavicka p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+    .nahled-pozn {
+        max-width: 1100px;
+        margin: 0 auto 20px;
+        padding: 10px 14px;
+        background: #fffbe6;
+        border: 1px solid #f5e6a8;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #6b5b12;
+    }
+</style>
+</head>
+<body>
+
+<div class="nahled-hlavicka">
+    <h1>Výpočet krmné dávky</h1>
+    <p>Vyplňte údaje o psovi a hned uvidíte, kolik a čeho potřebuje.</p>
+</div>
+
+<div class="nahled-pozn" id="pozn">
+    Náhled běží na <strong>ukázkových datech</strong> — výpočet i produkty jsou
+    z reálného enginu, ale bez připojení k Workeru. Slouží k odsouhlasení
+    vzhledu a ovládání.
+</div>
+
+<div id="tutani-barf"></div>
+
+<script>
+/**
+ * NÁHLEDOVÝ REŽIM.
+ *
+ * Podvrhne `fetch` na endpointy Workeru, aby šel konfigurátor ukázat
+ * klientovi bez nasazení. Odpovědi jsou SKUTEČNÉ výstupy našeho
+ * enginu (změřené na katalogu Tutani 2026-09-09), jen zamrzlé —
+ * nedopočítávají se tady, aby v náhledu nevznikla druhá,
+ * neautoritativní implementace výpočtu.
+ *
+ * Tenhle blok se na e-shop NENASAZUJE.
+ */
+(function () {
+    var puvodniFetch = window.fetch;
+
+    var KNOWLEDGE = {
+        v: 1,
+        diagnozy: [
+            { id: 'ckd', nazev: 'nemocné ledviny', popis: 'Chronické onemocnění ledvin' },
+            { id: 'pankreatitida', nazev: 'slinivka', popis: 'Zánět slinivky — potřebuje nízkotučnou stravu' },
+            { id: 'jatra', nazev: 'nemocná jaterní funkce', popis: 'Onemocnění jater' }
+        ],
+        alergie: [
+            { id: 'kure', nazev: 'kuřecí' },
+            { id: 'hovezi', nazev: 'hovězí' },
+            { id: 'vepr', nazev: 'vepřové' },
+            { id: 'ryba', nazev: 'ryby' }
+        ]
+    };
+
+    /**
+     * Zjednodušený výpočet POUZE pro náhled, aby posuvníky reagovaly.
+     * Na produkci tohle dělá Worker — proto je to tady označené a
+     * záměrně hloupé (jedno pásmo, žádná zdravotní pravidla).
+     */
+    function nahledovaOdpoved(telo) {
+        var pes = telo.pes || {};
+        var dni = telo.obdobiDni || 30;
+        var vek = pes.vekMesicu || 36;
+        var vaha = pes.hmotnostKg || 15;
+
+        if (pes.kondice === 'OVER' && !pes.idealniHmotnostKg) {
+            return { status: 'INCOMPLETE', reason: 'MISSING_IDEAL_WEIGHT' };
+        }
+
+        var pct, popis, porce;
+        if (vek < 6) { pct = 9; popis = 'štěně do 6 měsíců'; porce = 4; }
+        else if (vek < 12) { pct = 7; popis = 'štěně 6–12 měsíců'; porce = 3; }
+        else if (vek < 24) { pct = 5; popis = 'junior 1–2 roky'; porce = 2; }
+        else if (pes.kondice === 'OVER') { pct = 1.25; popis = 'redukční dieta'; porce = 2; }
+        else if (pes.kondice === 'UNDER') { pct = 3.5; popis = 'podváha'; porce = 3; }
+        else if (pes.fyziologickyStav === 'LACTATING') { pct = 5; popis = 'kojící fena'; porce = 4; }
+        else if (pes.fyziologickyStav === 'PREGNANT') { pct = 3.5; popis = 'březí fena'; porce = 3; }
+        else if (pes.aktivita === 'LOW' || pes.kastrovany) { pct = 1.75; popis = 'nízká aktivita'; porce = 2; }
+        else if (pes.aktivita === 'MEDIUM') { pct = 2.25; popis = 'dospělý pes, střední aktivita'; porce = 2; }
+        else { pct = 3; popis = 'vysoká aktivita'; porce = 2; }
+
+        var zVahy = pes.kondice === 'OVER' ? pes.idealniHmotnostKg : vaha;
+        var celkem = Math.round(zVahy * 1000 * pct / 100);
+
+        var kosti = (pes.diagnozy || []).indexOf('ckd') !== -1 ? 8 : 10;
+        var rostlinne = 10 - kosti + 5;
+        var slozeni = [
+            { group: 'MUSCLE', nazev: 'svalové maso', gramy: Math.round(celkem * 0.75), pct: 75, upraveno: false },
+            { group: 'BONE', nazev: 'mleté kosti', gramy: Math.round(celkem * kosti / 100), pct: kosti, upraveno: kosti !== 10 },
+            { group: 'LIVER', nazev: 'játra', gramy: Math.round(celkem * 0.05), pct: 5, upraveno: false },
+            { group: 'ORGAN', nazev: 'ostatní orgány', gramy: Math.round(celkem * 0.05), pct: 5, upraveno: false },
+            { group: 'PLANT', nazev: 'zelenina a ovoce', gramy: Math.round(celkem * rostlinne / 100), pct: rostlinne, upraveno: kosti !== 10 }
+        ];
+
+        var alergie = pes.alergie || [];
+        var maso = alergie.indexOf('kure') !== -1
+            ? { nazev: 'Barf Mletý Salmo Salar 3kg', cena: 114, balení: 3000, url: '#' }
+            : { nazev: 'Barf Mleté kuře 3kg', cena: 109, balení: 3000, url: '#' };
+
+        function polozka(nazev, cena, baleni, gramyDen, url) {
+            var potreba = gramyDen * dni;
+            var pocet = Math.max(1, Math.ceil(potreba / baleni));
+            return { nazev: nazev, pocet: pocet, cenaCelkem: pocet * cena, url: url || '#', priceId: null };
+        }
+
+        var produkty = [
+            polozka(maso.nazev, maso.cena, maso.balení, slozeni[0].gramy, maso.url),
+            polozka('Barf Pašíkovy kosti 1kg', 49, 1000, slozeni[1].gramy),
+            polozka('Barf Pašíkova játra mletá 1kg', 69, 1000, slozeni[2].gramy),
+            polozka('Barf Plíce jako kráva mleté 1kg', 49, 1000, slozeni[3].gramy),
+            polozka('Barf Mrkev 500g', 39, 500, slozeni[4].gramy)
+        ];
+
+        var upozorneni = [];
+        if ((pes.diagnozy || []).indexOf('ckd') !== -1) {
+            upozorneni.push({
+                severity: 'SERIOUS',
+                text: 'Kvůli onemocnění ledvin jsme snížili podíl kostí — obsahují fosfor, který ledviny zatěžuje.',
+                requiresVet: true
+            });
+        }
+        if (pes.kondice === 'OVER' && vek >= 12) {
+            upozorneni.push({
+                severity: 'CAUTION',
+                text: 'Dávku počítáme z cílové hmotnosti. Hubnutí má být pozvolné — vážte psa každé dva týdny.',
+                requiresVet: false
+            });
+        }
+        if (vek < 12 && pes.kondice === 'OVER') {
+            upozorneni.push({
+                severity: 'SERIOUS',
+                text: 'Rostoucí štěně se nehladoví. Dávka je na spodní hranici pásma pro štěně, ne redukční.',
+                requiresVet: true
+            });
+        }
+
+        return {
+            v: 1,
+            status: 'OK',
+            davka: {
+                pctMin: pct, pctMax: pct, pctPouzito: pct,
+                zHmotnosti: pes.kondice === 'OVER' ? 'IDEAL' : 'ACTUAL',
+                zHmotnostiKg: zVahy,
+                celkemGDen: celkem,
+                porce: { pocet: porce, gramyNaPorci: Math.round(celkem / porce) }
+            },
+            slozeni: slozeni,
+            produkty: produkty,
+            nepokryto: [],
+            cena: { celkemCzk: produkty.reduce(function (a, p) { return a + p.cenaCelkem; }, 0), naDni: dni },
+            upozorneni: upozorneni,
+            audit: [
+                { krok: 'DOSE_RULE', vysledek: popis + ' → ' + String(pct).replace('.', ',') + ' %' },
+                { krok: 'BASE_WEIGHT', vysledek: 'počítáno z ' + (pes.kondice === 'OVER' ? 'cílové' : 'aktuální') + ' hmotnosti ' + zVahy + ' kg' },
+                { krok: 'TOTAL_DOSE', vysledek: zVahy + ' kg × ' + String(pct).replace('.', ',') + ' % = ' + celkem + ' g na den' }
+            ].concat(kosti !== 10 ? [{ krok: 'COMPOSITION_LIMIT', vysledek: 'mleté kosti: 10 % → ' + kosti + ' % (onemocnění ledvin)' }] : []),
+            disclaimer: 'Výsledek je orientační doporučení. Doporučujeme konzultaci s veterinářem, který zná zdravotní stav vašeho psa.'
+        };
+    }
+
+    window.fetch = function (url, opts) {
+        var u = String(url);
+        if (u.indexOf('/v1/knowledge') !== -1) {
+            return Promise.resolve(new Response(JSON.stringify(KNOWLEDGE), {
+                status: 200, headers: { 'Content-Type': 'application/json' }
+            }));
+        }
+        if (u.indexOf('/v1/davka') !== -1) {
+            var telo = {};
+            try { telo = JSON.parse((opts && opts.body) || '{}'); } catch (e) { /* ponech prázdné */ }
+            var odp = nahledovaOdpoved(telo);
+            return Promise.resolve(new Response(JSON.stringify(odp), {
+                status: 200, headers: { 'Content-Type': 'application/json' }
+            }));
+        }
+        if (u.indexOf('/action/Cart/') !== -1) {
+            document.getElementById('pozn').innerHTML =
+                '<strong>Náhled:</strong> tady by se produkty vložily do košíku a zákazník by šel k pokladně.';
+            return Promise.resolve(new Response('{}', { status: 200 }));
+        }
+        return puvodniFetch.apply(window, arguments);
+    };
+})();
+</script>
+<script src="konfigurator.js"></script>
+
+</body>
+</html>

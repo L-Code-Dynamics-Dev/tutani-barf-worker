@@ -1,0 +1,486 @@
+/**
+ * BARF konfigurátor Tutani — styly.
+ *
+ * Vše je pod prefixem `tb-`, aby se to nemíchalo se šablonou
+ * Shoptetu. Barvy jdou přes CSS proměnné — klient si je může sladit
+ * s e-shopem bez zásahu do kódu.
+ *
+ * Rozvržení: na desktopu dva sloupce (vlevo pes, vpravo dávka), na
+ * mobilu pod sebou. Výsledek se nesmí schovat pod formulář — na
+ * mobilu je proto první, aby zákazník viděl číslo bez scrollování.
+ */
+
+#tutani-barf {
+    --tb-text: #1f2328;
+    --tb-text-slaby: #6b7280;
+    --tb-ram: #e3e6ea;
+    --tb-pozadi: #ffffff;
+    --tb-pozadi-panel: #f7f8fa;
+    --tb-hlavni: #2f7d32;        /* zelená — sladit s e-shopem klienta */
+    --tb-hlavni-tmava: #245f27;
+    --tb-varovani: #b45309;
+    --tb-chyba: #b3261e;
+    --tb-radius: 10px;
+
+    color: var(--tb-text);
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+#tutani-barf *,
+#tutani-barf *::before,
+#tutani-barf *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- rozvržení ---------- */
+
+.tb-mrizka {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 820px) {
+    .tb-mrizka {
+        grid-template-columns: 1fr;
+    }
+    /* Na mobilu nejdřív výsledek — zákazník má vidět dávku hned. */
+    .tb-sloupec:last-child {
+        order: -1;
+    }
+}
+
+.tb-panel {
+    background: var(--tb-pozadi);
+    border: 1px solid var(--tb-ram);
+    border-radius: var(--tb-radius);
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.tb-panel--davka {
+    background: var(--tb-pozadi-panel);
+}
+
+.tb-h2 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 14px;
+}
+
+.tb-h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+/* ---------- formulář ---------- */
+
+.tb-pole {
+    margin-bottom: 16px;
+}
+
+.tb-label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.tb-napoveda {
+    font-size: 13px;
+    color: var(--tb-text-slaby);
+    margin: 6px 0 0;
+}
+
+.tb-input {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--tb-ram);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    background: var(--tb-pozadi);
+    color: inherit;
+}
+
+.tb-input:focus,
+.tb-range:focus-visible,
+.tb-volba:focus-visible,
+.tb-tlacitko:focus-visible {
+    outline: 2px solid var(--tb-hlavni);
+    outline-offset: 2px;
+}
+
+/* posuvník + hodnota vedle sebe */
+.tb-posuvnik {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tb-range {
+    flex: 1 1 auto;
+    min-width: 0;
+    accent-color: var(--tb-hlavni);
+    /* Vyšší plocha pro prst na mobilu. */
+    height: 28px;
+}
+
+.tb-hodnota {
+    flex: 0 0 auto;
+    min-width: 78px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+/* přepínač voleb */
+.tb-prepinac {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tb-volba {
+    flex: 1 1 auto;
+    min-width: 72px;
+    padding: 9px 12px;
+    border: 1px solid var(--tb-ram);
+    border-radius: 8px;
+    background: var(--tb-pozadi);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color 0.12s, border-color 0.12s;
+}
+
+.tb-volba:hover {
+    border-color: var(--tb-hlavni);
+}
+
+.tb-volba--aktivni {
+    background: var(--tb-hlavni);
+    border-color: var(--tb-hlavni);
+    color: #fff;
+    font-weight: 600;
+}
+
+.tb-zaskrt,
+.tb-multi-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.tb-multi {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.tb-multi-item input,
+.tb-zaskrt input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--tb-hlavni);
+    flex: 0 0 auto;
+}
+
+/* ---------- výsledek ---------- */
+
+/* Když se přepočítává, výsledek zešedne — ale zůstane vidět, aby
+   obrazovka „neblikala" při každém pohybu posuvníkem. */
+.tb-je-stary {
+    opacity: 0.55;
+    transition: opacity 0.15s;
+}
+
+.tb-velke-cislo {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.tb-gramy {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--tb-hlavni);
+    font-variant-numeric: tabular-nums;
+}
+
+.tb-za-den {
+    font-size: 15px;
+    color: var(--tb-text-slaby);
+}
+
+.tb-podrobnost,
+.tb-porce {
+    margin: 2px 0;
+    font-size: 14px;
+    color: var(--tb-text-slaby);
+}
+
+.tb-porce {
+    margin-bottom: 14px;
+}
+
+/* ---------- tabulky ---------- */
+
+.tb-tabulka {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tb-tabulka td {
+    padding: 8px 4px;
+    border-bottom: 1px solid var(--tb-ram);
+    vertical-align: top;
+}
+
+.tb-tabulka tr:last-child td {
+    border-bottom: none;
+}
+
+.tb-nazev {
+    width: auto;
+}
+
+.tb-nazev a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--tb-ram);
+}
+
+.tb-nazev a:hover {
+    border-bottom-color: var(--tb-hlavni);
+}
+
+.tb-gram,
+.tb-cena,
+.tb-pocet,
+.tb-pct {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.tb-gram,
+.tb-cena {
+    font-weight: 600;
+}
+
+.tb-pct,
+.tb-pocet {
+    color: var(--tb-text-slaby);
+    width: 62px;
+}
+
+/* Podíl upravený zdravotním pravidlem — musí být poznat, ale ne
+   křičet; je to informace, ne chyba. */
+.tb-upraveno {
+    color: var(--tb-varovani);
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ---------- proč tolik (auditní stopa) ---------- */
+
+.tb-proc {
+    margin-top: 14px;
+    font-size: 13px;
+}
+
+.tb-proc summary {
+    cursor: pointer;
+    color: var(--tb-text-slaby);
+    padding: 4px 0;
+}
+
+.tb-proc summary:hover {
+    color: var(--tb-hlavni);
+}
+
+.tb-proc-seznam {
+    margin: 8px 0 0;
+    padding-left: 18px;
+    color: var(--tb-text-slaby);
+}
+
+.tb-proc-seznam li {
+    margin-bottom: 4px;
+}
+
+/* ---------- upozornění ---------- */
+
+.tb-upozorneni-blok {
+    margin-bottom: 16px;
+}
+
+.tb-upozorneni {
+    border-left: 3px solid var(--tb-ram);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: var(--tb-pozadi-panel);
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+}
+
+.tb-upozorneni p {
+    margin: 0;
+}
+
+.tb-upozorneni--caution {
+    border-left-color: var(--tb-varovani);
+}
+
+.tb-upozorneni--serious,
+.tb-upozorneni--critical {
+    border-left-color: var(--tb-chyba);
+    background: #fdf3f2;
+}
+
+.tb-vet {
+    margin-top: 6px !important;
+    font-weight: 600;
+}
+
+/* ---------- blokace a chyby ---------- */
+
+.tb-blok,
+.tb-chyba {
+    border: 1px solid var(--tb-ram);
+    border-left: 3px solid var(--tb-chyba);
+    border-radius: 0 var(--tb-radius) var(--tb-radius) 0;
+    padding: 16px 18px;
+    background: var(--tb-pozadi-panel);
+}
+
+.tb-chyba strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.tb-chyba p,
+.tb-blok p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.tb-nacitani {
+    padding: 22px;
+    text-align: center;
+    color: var(--tb-text-slaby);
+    border: 1px dashed var(--tb-ram);
+    border-radius: var(--tb-radius);
+}
+
+/* ---------- nákup ---------- */
+
+.tb-nepokryto {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--tb-pozadi-panel);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--tb-text-slaby);
+}
+
+.tb-nepokryto ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+}
+
+.tb-soucet {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 2px solid var(--tb-ram);
+}
+
+.tb-soucet-popis {
+    font-size: 14px;
+    color: var(--tb-text-slaby);
+}
+
+.tb-soucet-cena {
+    font-size: 24px;
+    font-weight: 700;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.tb-na-den {
+    margin: 2px 0 14px;
+    font-size: 13px;
+    color: var(--tb-text-slaby);
+    text-align: right;
+}
+
+.tb-tlacitko {
+    width: 100%;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 8px;
+    background: var(--tb-hlavni);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.12s;
+}
+
+.tb-tlacitko:hover:not(:disabled) {
+    background: var(--tb-hlavni-tmava);
+}
+
+.tb-tlacitko:disabled {
+    opacity: 0.65;
+    cursor: default;
+}
+
+/* ---------- disclaimer ---------- */
+
+/* Text přichází z Workeru, ne z šablony — nesmí se dát odstranit
+   úpravou frontendu. Vizuálně nenápadný, ale vždy přítomný. */
+.tb-disclaimer {
+    font-size: 12px;
+    color: var(--tb-text-slaby);
+    margin: 8px 2px 0;
+    line-height: 1.45;
+}
+
+/* ---------- tisk ---------- */
+
+/* Zákazník si jídelníček často chce vytisknout a vzít k veterináři.
+   Formulář a tlačítko na papíře nemají co dělat. */
+@media print {
+    .tb-mrizka {
+        grid-template-columns: 1fr;
+    }
+    .tb-panel--form,
+    .tb-tlacitko,
+    .tb-proc summary {
+        display: none;
+    }
+    .tb-proc[open] .tb-proc-seznam {
+        display: block;
+    }
+    .tb-panel {
+        border: none;
+        padding: 0;
+        background: none;
+    }
+}
