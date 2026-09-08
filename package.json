@@ -4,7 +4,13 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "scrape:dry": "tsx scripts/scrape-dry-run.ts"
+    "scrape:dry": "tsx scripts/scrape-dry-run.ts",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "sync:dry": "tsx scripts/sync-dry-run.ts",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate:local": "wrangler d1 migrations apply tutani-barf --local",
+    "migrate:remote": "wrangler d1 migrations apply tutani-barf --remote"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20241127.0",

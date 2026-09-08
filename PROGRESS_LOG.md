@@ -2,6 +2,194 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:35) — API + D1 hotové, celý systém funguje (172/172)
+
+API vrstva a D1 dodány (paralelní agent). **Všechny vrstvy hotové**,
+celý tok od validace po košík ověřen proti reálnému katalogu.
+
+```
+migrations/0001_init.sql                 products, category_map, sync_runs
+src/infrastructure/D1ProductStore.ts     upsert po 6 (limit 100 bound params)
+src/adapters/tutani-catalog/syncCatalog.ts  sitemap → D1, dryRun + diff
+src/api/handlers.ts                      /v1/davka, /v1/knowledge, /v1/health
+src/api/validateInput.ts                 rozsahy, enumy, chybové KÓDY
+src/index.ts                             routing, CORS, cron
+wrangler.jsonc                           cron 3:15, D1 binding, observability
+scripts/ukazka-api.ts                    celý API tok bez HTTP
+```
+
+**Testy 172/172** (7 souborů), `tsc --noEmit` čistý,
+`wrangler deploy --dry-run` prošel (138 KiB / gzip 39 KiB).
+
+### Dry-run synchronizace naostro
+
+```
+stav OK | 281 URL | načteno 281 | selhalo 0 | 22 s
+diff: přidat 264, změnit 0, odebrat 0, nepoužitelné 52
+```
+
+### Ověřený API tok (`scripts/ukazka-api.ts`)
+
+| případ | výsledek |
+|---|---|
+| zdravý pes | 540 g/den, 856 Kč/30 dní |
+| CKD počáteční | 540 g/den, 839 Kč, 2 varování SERIOUS |
+| CKD pokročilé | **BLOCKED** |
+| alergie na drůbež | 540 g/den, 864 Kč, produkty přehozené |
+| nadváha bez ideální hmotnosti | validace odmítla `MISSING_IDEAL_WEIGHT` |
+| nadváha s ideální | 250 g/den (redukční dieta) |
+| `pohlavi: "PES"` | odmítnuto `UNKNOWN_ENUM_VALUE` |
+| hmotnost 500 kg | odmítnuto `OUT_OF_RANGE` |
+
+### Rozhodnuto podle nálezů agenta
+
+**1. `SF*` „MAX deluxe" jde do dávky.** 18 použitelných produktů
+sedělo v OTHER, protože kategorie „BARF na cesty - barf granule"
+v mapování chyběla. Ověřil jsem detail SF2: jsou to **mražené kostky
+svaloviny** (800 g/205 Kč), celé i dělené kuře, srnec/daněk/jelen —
+slovo „granule" znamená kostky, ne suché granule. MUSCLE 55 → **62**.
+
+**2. `MYS` vyřazena.** „Myš mražená 16-22g 25ks" — parser vzal 22 g
+za JEDEN kus, ale balení je 25 ks za 405 Kč. To by dalo 18 400 Kč/kg.
+Navíc je to „Barf pro dravce" (sokolnictví), ne krmivo pro psy. Celá
+kategorie „pro dravce" i „pro kočky" → OTHER.
+
+**3. `pohlavi` v dokumentaci opraveno** na `MALE|FEMALE`. Kód i
+frontend enum používaly správně, chyba byla jen v ARCHITEKTURA.md §6.
+
+### OPRAVA MÉHO DŘÍVĚJŠÍHO TVRZENÍ
+
+Napsal jsem, že rozpor v gramáži „vyřešila cena 26/26". **Změřeno:
+cena rozhodla jen 6 z 26**, u zbývajících 20 obě varianty prošly
+a rozhodl tie-break „vyhrává název". Výsledek je správný, ale moje
+odůvodnění bylo silnější než realita.
+
+**Zkoušel jsem hranice zpřísnit z 0,25×–4× na 0,4×–2,5×. Bylo to
+HORŠÍ:** u `TUT196` „Barf Mrkev 500g" vypadla správná varianta
+78 Kč/kg pod dolní hranici (0,4 × medián PLANT 204 = 82) a vyhrálo
+nesprávných 100 g = **390 Kč/kg**. Zpřísnění tedy vybralo špatně tam,
+kde široké pásmo vybralo dobře — mediány skupin jsou zkreslené drahým
+sortimentem (SUPPLEMENT 931 Kč/kg kvůli řasám a olejům).
+
+Vráceno na 0,25×–4× a **v kódu je poznámka, proč se to nesmí
+opakovat**. Role ceny je úzká a záměrná: vyloučit variantu mimo
+o násobek. Kde nerozhodne, `reasonCs` výslovně uvede, že rozhodl
+tie-break.
+
+### Dvě rozhodnutí agenta, která schvaluju
+
+- **selhání rule enginu vrací `BLOCKED`/503**, ne dávku bez
+  zdravotních omezení. Tichý fallback na prázdná omezení by u psa
+  s CKD byl horší než nevydat nic.
+- **`knowledgeEngineReady: false`** se přidá jen když majitel zadal
+  diagnózu nebo alergii — aby konfigurátor netvrdil, že s nimi
+  počítal.
+
+### ZBÝVÁ K NASAZENÍ
+
+1. **`wrangler d1 create tutani-barf`** → vyplnit `database_id`
+   ve `wrangler.jsonc` (agent ho záměrně nevymyslel).
+2. **`priceId` je vždy NULL** — v `dataLayer` na detailu není.
+   `matchProducts` ho ve výstupu očekává a frontend ho potřebuje pro
+   vložení do košíku. Řešení: buď `productId` + formulář Shoptetu,
+   nebo scrapovat `priceId` z HTML formuláře na detailu. **Blokuje
+   tlačítko „Vložit vše do košíku".**
+3. Zapojit frontend na reálný Worker (dnes míří na
+   `tutani-barf.hlancaric.workers.dev`, který neexistuje).
+
+## 2026-09-09 (00:40) — API vrstva Workeru, D1 schéma a Cron sync (172/172)
+
+**Napsáno:** `migrations/0001_init.sql`, `src/infrastructure/D1ProductStore.ts`,
+`src/adapters/tutani-catalog/syncCatalog.ts`, `src/api/handlers.ts`,
+`src/api/validateInput.ts`, `src/index.ts`, `wrangler.jsonc`,
+`tsconfig.json` + `tsconfig.node.json`, `scripts/sync-dry-run.ts`,
+`tests/unit/{validateInput,api,syncCatalog}.test.ts`.
+
+Tím je hotová **celá serverová část**: katalog v D1, noční sync,
+tři endpointy. Chybí jen napojení znalostní vrstvy (integrační bod
+připravený) a frontend.
+
+### DRY-RUN proti reálnému e-shopu — 281 URL, 0 selhání, 22 s
+
+```
+stav: OK   URL 281   načteno 281   selhalo 0   produktů 264
+diff: přidat 264, změnit 0, odebrat 0, nepoužitelné 52
+
+skupina      celkem  použitelných      zdroj gramáže
+OTHER          104           68        DATALAYER      108
+MUSCLE          55           54        NAME            78
+SUPPLEMENT      46           32        CHYBÍ           52
+PLANT           24           24        RESOLVED_PRICE  26
+BONE            17           16
+ORGAN           14           14
+LIVER            4            4
+```
+
+52 nepoužitelných je **správně**: poukázky, hračky, míčky, oleje
+v ml. Do doporučení nepatří a systém si je nedomýšlí (R7).
+
+### Co drží katalog klienta v bezpečí
+
+- **dry-run nic nezapíše** a diff se přesto zaznamená do `sync_runs` —
+  schválený diff musí být dohledatelný, ne jen v konzoli
+- **prázdný výsledek běh PŘERUŠÍ** — kdyby se změnila struktura
+  stránky, konfigurátor by jinak přišel o všechna doporučení
+- **produkty se neodebírají při PARTIAL běhu** — chybějící SKU
+  znamená „nepřečetli jsme ho", ne „přestal se prodávat"
+- `ON CONFLICT` místo `DELETE`+`INSERT` — katalog není ani na okamžik
+  prázdný, i kdyby zákazník počítal dávku ve stejnou chvíli
+- concurrency 4, rozestup 150 ms, retry — e-shop v provozu to nesmí
+  poznat
+
+### Bezpečnost v odpovědi, ne v šabloně
+
+- **disclaimer je v odpovědi Workeru** u OK, BLOCKED, INCOMPLETE
+  i u chyby validace — úpravou frontendu se odstranit nedá (4 testy)
+- **selhání rule enginu vrátí BLOCKED**, ne dávku bez zdravotních
+  omezení — tichý fallback na prázdná omezení by byl horší než
+  nevydat nic
+- **nehotová znalostní vrstva se PŘIZNÁ**: zadal-li majitel diagnózu
+  a pravidla neběží, přidá se `KNOWLEDGE_ENGINE_UNAVAILABLE`
+  se `requiresVet: true`. Konfigurátor nesmí mlčky tvrdit, že
+  s onemocněním ledvin počítal.
+- CORS na **přesný výčet** originů, ne `endsWith('tutani.cz')` —
+  tím by prošel `zlytutani.cz`
+
+### Na co jsem narazil (potřebuje rozhodnutí)
+
+1. **18 použitelných produktů v OTHER je reálné maso.** Celá řada
+   `SF*` „MAX deluxe" (kostky hovězí svaloviny, 3/4 kuřete
+   s dršťkami) je v kategorii **„BARF na cesty - barf granule"**,
+   která v `categoryMap` není. Do dávky patří, ale nedoporučí se.
+   Rozhodnout: doplnit mapování, nebo je klient nechce v BARF dávce?
+2. **`MYS` „Myš mražená 16-22g 25ks" → 22 g za 405 Kč.** Parser vzal
+   gramáž JEDNÉ myši, balení je 25 ks. Kdyby se dostala do dávky,
+   doporučí nesmyslné množství. Podobně `TUT35` „6ks",
+   `TUT60` „2 ks" — u těch aspoň gramáž chybí a vypadnou samy.
+3. **20 z 26 rozporů v gramáži rozhodl tie-break, ne cena.** Obě
+   varianty jsou cenově možné, takže vyhrál název. U `DR23`
+   „Dromy Krill pure 130g" to dává 1169 Kč/kg proti 304 Kč/kg
+   z adminu — cena tady nerozhodla a název nemusí být správně.
+4. **`priceId` je vždy NULL** — v `dataLayer` na detailu produktu
+   není (ověřeno). Vložení do košíku se bude muset opřít
+   o `productId` a formulář, jinak potřebujeme jiný zdroj.
+5. **`database_id` ve `wrangler.jsonc` je prázdné** — čeká na
+   `wrangler d1 create tutani-barf`. Nevymýšlím si ho.
+
+### Stav projektu
+
+| vrstva | stav |
+|---|---|
+| D1 schéma + migrace | ✅ ověřeno proti sqlite3 |
+| store (rozhraní + D1) | ✅ dávkový zápis, limit parametrů ošetřen |
+| sync katalogu + Cron | ✅ dry-run naostro, 264/264 |
+| API `/v1/davka`, `/knowledge`, `/health` | ✅ |
+| validace vstupu | ✅ kódy, ne texty |
+| napojení znalostní vrstvy | ⬜ integrační bod hotový, čeká na výměnu `NOOP_RULE_ENGINE` |
+
+**Testy: 172/172** (50 původních nedotčeno), `tsc --noEmit` čistý.
+
+
 ## 2026-09-09 (00:35) — zdravotní volby v UI, blokace ověřená v prohlížeči
 
 Doplněno po nálezu ze znalostní vrstvy: **konfigurátor se musí ptát

@@ -33,13 +33,24 @@ import { TUTANI_TENANT } from '../../tenants/tutani/config/tenant.js';
 // neověřoval vlastní kopii pravidel.
 const raw = JSON.parse(
     readFileSync(new URL('../../tenants/tutani/rules/barf-core.json', import.meta.url), 'utf-8')
-) as Record<string, never>;
+) as BarfMethodology;
 const METHODOLOGY: BarfMethodology = {
     doseMatrix: raw.doseMatrix,
     conflictResolution: raw.conflictResolution,
     compositionProfile: raw.compositionProfile,
     sourceVersion: raw.sourceVersion,
 };
+
+/**
+ * Tělo odpovědi API. Kontrakt je JSON s českými klíči (§6), takže se
+ * čte jako volný záznam — testy tvrdí HODNOTY kontraktu, ne typy
+ * enginu. `body()` je jediné místo, kde se přetypovává.
+ */
+type ApiBody = Record<string, any>;
+
+async function body(res: Response): Promise<ApiBody> {
+    return (await res.json()) as ApiBody;
+}
 
 /** Falešný store — v paměti, bez D1. */
 class FakeStore implements ProductStore {
@@ -179,22 +190,22 @@ describe('POST /v1/davka — validní vstup', () => {
     it('spočítá dávku a doporučí produkty', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
         expect(res.status).toBe(200);
-        const body = (await res.json()) as Record<string, never>;
+        const b = await body(res);
 
-        expect(body.status).toBe('OK');
+        expect(b.status).toBe('OK');
         // 24 kg, dospělý, střední aktivita → 2,25 % → 540 g/den.
-        expect(body.davka.celkemGDen).toBe(540);
-        expect(body.davka.porce.pocet).toBe(2);
-        expect(body.slozeni).toHaveLength(5);
-        expect(body.produkty.length).toBeGreaterThan(0);
-        expect(body.cena.naDni).toBe(30);
-        expect(body.obdobiDni).toBe(30);
+        expect(b.davka.celkemGDen).toBe(540);
+        expect(b.davka.porce.pocet).toBe(2);
+        expect(b.slozeni).toHaveLength(5);
+        expect(b.produkty.length).toBeGreaterThan(0);
+        expect(b.cena.naDni).toBe(30);
+        expect(b.obdobiDni).toBe(30);
     });
 
     it('audit vysvětluje výpočet bez LLM (R1)', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
-        const body = (await res.json()) as Record<string, never>;
-        const steps = (body.audit as { krok: string }[]).map((a) => a.krok);
+        const b = await body(res);
+        const steps = (b.audit as { krok: string }[]).map((a) => a.krok);
         expect(steps).toContain('LIFE_STAGE');
         expect(steps).toContain('DOSE_RULE');
         expect(steps).toContain('BASE_WEIGHT');
@@ -203,8 +214,8 @@ describe('POST /v1/davka — validní vstup', () => {
 
     it('produkty nesou productId pro vložení do košíku', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
-        const body = (await res.json()) as Record<string, never>;
-        expect((body.produkty as { productId: string }[])[0].productId).toBe('868');
+        const b = await body(res);
+        expect((b.produkty as { productId: string }[])[0].productId).toBe('868');
     });
 
     it('respektuje kratší období', async () => {
@@ -212,24 +223,24 @@ describe('POST /v1/davka — validní vstup', () => {
             doseRequest({ ...REX, obdobiDni: 7 }),
             deps({ rules: fakeRules() })
         );
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.cena.naDni).toBe(7);
+        const b = await body(res);
+        expect(b.cena.naDni).toBe(7);
     });
 });
 
 describe('POST /v1/davka — DISCLAIMER se nedá odstranit', () => {
     it('je v odpovědi u OK', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.disclaimer).toBe(DISCLAIMER_CS);
-        expect(String(body.disclaimer)).toMatch(/veterinář/i);
+        const b = await body(res);
+        expect(b.disclaimer).toBe(DISCLAIMER_CS);
+        expect(String(b.disclaimer)).toMatch(/veterinář/i);
     });
 
     it('je v odpovědi i u BLOCKED', async () => {
         const rules = fakeRules({ blocked: true, blockedBy: ['ckd-3'] });
         const res = await handleDose(doseRequest(REX), deps({ rules }));
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.disclaimer).toBe(DISCLAIMER_CS);
+        const b = await body(res);
+        expect(b.disclaimer).toBe(DISCLAIMER_CS);
     });
 
     it('je v odpovědi i u INCOMPLETE', async () => {
@@ -238,15 +249,15 @@ describe('POST /v1/davka — DISCLAIMER se nedá odstranit', () => {
             doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'HIGH' } }),
             deps({ rules: fakeRules() })
         );
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('INCOMPLETE');
-        expect(body.disclaimer).toBe(DISCLAIMER_CS);
+        const b = await body(res);
+        expect(b.status).toBe('INCOMPLETE');
+        expect(b.disclaimer).toBe(DISCLAIMER_CS);
     });
 
     it('je i v chybové odpovědi validace', async () => {
         const res = await handleDose(doseRequest({ pes: {} }), deps());
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.disclaimer).toBe(DISCLAIMER_CS);
+        const b = await body(res);
+        expect(b.disclaimer).toBe(DISCLAIMER_CS);
     });
 });
 
@@ -255,12 +266,12 @@ describe('POST /v1/davka — BLOCKED a INCOMPLETE', () => {
         const rules = fakeRules({ blocked: true, blockedBy: ['jaterni-shunt'] });
         const res = await handleDose(doseRequest(REX), deps({ rules }));
         expect(res.status).toBe(200); // požadavek byl v pořádku, jen výsledkem je odmítnutí
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('BLOCKED');
-        expect(body.reason).toBe('CONDITION_BLOCKS_RESULT');
-        expect(body.davka).toBeNull();
-        expect(body.produkty).toEqual([]);
-        expect(body.slozeni).toEqual([]);
+        const b = await body(res);
+        expect(b.status).toBe('BLOCKED');
+        expect(b.reason).toBe('CONDITION_BLOCKS_RESULT');
+        expect(b.davka).toBeNull();
+        expect(b.produkty).toEqual([]);
+        expect(b.slozeni).toEqual([]);
     });
 
     it('INCOMPLETE u chybějícího pásma vysvětlí důvod v auditu', async () => {
@@ -268,11 +279,11 @@ describe('POST /v1/davka — BLOCKED a INCOMPLETE', () => {
             doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'HIGH' } }),
             deps({ rules: fakeRules() })
         );
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('INCOMPLETE');
-        expect(body.reason).toBe('NO_MATCHING_DOSE_RULE');
-        expect(body.produkty).toEqual([]);
-        expect((body.audit as { krok: string }[]).map((a) => a.krok)).toContain('DOSE_RULE');
+        const b = await body(res);
+        expect(b.status).toBe('INCOMPLETE');
+        expect(b.reason).toBe('NO_MATCHING_DOSE_RULE');
+        expect(b.produkty).toEqual([]);
+        expect((b.audit as { krok: string }[]).map((a) => a.krok)).toContain('DOSE_RULE');
     });
 
     it('nadváha se počítá z IDEÁLNÍ hmotnosti', async () => {
@@ -283,10 +294,10 @@ describe('POST /v1/davka — BLOCKED a INCOMPLETE', () => {
             }),
             deps({ rules: fakeRules() })
         );
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('OK');
-        expect(body.davka.zHmotnosti).toBe('IDEAL');
-        expect(body.davka.zakladHmotnostiKg).toBe(24);
+        const b = await body(res);
+        expect(b.status).toBe('OK');
+        expect(b.davka.zHmotnosti).toBe('IDEAL');
+        expect(b.davka.zakladHmotnostiKg).toBe(24);
     });
 });
 
@@ -297,9 +308,9 @@ describe('POST /v1/davka — chybný vstup', () => {
             deps()
         );
         expect(res.status).toBe(422);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.code).toBe('VALIDATION_FAILED');
-        expect((body.issues as { code: string }[]).map((i) => i.code)).toContain(
+        const b = await body(res);
+        expect(b.code).toBe('VALIDATION_FAILED');
+        expect((b.issues as { code: string }[]).map((i) => i.code)).toContain(
             'MISSING_IDEAL_WEIGHT'
         );
     });
@@ -310,8 +321,8 @@ describe('POST /v1/davka — chybný vstup', () => {
             deps()
         );
         expect(res.status).toBe(422);
-        const body = (await res.json()) as Record<string, never>;
-        expect((body.issues as { code: string }[]).map((i) => i.code)).toContain('OUT_OF_RANGE');
+        const b = await body(res);
+        expect((b.issues as { code: string }[]).map((i) => i.code)).toContain('OUT_OF_RANGE');
     });
 
     it('neznámý enum → 422', async () => {
@@ -320,8 +331,8 @@ describe('POST /v1/davka — chybný vstup', () => {
             deps()
         );
         expect(res.status).toBe(422);
-        const body = (await res.json()) as Record<string, never>;
-        expect((body.issues as { code: string }[]).map((i) => i.code)).toContain(
+        const b = await body(res);
+        expect((b.issues as { code: string }[]).map((i) => i.code)).toContain(
             'UNKNOWN_ENUM_VALUE'
         );
     });
@@ -330,8 +341,8 @@ describe('POST /v1/davka — chybný vstup', () => {
         const req = new Request('https://w.example/v1/davka', { method: 'POST', body: '{nope' });
         const res = await handleDose(req, deps());
         expect(res.status).toBe(400);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.code).toBe('INVALID_JSON');
+        const b = await body(res);
+        expect(b.code).toBe('INVALID_JSON');
     });
 
     it('nafouknuté tělo → 400', async () => {
@@ -341,8 +352,8 @@ describe('POST /v1/davka — chybný vstup', () => {
         });
         const res = await handleDose(req, deps());
         expect(res.status).toBe(400);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.code).toBe('BODY_TOO_LARGE');
+        const b = await body(res);
+        expect(b.code).toBe('BODY_TOO_LARGE');
     });
 });
 
@@ -352,16 +363,16 @@ describe('POST /v1/davka — nehotová znalostní vrstva se PŘIZNÁ (R7)', () =
             doseRequest({ ...REX, pes: { ...REX.pes, diagnozy: ['ckd'] } }),
             deps({ rules: NOOP_RULE_ENGINE })
         );
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.knowledgeEngineReady).toBe(false);
-        const codes = (body.upozorneni as { kod: string }[]).map((w) => w.kod);
+        const b = await body(res);
+        expect(b.knowledgeEngineReady).toBe(false);
+        const codes = (b.upozorneni as { kod: string }[]).map((w) => w.kod);
         expect(codes).toContain('KNOWLEDGE_ENGINE_UNAVAILABLE');
     });
 
     it('u zdravého psa se varování nepřidává', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: NOOP_RULE_ENGINE }));
-        const body = (await res.json()) as Record<string, never>;
-        const codes = (body.upozorneni as { kod: string }[]).map((w) => w.kod);
+        const b = await body(res);
+        const codes = (b.upozorneni as { kod: string }[]).map((w) => w.kod);
         expect(codes).not.toContain('KNOWLEDGE_ENGINE_UNAVAILABLE');
     });
 
@@ -380,8 +391,8 @@ describe('POST /v1/davka — nehotová znalostní vrstva se PŘIZNÁ (R7)', () =
             doseRequest({ ...REX, pes: { ...REX.pes, diagnozy: ['ckd'] } }),
             deps({ rules })
         );
-        const body = (await res.json()) as Record<string, never>;
-        const w = (body.upozorneni as { kod: string; requiresVet: boolean }[])[0];
+        const b = await body(res);
+        const w = (b.upozorneni as { kod: string; requiresVet: boolean }[])[0];
         expect(w.kod).toBe('ckd');
         expect(w.requiresVet).toBe(true);
     });
@@ -400,22 +411,22 @@ describe('POST /v1/davka — selhání pravidel a katalogu', () => {
         };
         const res = await handleDose(doseRequest(REX), deps({ rules }));
         expect(res.status).toBe(503);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('BLOCKED');
-        expect(body.reason).toBe('RULE_ENGINE_FAILED');
-        expect(body.disclaimer).toBe(DISCLAIMER_CS);
+        const b = await body(res);
+        expect(b.status).toBe('BLOCKED');
+        expect(b.reason).toBe('RULE_ENGINE_FAILED');
+        expect(b.disclaimer).toBe(DISCLAIMER_CS);
     });
 
     it('nedostupný katalog dávku vydá, ale přizná chybějící balení', async () => {
         const store = new FakeStore(fullCatalog());
         store.failReads = true;
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }, store));
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('OK');
-        expect(body.davka.celkemGDen).toBe(540);
-        expect(body.katalogNedostupny).toBe(true);
-        expect(body.produkty).toEqual([]);
-        expect(body.cena).toBeNull();
+        const b = await body(res);
+        expect(b.status).toBe('OK');
+        expect(b.davka.celkemGDen).toBe(540);
+        expect(b.katalogNedostupny).toBe(true);
+        expect(b.produkty).toEqual([]);
+        expect(b.cena).toBeNull();
     });
 
     it('prázdný katalog přizná nepokryté složky, nesubstituuje', async () => {
@@ -423,17 +434,17 @@ describe('POST /v1/davka — selhání pravidel a katalogu', () => {
             doseRequest(REX),
             deps({ rules: fakeRules() }, new FakeStore([]))
         );
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('OK');
-        expect(body.produkty).toEqual([]);
-        expect((body.nepokryto as unknown[]).length).toBe(5);
+        const b = await body(res);
+        expect(b.status).toBe('OK');
+        expect(b.produkty).toEqual([]);
+        expect((b.nepokryto as unknown[]).length).toBe(5);
     });
 
     it('produkty bez gramáže se do doporučení nedostanou (R7)', async () => {
         const store = new FakeStore([product({ packGrams: null, packGramsSource: null })]);
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }, store));
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.produkty).toEqual([]);
+        const b = await body(res);
+        expect(b.produkty).toEqual([]);
     });
 
     it('alergie vyřadí produkt a složka se přizná jako nepokrytá', async () => {
@@ -442,9 +453,9 @@ describe('POST /v1/davka — selhání pravidel a katalogu', () => {
         ]);
         const rules = fakeRules({ excludedIngredientIds: new Set(['kure']) });
         const res = await handleDose(doseRequest(REX), deps({ rules }, store));
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.produkty).toEqual([]);
-        const uncovered = (body.nepokryto as { group: string; duvod: string }[]).find(
+        const b = await body(res);
+        expect(b.produkty).toEqual([]);
+        const uncovered = (b.nepokryto as { group: string; duvod: string }[]).find(
             (u) => u.group === 'MUSCLE'
         );
         expect(uncovered?.duvod).toBe('ALL_FILTERED_OUT');
@@ -455,19 +466,19 @@ describe('GET /v1/knowledge', () => {
     it('vrátí seznam diagnóz a alergenů, aby je frontend neměl natvrdo', async () => {
         const res = await handleKnowledge(deps({ rules: fakeRules() }));
         expect(res.status).toBe(200);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.ready).toBe(true);
-        expect((body.diagnoses as { id: string }[])[0].id).toBe('ckd');
-        expect((body.allergens as { id: string }[])[0].id).toBe('kure');
-        expect(body.ruleSetIds).toEqual(TUTANI_TENANT.ruleSetIds);
+        const b = await body(res);
+        expect(b.ready).toBe(true);
+        expect((b.diagnoses as { id: string }[])[0].id).toBe('ckd');
+        expect((b.allergens as { id: string }[])[0].id).toBe('kure');
+        expect(b.ruleSetIds).toEqual(TUTANI_TENANT.ruleSetIds);
     });
 
     it('endpoint existuje i bez nasazených pravidel a přizná to', async () => {
         const res = await handleKnowledge(deps({ rules: NOOP_RULE_ENGINE }));
         expect(res.status).toBe(200);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.ready).toBe(false);
-        expect(body.diagnoses).toEqual([]);
+        const b = await body(res);
+        expect(b.ready).toBe(false);
+        expect(b.diagnoses).toEqual([]);
     });
 });
 
@@ -475,10 +486,10 @@ describe('GET /v1/health', () => {
     it('DEGRADED, dokud sync neproběhl', async () => {
         const res = await handleHealth(deps());
         expect(res.status).toBe(503);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('DEGRADED');
-        expect(body.lastSync).toBeNull();
-        expect(body.usableProducts).toBe(5);
+        const b = await body(res);
+        expect(b.status).toBe('DEGRADED');
+        expect(b.lastSync).toBeNull();
+        expect(b.usableProducts).toBe(5);
     });
 
     it('OK po nedávném ostrém syncu', async () => {
@@ -503,10 +514,10 @@ describe('GET /v1/health', () => {
         });
         const res = await handleHealth(deps({ now: () => now }, store));
         expect(res.status).toBe(200);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('OK');
-        expect(body.lastSync.ageHours).toBe(2.8);
-        expect(body.lastSync.productsParsed).toBe(264);
+        const b = await body(res);
+        expect(b.status).toBe('OK');
+        expect(b.lastSync.ageHours).toBe(2.8);
+        expect(b.lastSync.productsParsed).toBe(264);
     });
 
     it('DEGRADED, když je poslední sync starší než 48 h', async () => {
@@ -532,16 +543,16 @@ describe('GET /v1/health', () => {
             deps({ now: () => new Date('2026-09-09T06:00:00.000Z') }, store)
         );
         expect(res.status).toBe(503);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('DEGRADED');
+        const b = await body(res);
+        expect(b.status).toBe('DEGRADED');
     });
 
     it('DEGRADED, když katalog nemá použitelné produkty', async () => {
         const store = new FakeStore([product({ packGrams: null })]);
         const res = await handleHealth(deps({}, store));
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('DEGRADED');
-        expect(body.usableProducts).toBe(0);
+        const b = await body(res);
+        expect(b.status).toBe('DEGRADED');
+        expect(b.usableProducts).toBe(0);
     });
 
     it('nedostupná D1 → FAILED, ne pád', async () => {
@@ -549,7 +560,7 @@ describe('GET /v1/health', () => {
         store.failReads = true;
         const res = await handleHealth(deps({}, store));
         expect(res.status).toBe(503);
-        const body = (await res.json()) as Record<string, never>;
-        expect(body.status).toBe('FAILED');
+        const b = await body(res);
+        expect(b.status).toBe('FAILED');
     });
 });

@@ -46,6 +46,26 @@ export type WeightDecision =
  * je široká záměrně: cílem je vyloučit nesmysl (10 Kč/kg, 390 Kč/kg),
  * ne posuzovat, jestli je produkt drahý.
  */
+/**
+ * ŠIROKÉ PÁSMO JE ZÁMĚR, ne nedbalost (zjištěno měřením 2026-09-09).
+ *
+ * Zkoušel jsem zpřísnit na 0,4×–2,5×, aby cena rozhodovala častěji.
+ * Výsledek byl HORŠÍ: u `TUT196` „Barf Mrkev 500g" (39 Kč) vypadla
+ * správná varianta 78 Kč/kg pod dolní hranici (0,4 × medián PLANT
+ * 204 = 82) a vyhrálo nesprávných 100 g = **390 Kč/kg**. Zpřísnění
+ * tedy vybralo špatně tam, kde široké pásmo vybralo dobře.
+ *
+ * Důvod: mediány skupin jsou zkreslené drahým sortimentem (SUPPLEMENT
+ * 931 Kč/kg kvůli mořským řasám a olejům), takže poměrové hranice
+ * kolem mediánu neodpovídají tomu, co je u konkrétní suroviny
+ * reálná cena.
+ *
+ * Role ceny je proto ÚZKÁ A ZÁMĚRNÁ: vyloučit variantu, která je
+ * mimo o násobek (10 Kč/kg za vemínko, 390 Kč/kg za mrkev). Kde cena
+ * nerozhodne — reálně 20 z 26 případů — rozhoduje tie-break
+ * „vyhrává název" a `reasonCs` to výslovně uvede, aby bylo v auditu
+ * poznat čím se rozhodlo.
+ */
 const LOWER_FACTOR = 0.25;   // pod čtvrtinou mediánu = nereálně nízko
 const UPPER_FACTOR = 4.0;    // nad čtyřnásobkem = nereálně vysoko
 

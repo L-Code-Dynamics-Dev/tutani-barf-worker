@@ -317,7 +317,7 @@ Nepokryje-li se složka (třeba nejsou skladem játra), výsledek to
     "hmotnostKg": 24.0,
     "idealniHmotnostKg": null,      // povinné při nadváze
     "vekMesicu": 36,
-    "pohlavi": "PES",               // PES | FENA
+    "pohlavi": "MALE",              // MALE | FEMALE (kanonický enum z DogProfile.ts)
     "kastrovany": false,
     "aktivita": "MEDIUM",           // LOW | MEDIUM | HIGH | WORKING
     "kondice": "IDEAL",             // UNDER | IDEAL | OVER

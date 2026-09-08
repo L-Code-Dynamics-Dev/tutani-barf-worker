@@ -59,7 +59,15 @@ export const TUTANI_TENANT: TenantConfiguration = {
         { match: 'poukázk', barfGroup: 'OTHER' },
         { match: 'dárkov', barfGroup: 'OTHER' },
         { match: 'obal', barfGroup: 'OTHER' },
-        { match: 'na cesty', barfGroup: 'OTHER' },
+        /**
+         * „Barf pro dravce" jsou celá zvířata pro sokolníky (myši,
+         * krysy, křepelky), ne krmná dávka pro psa. Navíc mají gramáž
+         * za JEDEN kus, ne za balení — `MYS` „Myš mražená 16-22g 25ks"
+         * se přečetla jako 22 g za 405 Kč, což by dalo 18 400 Kč/kg
+         * a nesmyslné množství v košíku (nález 2026-09-09).
+         */
+        { match: 'pro dravce', barfGroup: 'OTHER' },
+        { match: 'pro kočky', barfGroup: 'OTHER' },
 
         /**
          * JATÝRKA / JÁTRA dřív než obecné vnitřnosti — mají v metodice
@@ -118,6 +126,22 @@ export const TUTANI_TENANT: TenantConfiguration = {
         { match: 'plíce', barfGroup: 'ORGAN' },
         { match: 'bachor', barfGroup: 'ORGAN' },
         { match: 'dršťk', barfGroup: 'ORGAN' },
+
+        /**
+         * „MAX deluxe" z kategorie „BARF na cesty - barf granule".
+         *
+         * Nález 2026-09-09: 18 použitelných produktů v OTHER bylo
+         * reálné maso — kostky hovězí i libové svaloviny (800 g/205 Kč),
+         * celé i dělené kuře (1200 g), srnec/daněk/jelen. Slovo
+         * „granule" v názvu kategorie znamená MRAŽENÉ KOSTKY, ne suché
+         * granule; ověřeno na detailu SF2. Do dávky patří.
+         */
+        { match: 'svaloviny', barfGroup: 'MUSCLE' },
+        { match: 'kuřete', barfGroup: 'MUSCLE' },
+        { match: 'srnec', barfGroup: 'MUSCLE' },
+        { match: 'daněk', barfGroup: 'MUSCLE' },
+        { match: 'jelen', barfGroup: 'MUSCLE' },
+        { match: 'klokan', barfGroup: 'MUSCLE' },
 
         { match: 'jazyk', barfGroup: 'MUSCLE' },
         { match: 'kachn', barfGroup: 'MUSCLE' },
