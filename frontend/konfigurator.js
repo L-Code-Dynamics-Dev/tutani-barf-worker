@@ -634,9 +634,21 @@
         return wrap;
     }
 
+    /**
+     * Vícenásobný výběr se VYSVĚTLENÍM u každé volby.
+     *
+     * U zdravotních stavů nestačí název — majitel musí poznat, který
+     * vybrat. Rozdíl mezi počátečním a pokročilým stadiem onemocnění
+     * ledvin rozhoduje o tom, jestli systém dávku vůbec vydá, takže
+     * text nesmí být schovaný v `title` (na mobilu se nezobrazí vůbec).
+     *
+     * Texty přicházejí z Workeru ze znalostní databáze — nejsou tady
+     * natvrdo, aby se daly upravit bez zásahu do frontendu.
+     */
     function vicenasobnyVyber(moznosti, vybrane, onChange) {
         var wrap = el('div', 'tb-multi');
         moznosti.forEach(function (m) {
+            var polozka = el('div', 'tb-multi-radek');
             var lbl = el('label', 'tb-multi-item');
             var i = el('input');
             i.type = 'checkbox';
@@ -650,8 +662,17 @@
             });
             lbl.appendChild(i);
             lbl.appendChild(el('span', null, m.nazev));
-            if (m.popis) lbl.title = m.popis;
-            wrap.appendChild(lbl);
+            polozka.appendChild(lbl);
+
+            // Stav, který dávku zablokuje, se označí předem — zákazník
+            // má vědět, že u něj výsledek nedostane, ještě než klikne.
+            if (m.blokuje) {
+                polozka.appendChild(el('p', 'tb-multi-blok',
+                    'U tohoto stavu dávku nepočítáme — je potřeba individuální plán od veterináře.'));
+            } else if (m.popis) {
+                polozka.appendChild(el('p', 'tb-multi-popis', m.popis));
+            }
+            wrap.appendChild(polozka);
         });
         return wrap;
     }

@@ -181,7 +181,25 @@
 .tb-multi {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 10px;
+}
+
+.tb-multi-radek {
+    display: block;
+}
+
+/* Vysvětlení pod volbou, zarovnané za zaškrtávátko. */
+.tb-multi-popis,
+.tb-multi-blok {
+    margin: 3px 0 0 26px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--tb-text-slaby);
+}
+
+/* Stav, u kterého se dávka nevydá — musí být poznat předem. */
+.tb-multi-blok {
+    color: var(--tb-varovani);
 }
 
 .tb-multi-item input,

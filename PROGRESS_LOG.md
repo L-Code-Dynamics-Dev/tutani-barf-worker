@@ -2,6 +2,40 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:35) — zdravotní volby v UI, blokace ověřená v prohlížeči
+
+Doplněno po nálezu ze znalostní vrstvy: **konfigurátor se musí ptát
+na stadium CKD**, jinak nelze rozlišit `ckd-early` (dávka se vydá) od
+`ckd-advanced` (nevydá).
+
+### Co se změnilo
+
+- **vysvětlení pod každou zdravotní volbou**, ne v `title` — na mobilu
+  se `title` nezobrazí vůbec a majitel by nepoznal, které stadium
+  vybrat. Texty přicházejí z Workeru ze znalostní databáze
+  (`explainCs`), nejsou ve frontendu natvrdo.
+- **stavy, které dávku zablokují, jsou označené PŘEDEM** oranžovým
+  textem „U tohoto stavu dávku nepočítáme" — zákazník to má vědět,
+  než klikne, ne až po odeslání.
+- náhled dostal obě stadia CKD i jaterní shunt, aby se blokace dala
+  předvést klientovi.
+
+### Ověřeno v Chrome, 0 chyb v konzoli
+
+| test | výsledek |
+|---|---|
+| 5 diagnóz s vysvětlením | ✅ 2 označené jako blokující |
+| pokročilé CKD | ✅ dávka **i nákup se skryjí**, zobrazí se „Tady si netroufáme radit" |
+| počáteční CKD | ✅ 338 g, kosti 8 %, 1 varování |
+| mobil 390 px | ✅ scrollWidth 390, popisy se vejdou |
+
+### Zbývá rozhodnout (nezablokovalo vývoj)
+
+Co dělat, když majitel **stadium nezná**. Návrh agenta byl použít
+`ckd-advanced` (bezpečnější), ale znamená to, že části zákazníků
+systém dávku nedá. Zatím se nic nepředvolí — zákazník musí vybrat
+sám. **Rozhodnutí Lucky/klient.**
+
 ## 2026-09-09 (00:25) — znalostní vrstva nemocí HOTOVÁ (88/88 testů)
 
 Znalostní databáze a rule engine dodány (paralelní agent), ověřeno

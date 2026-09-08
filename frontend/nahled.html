@@ -72,9 +72,14 @@
     var KNOWLEDGE = {
         v: 1,
         diagnozy: [
-            { id: 'ckd', nazev: 'nemocné ledviny', popis: 'Chronické onemocnění ledvin' },
-            { id: 'pankreatitida', nazev: 'slinivka', popis: 'Zánět slinivky — potřebuje nízkotučnou stravu' },
-            { id: 'jatra', nazev: 'nemocná jaterní funkce', popis: 'Onemocnění jater' }
+            { id: 'ckd-early', nazev: 'nemocné ledviny, počáteční stadium',
+              popis: 'Ledviny nezvládají vylučovat fosfor. Snížíme podíl mletých kostí, které jsou jeho hlavním zdrojem.' },
+            { id: 'ckd-advanced', nazev: 'nemocné ledviny, pokročilé stadium', blokuje: true },
+            { id: 'pankreatitida', nazev: 'zánět slinivky',
+              popis: 'Vybíráme libové suroviny a vynecháváme tučné.' },
+            { id: 'onemocneni-jater', nazev: 'nemocná jaterní funkce',
+              popis: 'Snížíme podíl jater v dávce.' },
+            { id: 'portosystemovy-shunt', nazev: 'zkratka jaterní cévy', blokuje: true }
         ],
         alergie: [
             { id: 'kure', nazev: 'kuřecí' },
@@ -114,7 +119,19 @@
         var zVahy = pes.kondice === 'OVER' ? pes.idealniHmotnostKg : vaha;
         var celkem = Math.round(zVahy * 1000 * pct / 100);
 
-        var kosti = (pes.diagnozy || []).indexOf('ckd') !== -1 ? 8 : 10;
+                var dg = pes.diagnozy || [];
+        if (dg.indexOf('ckd-advanced') !== -1 || dg.indexOf('portosystemovy-shunt') !== -1) {
+            return {
+                status: 'BLOCKED',
+                upozorneni: [{
+                    severity: 'CRITICAL',
+                    text: 'Dávku jsme nevydali. U tohoto onemocnění se jídelníček staví individuálně podle výsledků krve.',
+                    requiresVet: true
+                }],
+                disclaimer: 'Výsledek je orientační doporučení. Doporučujeme konzultaci s veterinářem.'
+            };
+        }
+        var kosti = dg.indexOf('ckd-early') !== -1 ? 8 : 10;
         var rostlinne = 10 - kosti + 5;
         var slozeni = [
             { group: 'MUSCLE', nazev: 'svalové maso', gramy: Math.round(celkem * 0.75), pct: 75, upraveno: false },
@@ -144,7 +161,7 @@
         ];
 
         var upozorneni = [];
-        if ((pes.diagnozy || []).indexOf('ckd') !== -1) {
+        if (dg.indexOf('ckd-early') !== -1) {
             upozorneni.push({
                 severity: 'SERIOUS',
                 text: 'Kvůli onemocnění ledvin jsme snížili podíl kostí — obsahují fosfor, který ledviny zatěžuje.',
