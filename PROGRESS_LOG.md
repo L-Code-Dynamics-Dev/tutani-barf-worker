@@ -2,6 +2,45 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:40) — BLOKÁTOR KOŠÍKU VYŘEŠEN (178/178)
+
+Agent hlásil, že `priceId` je vždy NULL a blokuje tlačítko „Vložit
+vše do košíku". **Vyřešeno: `priceId` v `dataLayer` skutečně není,
+ale JE v hidden inputu formuláře na detailu produktu.**
+
+```html
+<input type="hidden" name="productId" value="868">
+<input type="hidden" name="priceId" value="973">
+```
+
+Doplněno `parsePriceId()` do parseru. Ověřeno naostro na 4 produktech
+napříč skupinami:
+
+| SKU | productId | priceId |
+|---|---|---|
+| ZP9 Hovězí svalovina 1kg | 868 | **973** |
+| TUT196 Barf Mrkev 500g | 5425 | **8281** |
+| TUT108 Pašíkova játra 1kg | 4783 | **7207** |
+| SF2 MAX deluxe kostky 800g | 1987 | **2497** |
+
+Parser bere **PRVNÍ výskyt** — stránka má i formuláře upsellu
+a „podobných produktů", které nesou cizí `priceId`; kdyby se vzal
+poslední, zákazník by si vložil jiný produkt. Na to je test.
+
+`scripts/overit-priceid.ts` to kdykoli přeověří naostro.
+
+**Testy 178/178** (8 souborů), `tsc --noEmit` čistý.
+
+### Co zbývá k nasazení
+
+1. **`wrangler d1 create tutani-barf`** → vyplnit `database_id`
+   ve `wrangler.jsonc`.
+2. Zapojit frontend na reálnou adresu Workeru.
+3. Naplnit D1 (`syncCatalog` bez `dryRun`) a ověřit ostrý běh.
+
+Nic z toho není programátorská práce — jsou to nasazovací kroky, které
+potřebují Cloudflare účet.
+
 ## 2026-09-09 (00:35) — API + D1 hotové, celý systém funguje (172/172)
 
 API vrstva a D1 dodány (paralelní agent). **Všechny vrstvy hotové**,

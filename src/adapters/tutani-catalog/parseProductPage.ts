@@ -25,6 +25,15 @@ export interface ScrapedProduct {
     url: string;
     /** Shoptet interní id — potřebné pro vložení do košíku. */
     productId: string | null;
+    /**
+     * `priceId` pro `/action/Cart/addCartItem/` — bez něj nejde
+     * produkt vložit do košíku.
+     *
+     * NENÍ v `dataLayer` (ověřeno 2026-09-09), ale JE v hidden inputu
+     * formuláře na detailu produktu: `<input type="hidden"
+     * name="priceId" value="973">`. Proto se čte odtud, ne z JSONu.
+     */
+    priceId: string | null;
     guid: string | null;
     /** Cena s DPH v Kč. */
     priceWithVat: number | null;
@@ -160,6 +169,31 @@ export function parseGramsFromText(text: string): number | null {
     // číslo (obsah balení vs. dávkování), takže radši `null` než nesmysl.
     if (grams < 10 || grams > 50_000) return null;
     return Math.round(grams);
+}
+
+/**
+ * `priceId` z hidden inputu formuláře „do košíku".
+ *
+ * Shoptet ho na detailu produktu vykresluje jako
+ * `<input type="hidden" name="priceId" value="973">`. U variantních
+ * produktů se přepisuje JS podle vybrané varianty — pro produkty bez
+ * variant (což je celý katalog Tutani, `hasVariants: false`) je
+ * hodnota v HTML správná.
+ *
+ * Bere se PRVNÍ výskyt: stránka může mít další formuláře (upsell,
+ * „podobné produkty"), které nesou cizí `priceId`.
+ */
+export function parsePriceId(html: string): string | null {
+    // Atributy mohou být v libovolném pořadí, proto dvě varianty.
+    const patterns = [
+        /<input[^>]*name="priceId"[^>]*value="(\d+)"/i,
+        /<input[^>]*value="(\d+)"[^>]*name="priceId"/i,
+    ];
+    for (const re of patterns) {
+        const m = html.match(re);
+        if (m) return m[1];
+    }
+    return null;
 }
 
 /** Parametry z tabulky na detailu, např. `Hmotnost = 1 kg`. */
@@ -346,6 +380,7 @@ export function parseProductPage(html: string, url: string): ScrapedProduct | nu
         name,
         url,
         productId: p.id !== undefined && p.id !== null ? String(p.id) : null,
+        priceId: parsePriceId(html),
         guid: typeof p.guid === 'string' ? p.guid : null,
         priceWithVat: typeof p.priceWithVat === 'number' ? p.priceWithVat : null,
         packGrams,

@@ -20,6 +20,7 @@ function product(over: Partial<ScrapedProduct> = {}): ScrapedProduct {
         name: 'Testovací produkt 1kg',
         url: 'https://obchod.tutani.cz/x/1',
         productId: '1',
+        priceId: null,
         guid: null,
         priceWithVat: 100,
         packGrams: 1000,

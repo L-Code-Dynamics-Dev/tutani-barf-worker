@@ -298,6 +298,7 @@ function emptyProduct(): StoredProduct {
         priceCzk: 100,
         priceId: null,
         productId: null,
+        priceId: null,
         inStock: true,
         stockQuantity: 10,
         ingredientIds: [],
