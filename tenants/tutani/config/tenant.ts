@@ -43,6 +43,37 @@ export const TUTANI_TENANT: TenantConfiguration = {
      * Kategorie ověřeny proti sitemap 2026-09-08 (346 URL).
      */
     categoryMap: [
+        /**
+         * PAMLSKY A AKČNÍ KATEGORIE PRVNÍ — musí vypadnout, než je
+         * trefí slovo ze složky dávky.
+         *
+         * Nález z ukázky toku 2026-09-09: `2927 Rolka sushi králičí
+         * játra-100g` je „Barf pamlsky", ale název obsahuje „játra",
+         * takže se mapoval na LIVER a doporučoval se jako složka
+         * dávky — pamlsek za 630 Kč/kg místo jater za 69 Kč/kg.
+         * Pamlsek není krmná dávka.
+         */
+        { match: 'pamlsk', barfGroup: 'OTHER' },
+        { match: 'hračk', barfGroup: 'OTHER' },
+        { match: 'obojk', barfGroup: 'OTHER' },
+        { match: 'poukázk', barfGroup: 'OTHER' },
+        { match: 'dárkov', barfGroup: 'OTHER' },
+        { match: 'obal', barfGroup: 'OTHER' },
+        { match: 'na cesty', barfGroup: 'OTHER' },
+
+        /**
+         * JATÝRKA / JÁTRA dřív než obecné vnitřnosti — mají v metodice
+         * vlastní podíl 5 % a u diagnóz s omezením měďi se limitují
+         * zvlášť.
+         *
+         * Nález 2026-09-09: `TUT22 Barf Kachní jatýrka 500g` je
+         * v kategorii „Barf - Kachní vnitřnosti", takže padal na ORGAN.
+         * U hepatopatie s ukládáním měďi by se tak měď dostala přesně
+         * tam, odkud ji vyřazujeme.
+         */
+        { match: 'jatýrk', barfGroup: 'LIVER' },
+        { match: 'jatyrk', barfGroup: 'LIVER' },
+
         // Játra dřív než obecné vnitřnosti — vlastní podíl v dávce.
         { match: 'játra', barfGroup: 'LIVER' },
         { match: 'jatra', barfGroup: 'LIVER' },

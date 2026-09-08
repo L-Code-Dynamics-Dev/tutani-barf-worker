@@ -209,6 +209,31 @@ export function resolveBarfGroup(
     categoryMap: { match: string; barfGroup: BarfGroup }[],
     productName?: string | null
 ): BarfGroup {
+    /**
+     * 0. JÁTRA podle názvu mají přednost i před kategorií.
+     *
+     * Játra jsou v metodice samostatná složka (5 %) oddělená od
+     * ostatních orgánů (5 %) a u hepatopatie s ukládáním měďi se
+     * limitují zvlášť (max 1 %). Když je e-shop zařadí pod obecné
+     * „vnitřnosti", zdravotní limit by je minul.
+     *
+     * Nález 2026-09-09: `TUT22 Barf Kachní jatýrka 500g` je
+     * v kategorii „Barf - Kachní vnitřnosti" → padalo na ORGAN, takže
+     * u omezení měďi by se měď dostala přesně tam, odkud ji
+     * vyřazujeme.
+     *
+     * Výjimka platí JEN pro játra a jen když kategorie neříká něco
+     * úplně jiného (pamlsky, hračky) — proto se nejdřív ověří, že
+     * kategorie nemapuje na OTHER.
+     */
+    if (productName && categoryPath) {
+        const jmeno = productName.toLowerCase();
+        if (/jat[ýy]rk|j[áa]tr/.test(jmeno)) {
+            const dleKategorie = matchIn(categoryPath, categoryMap);
+            if (dleKategorie !== 'OTHER') return 'LIVER';
+        }
+    }
+
     // 1. Kategorie je autoritativní — klient ji v adminu spravuje.
     if (categoryPath) {
         const hay = categoryPath.toLowerCase();
@@ -222,6 +247,18 @@ export function resolveBarfGroup(
         for (const entry of categoryMap) {
             if (hay.includes(entry.match.toLowerCase())) return entry.barfGroup;
         }
+    }
+    return 'OTHER';
+}
+
+/** Najde první shodu v textu podle mapování. Pomocník pro `resolveBarfGroup`. */
+function matchIn(
+    text: string,
+    categoryMap: { match: string; barfGroup: BarfGroup }[]
+): BarfGroup {
+    const hay = text.toLowerCase();
+    for (const entry of categoryMap) {
+        if (hay.includes(entry.match.toLowerCase())) return entry.barfGroup;
     }
     return 'OTHER';
 }

@@ -1,0 +1,56 @@
+{
+    // ============================================================
+    // Tutani BARF konfigurátor — Cloudflare Worker
+    //
+    // `database_id` je PRÁZDNÉ ZÁMĚRNĚ: databáze se vytvoří příkazem
+    //   npx wrangler d1 create tutani-barf
+    // a vypsané id se doplní sem. Vymyšlené id by při deployi selhalo
+    // s nečitelnou chybou — nehádá se (R7).
+    //
+    // Migrace:
+    //   npx wrangler d1 migrations apply tutani-barf --local
+    //   npx wrangler d1 migrations apply tutani-barf --remote
+    // ============================================================
+    "name": "tutani-barf",
+    "main": "src/index.ts",
+    "compatibility_date": "2026-09-09",
+
+    // Bez toho by `AbortSignal.timeout` a nodejs-kompatibilní API
+    // ve fetch retry nebyly dostupné.
+    "compatibility_flags": ["nodejs_compat"],
+
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "tutani-barf",
+            "database_id": "",
+            "migrations_dir": "migrations"
+        }
+    ],
+
+    "triggers": {
+        // Noční sync ve 3:15 UTC = 5:15 letního / 4:15 zimního času.
+        // ZÁMĚRNĚ ne rovná hodina: v celou hodinu startují crony
+        // půlky internetu a e-shop klienta by dostal špičku.
+        // Doba je zvolená tak, aby scraping 300+ URL proběhl mimo
+        // provoz e-shopu.
+        "crons": ["15 3 * * *"]
+    },
+
+    "observability": {
+        "enabled": true,
+        // Plné vzorkování: objem požadavků konfigurátoru je malý
+        // a při reklamaci se musí dohledat KONKRÉTNÍ výpočet.
+        "head_sampling_rate": 1
+    },
+
+    // Volání sitemap a 300+ produktových URL v cronu se do CPU limitu
+    // bez tohohle nevejde — většina času je ale čekání na síť.
+    "limits": {
+        "cpu_ms": 300000
+    },
+
+    "vars": {
+        "TENANT_ID": "tutani"
+    }
+}

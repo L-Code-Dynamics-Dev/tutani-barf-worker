@@ -2,6 +2,103 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (00:25) — znalostní vrstva nemocí HOTOVÁ (88/88 testů)
+
+Znalostní databáze a rule engine dodány (paralelní agent), ověřeno
+proti reálnému katalogu. **`tsc --noEmit` čistý, 88/88 testů.**
+
+```
+tenants/tutani/rules/tutani-health.json    15 stavů, 42 pravidel
+tenants/tutani/rules/ingredients.json      28 surovin
+src/rules/RuleEngine.ts                    interpret (buildKnowledgeBase, resolveConstraints)
+tests/unit/RuleEngine.test.ts              38 testů
+scripts/ukazka-nemoci.ts                   ukázka celého toku s nemocemi
+```
+
+### Co znalostní vrstva pokrývá
+
+| stav | dopad na dávku |
+|---|---|
+| `ckd-early` | kosti ≤ 8 % (fosfor), 3 porce, vet |
+| `ckd-advanced` | **BLOCKED** — dávka se nevydá |
+| `pankreatitida` | preferuje libové, vylučuje tučné, 3 porce |
+| `onemocneni-jater` | játra ≤ 3 %; bílkovina ZÁMĚRNĚ neomezená |
+| `portosystemovy-shunt` | **BLOCKED** |
+| `med-hepatopatie` | játra ≤ 1 %, orgány ≤ 3 % |
+| alergie kuřecí / hovězí / drůbež / ryby / vepřové | vyloučení surovin |
+| `toxicke-potraviny` | `alwaysActive` — 8 surovin vyloučeno i bez zadání |
+
+Ověřeno naostro: dvojí limit na měď se **skládá** (játra 1 %, orgány
+3 %), renormalizace poslala svalovinu na 78 % a zeleninu na 8 %.
+Neznámá diagnóza se **přizná** varováním + `requiresVet`, neignoruje
+se tiše.
+
+### DVĚ CHYBY V MAPOVÁNÍ, které vylezly až s nemocemi — OPRAVENO
+
+**1. Pamlsek se doporučoval jako složka dávky.**
+`2927 Rolka sushi králičí játra-100g` je v kategorii „Barf pamlsky",
+ale název obsahuje „játra" → mapoval se na LIVER. Systém pak
+u pankreatitidy doporučil pamlsek za **630 Kč/kg** místo jater za
+69 Kč/kg. Oprava: pamlsky, hračky, obojky, poukázky a „na cesty" jsou
+v `categoryMap` PRVNÍ, takže vypadnou dřív, než je trefí slovo ze
+složky dávky.
+
+**2. Kachní jatýrka padala na ORGAN, ne LIVER.**
+`TUT22 Barf Kachní jatýrka 500g` je v kategorii „Barf - Kachní
+vnitřnosti". U hepatopatie s ukládáním měďi (játra max 1 %) by se měď
+dostala přesně tam, odkud ji vyřazujeme. Oprava: **játra podle názvu
+mají přednost i před kategorií** (`resolveBarfGroup`, krok 0) — jsou
+to zdravotně oddělené složky s vlastním limitem. Výjimka platí jen
+tehdy, když kategorie nemapuje na OTHER, aby se pamlsek nepřeklopil
+zpátky na LIVER.
+
+Rozpad po opravách: OTHER 104, MUSCLE 55, SUPPLEMENT 46, PLANT 24,
+BONE 17, ORGAN 14, **LIVER 4** (dřív 1).
+
+### OTEVŘENÉ OTÁZKY z dodané znalostní vrstvy — POTŘEBUJÍ ROZHODNUTÍ
+
+1. **BONE 8 % u CKD není citace, je to náš převod.** Veterinární
+   literatura udává fosfor v **g/1000 kcal**, ne v procentu kostí.
+   V JSONu označeno `source: "L-CODE-INFERENCE"`. Musí potvrdit
+   veterinář. Totéž LIVER 3 % / 1 % a ORGAN 3 %.
+2. **Konfigurátor se MUSÍ ptát na stadium CKD** — bez toho nelze
+   rozlišit `ckd-early` (dávka se vydá) od `ckd-advanced` (nevydá).
+   Návrh agenta: když majitel stadium nezná, použít `ckd-advanced`
+   (bezpečnější) — ale znamená to, že části zákazníků systém dávku
+   nedá. **Rozhodnutí Lucky/klient.**
+3. **Preference přebíjí cenu** — u pankreatitidy vybral `pickBest`
+   králičí játra za 444 Kč místo 69 Kč, protože `INGREDIENT_PREFER`
+   řadí před cenou. Buď má cena preferenci u drahých produktů přebít,
+   nebo mají být preference jen pro MUSCLE, kde o tuk skutečně jde.
+   (Po opravě mapování je konkrétní případ vyřešený — pamlsek vypadl —
+   ale princip zůstává.)
+4. **Pankreatitida nemá jak filtrovat tuk** — katalog nenese `fatPct`,
+   pravidlo se hlásí jako `NO_DATA_FOR_PRODUCT_ATTR` a filtruje se jen
+   po surovinách. Aby to bylo skutečně nízkotučné, musí klient doplnit
+   obsah tuku.
+5. **Alergie na drůbež plošně vylučuje kachní a krůtí** — konzervativní
+   volba, křížová reaktivita mezi ptáky nemá v literatuře pevná čísla.
+   Jemnější dělení = čistě datová změna.
+6. **Kuskus je z pšeničné semoliny** — má `commonAllergen: true`,
+   ale podmínka „alergie na obiloviny" ve v1 není.
+
+### Zdroje veterinárních hodnot (v JSONu, blok `sources`)
+
+IRIS Kidney / Today's Veterinary Practice ACVN 2016, Merck Vet Manual
+(Nutrition in Hepatic Disease — bílkovina se automaticky NEomezuje),
+TVP Copper Hepatopathy, SASH Vets (pankreatitida < 10 % tuku),
+VCA přehled 297 psů (alergeny), ASPCA APCC (toxické).
+
+### Stav projektu
+
+| vrstva | stav |
+|---|---|
+| tenant model, scraper, konflikty gramáže | ✅ |
+| výpočet dávky, product matching | ✅ |
+| frontend konfigurátoru | ✅ ověřen v Chrome |
+| **znalostní vrstva nemocí** | ✅ 15 stavů, 42 pravidel |
+| API Workeru + D1 | 🔄 běží agent |
+
 ## 2026-09-09 (00:30) — frontend konfigurátoru, ověřený v prohlížeči
 
 **Napsáno:** `frontend/konfigurator.js` (27 KB), `konfigurator.css`,
