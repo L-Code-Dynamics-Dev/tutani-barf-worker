@@ -1,0 +1,476 @@
+{
+  "ruleSetId": "fediaf-2025@1",
+  "displayName": "FEDIAF 2025 — nutriční cíle pro psy",
+  "basis": "PER_1000_KCAL",
+  "source": "FEDIAF",
+  "sourceVersion": "2025",
+  "updatedAt": "2026-09-09",
+  "note": "Hodnoty na 1000 kcal ME. Denní cíl = hodnota x (kcal psa / 1000). FEDIAF je referenční rámec pro KOMPLETNÍ krmiva pro ZDRAVÉ psy — ne univerzální recept pro každého psa. Nad tím musí být DOG PROFILE a HEALTH MODIFIERS.",
+  "noteMin": "Jsou to DOPORUČENÉ MINIMÁLNÍ ÚROVNĚ pro kompletní krmivo, ne minimální biologické potřeby psa.",
+  "noteNotSpecified": "status NOT_SPECIFIED = FEDIAF pro tuto fázi hodnotu NEUVÁDÍ (v tabulce pomlčka). NESMÍ se doplnit vymyšlené minimum. Reálný případ: EPA+DHA u dospělého psa — 0,13 g/1000 kcal platí pro RŮST a REPRODUKCI, u dospělého jsou pomlčky.",
+  "targets": [
+    {
+      "nutrient": "protein",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 52.1
+      },
+      "growthUnder14w": {
+        "min": 62.5
+      }
+    },
+    {
+      "nutrient": "fat",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 13.75
+      },
+      "growthUnder14w": {
+        "min": 21.25
+      }
+    },
+    {
+      "nutrient": "linoleicAcid",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 3.82
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "epaDha",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      },
+      "growthUnder14w": {
+        "min": 0.13
+      },
+      "noteCs": "U DOSPĚLÉHO psa FEDIAF minimum NEUVÁDÍ. Hodnota 0,13 g platí pro růst a reprodukci."
+    },
+    {
+      "nutrient": "arginine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.51
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "histidine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.67
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "isoleucine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.33
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "leucine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 2.37
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "lysine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.22
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "methionine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.16
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "methionineCystine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 2.21
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "phenylalanine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.56
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "phenylalanineTyrosine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 2.58
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "threonine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.51
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "tryptophan",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.49
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "valine",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.71
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "calcium",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.45
+      },
+      "growthUnder14w": {
+        "min": 2.5
+      },
+      "nutritionalMax": 6.25,
+      "noteCs": "Nutriční maximum 6,25 g/1000 kcal."
+    },
+    {
+      "nutrient": "phosphorus",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.16
+      },
+      "growthUnder14w": {
+        "min": 2.25
+      },
+      "nutritionalMax": 4.0,
+      "noteCs": "Nutriční maximum 4,00 g/1000 kcal."
+    },
+    {
+      "nutrient": "potassium",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.45
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "sodium",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.29
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "chloride",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.43
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "magnesium",
+      "unit": "g",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.2
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "copper",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 2.08
+      },
+      "growthUnder14w": {
+        "min": 2.75
+      }
+    },
+    {
+      "nutrient": "iodine",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.3
+      },
+      "growthUnder14w": {
+        "min": 0.38
+      }
+    },
+    {
+      "nutrient": "iron",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 10.4
+      },
+      "growthUnder14w": {
+        "min": 22
+      }
+    },
+    {
+      "nutrient": "manganese",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.67
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "seleniumWet",
+      "unit": "ug",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 67.5
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      },
+      "noteCs": "Mokrá strava. Pro suchou 55 µg — BARF je mokrá."
+    },
+    {
+      "nutrient": "zinc",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 20.8
+      },
+      "growthUnder14w": {
+        "min": 25
+      }
+    },
+    {
+      "nutrient": "vitaminA",
+      "unit": "IU",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1754
+      },
+      "growthUnder14w": {
+        "min": 1250
+      }
+    },
+    {
+      "nutrient": "vitaminD",
+      "unit": "IU",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 159
+      },
+      "growthUnder14w": {
+        "min": 138
+      }
+    },
+    {
+      "nutrient": "vitaminE",
+      "unit": "IU",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 10.4
+      },
+      "growthUnder14w": {
+        "min": 12.5
+      }
+    },
+    {
+      "nutrient": "vitaminB1",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.62
+      },
+      "growthUnder14w": {
+        "min": 0.45
+      }
+    },
+    {
+      "nutrient": "vitaminB2",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 1.74
+      },
+      "growthUnder14w": {
+        "min": 1.05
+      }
+    },
+    {
+      "nutrient": "vitaminB3",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 4.74
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "vitaminB5",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 4.11
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "vitaminB6",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 0.42
+      },
+      "growthUnder14w": {
+        "min": 0.3
+      }
+    },
+    {
+      "nutrient": "vitaminB12",
+      "unit": "ug",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 9.68
+      },
+      "growthUnder14w": {
+        "min": 7
+      }
+    },
+    {
+      "nutrient": "folate",
+      "unit": "ug",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 74.7
+      },
+      "growthUnder14w": {
+        "min": null,
+        "status": "NOT_SPECIFIED"
+      }
+    },
+    {
+      "nutrient": "choline",
+      "unit": "mg",
+      "basis": "PER_1000_KCAL",
+      "adult": {
+        "min": 474
+      },
+      "growthUnder14w": {
+        "min": 425
+      }
+    }
+  ],
+  "caPRatio": {
+    "recommendedMin": 1.0,
+    "nutritionalMax": 2.0,
+    "noteCs": "Doporučený poměr Ca:P; 2:1 je nutriční maximum. Engine NESMÍ tvrdit, že každý recept musí mít přesně 2:1 — FEDIAF rozlišuje doporučený poměr a maxima."
+  }
+}

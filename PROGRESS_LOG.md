@@ -2,6 +2,110 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-09 (02:00) — NUTRIČNÍ VRSTVA: FEDIAF 2025 + dataset surovin
+
+Lucky dodal kompletní znalostní rámec (body 1–96 + FEDIAF tabulky
++ BARF Ingredient Dataset v0.1). Implementováno to, co jde bez
+chybějících dat.
+
+### Napsáno
+
+```
+docs/ZNALOSTNI-BAZE.md                    rámec Lucky jako reference
+src/domain/nutrition/energy.ts            RER/MER, ověřeno proti tabulce
+src/domain/nutrition/assessment.ts        dvě osy + 17 kontrolních bodů
+src/domain/nutrition/Ingredient.ts        model surovin, jednotky, evidence
+tenants/tutani/rules/fediaf-2025.json     39 živin na 1000 kcal
+tenants/tutani/rules/ingredients-nutrition.json  10 surovin z USDA
+tenants/tutani/rules/barf-safety.json     rizika + 8 mýtů s citacemi
+```
+
+### Ověřeno naostro
+
+**RER** proti referenční tabulce: 5/10/20/30/40 kg → 234/394/662/897/1113 kcal.
+
+**FEDIAF přepočet** na 10kg psa / 500 kcal — **12/12 hodnot sedí**:
+protein 26,05 g, tuk 6,875 g, Ca 0,725 g, P 0,58 g, Cu 1,04 mg,
+jód 0,15 mg, Fe 5,2 mg, Zn 10,4 mg, vit. A 877 IU, D 79,5 IU,
+E 5,2 IU, cholin 237 mg. Ca:P při minimech 1,25:1 (FEDIAF max 2:1).
+
+**Bod 73** (dva psi po 20 kg): senior kastrovaný s nadváhou 560–616
+kcal vs. mladý pracovní 1324–1986 kcal → **2,8× rozdíl** při stejné
+hmotnosti. Procento z hmotnosti to nerozliší.
+
+**Bod 12** (deficit Ca) spočítán: 400 g kuřecích prsou = 480 kcal,
+Ca 20 mg, P 852 mg → **Ca:P 1:43** proti FEDIAF minimu 1,25:1.
+Dieta z libového masa má prokazatelný deficit vápníku.
+
+### Čtyři zásadní rozhodnutí v modelu
+
+**1. JEDNOTKY.** FEDIAF udává na **1000 kcal ME**, ne na gramy. Engine
+nesmí říct „pes potřebuje 5 mg zinku", ale „X mg na 1000 kcal při jeho
+energetické potřebě". Proto se u každé suroviny ukládá `kcal` i voda —
+bez nich převod nejde.
+
+**2. `value = 0` ≠ `NOT_ANALYZED`.** Kdyby se neměřená hodnota
+počítala jako nula, engine by hlásil nedostatek vitaminu D a doporučil
+suplementaci naslepo. `ValueStatus` má `MEASURED | NOT_ANALYZED |
+TRACE | NOT_PRESENT` a `contribution()` vrací u `NOT_ANALYZED` `null`,
+takže součet přizná neúplnost.
+
+**3. `NOT_SPECIFIED` u FEDIAF.** Kde má tabulka pomlčku, nesmí se
+doplnit vymyšlené minimum. Reálný případ: **EPA+DHA u dospělého psa
+FEDIAF neuvádí** — 0,13 g/1000 kcal platí pro růst a reprodukci.
+
+**4. VARIANTY podle datasetu.** Táž surovina má v různých datasetech
+různé hodnoty — kuřecí prsa: Foundation **1,9 g** tuku vs. SR Legacy
+**2,6 g**. Proto se ukládá `dataset` u každé varianty a hodnoty
+z různých zdrojů se nikdy nemíchají do jednoho čísla.
+
+### Dvě osy hodnocení (bod 29)
+
+> Nutričně perfektní dieta může být mikrobiologicky riziková.
+
+Bezpečnost byla filtrem UVNITŘ nutričního výpočtu. Teď jsou to dvě
+samostatné osy s vlastní úrovní, protože kombinace mají různé závěry:
+„nutričně OK / vysoké riziko" se řeší manipulací, „deficit Ca / nízké
+riziko" recepturou.
+
+Tři úrovně (bod 95): 🟢 KONTROLOVANÁ, 🟡 ORIENTAČNÍ, 🔴 NEVHODNÁ.
+
+### STAV DAT — proč je dnes každá dávka 🟡 ORIENTAČNÍ
+
+Dataset má **10 surovin, 80 změřených a 10 neměřených hodnot**.
+
+Chybí:
+- **suroviny**: krůtí, králičí, jehněčí, koňské, zvěřina, vepřové
+  maso, slezina, kuřecí srdce, sardinky, makrela, oleje, veškerá
+  zelenina a ovoce, vaječná skořápka, kostní moučka, premix
+- **živiny**: vitamin D a E u žádné suroviny, jód u žádné, mangan,
+  Mg, Na, K, B-vitaminy, folát, cholin, **EPA/DHA jen jako
+  NOT_ANALYZED u lososa**, aminokyseliny
+
+Dokud chybí vitamin D, E, jód a EPA/DHA, **nelze vydat 🟢
+KONTROLOVANOU dávku**. To není nedostatek implementace, ale pravdivý
+stav dat.
+
+### DALŠÍ KROK (trigger „BARF")
+
+Naplnit nutrient vektor u ~20 surovin — ne jen protein/tuk/Ca/P, ale
+celý profil podle FEDIAF 2025: aminokyseliny, linolová kyselina,
+EPA/DHA, Mg/Na/K/Cl, mangan, vitaminy D, E, B-komplex, folát, cholin.
+
+Zdroj: **USDA FoodData Central** (má veřejné API, vrací FDC ID,
+dataset a analytickou metodu). Kritické je zachovat `dataset`,
+`sourceRef`, `sourceDate` a `confidence` u každé hodnoty — a nikdy
+nezaměnit neměřenou hodnotu za nulu.
+
+Seznam surovin k doplnění: hovězí/kuřecí/krůtí/králičí/vepřové/
+jehněčí/koňské maso, zvěřina, játra (hovězí, kuřecí, vepřová),
+ledviny (hovězí, vepřová), slezina, srdce (hovězí, kuřecí), vejce,
+sardinky, losos, makrela, rybí/lososový/lněný olej, mrkev, brokolice,
+cuketa, dýně, špenát, jablko, borůvky + vaječná skořápka, kostní
+moučka, minerální premix.
+
+**204/204 testů, `tsc` čistý.**
+
 ## 2026-09-09 (01:30) — OPRAVY PO 5STUPŇOVÉM AUDITU (187/187)
 
 Audit odhalil, že **zdravotní vrstva v produkci vůbec neběžela**.

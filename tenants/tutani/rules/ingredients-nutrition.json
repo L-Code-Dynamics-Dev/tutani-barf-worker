@@ -1,0 +1,275 @@
+{
+  "datasetId": "barf-ingredient-nutrition@0.1",
+  "displayName": "BARF Ingredient Dataset v0.1",
+  "note": "Nutriční hodnoty surovin na 100 g SUROVÉ jedlé části (as-fed). Zdroj: Lucky 2026-09-09 z USDA FoodData Central. POZOR na jednotky: FEDIAF udává potřeby na 1000 kcal ME, ne na gramy — převod vyžaduje kcal dávky.",
+  "basis": "100G_RAW_EDIBLE",
+  "sourceVersion": "0.1",
+  "updatedAt": "2026-09-09",
+
+  "datasets": {
+    "USDA_SR_LEGACY": "USDA FoodData Central — SR Legacy (starší, širší pokrytí živin)",
+    "USDA_FOUNDATION": "USDA FoodData Central — Foundation Foods (novější, vzorky s analytickou metodou)",
+    "NEURCENO": "zdroj neuveden nebo agregovaný — nižší důvěryhodnost"
+  },
+
+  "note_variants": "Táž surovina může mít v různých datasetech RŮZNÉ hodnoty. Ověřeno na kuřecích prsech: Foundation 1,9 g tuku vs. SR Legacy 2,6 g. Proto se ukládá dataset u každé varianty a nikdy se nemíchají hodnoty z různých zdrojů do jednoho čísla.",
+
+  "note_missing": "Pomlčka ve zdroji = NOT_ANALYZED, NE nula. Neanalyzovaná živina se nesmí sečíst jako nula — engine by hlásil nedostatek a doporučil suplementaci naslepo.",
+
+  "ingredients": [
+    {
+      "id": "hovezi-mlete-93-7",
+      "nameCs": "Hovězí mleté 93/7",
+      "aliasesCs": ["hovězí mleté", "hovězí svalovina", "mleté hovězí"],
+      "species": "BEEF",
+      "part": "MUSCLE",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 152, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 20.85, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 7.0, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 10, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 192, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 2.33, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 4.97, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.075, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 17.1, "unit": "ug", "status": "MEASURED" }
+      },
+      "noteCs": "Ca:P je 10:192, tedy 1:19 — svalovina sama vápník nepokryje (bod 12)."
+    },
+    {
+      "id": "kureci-prsa-sr-legacy",
+      "nameCs": "Kuřecí prsa bez kůže",
+      "aliasesCs": ["kuřecí prsa", "kuřecí maso", "kuřecí svalovina"],
+      "species": "CHICKEN",
+      "part": "MUSCLE",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 120, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 22.5, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 2.6, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 5, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 213, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 0.37, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 0.68, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.037, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 22.8, "unit": "ug", "status": "MEASURED" }
+      },
+      "noteCs": "Ca:P je 5:213, tedy 1:43. Extrémně nevyvážené — proto dieta z libového masa naráží na minerální bilanci."
+    },
+    {
+      "id": "kureci-prsa-foundation",
+      "nameCs": "Kuřecí prsa bez kůže (Foundation)",
+      "aliasesCs": ["kuřecí prsa"],
+      "species": "CHICKEN",
+      "part": "MUSCLE",
+      "raw": true,
+      "dataset": "USDA_FOUNDATION",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "protein": { "value": 22.5, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 1.9, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 3.9, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 214.9, "unit": "mg", "status": "MEASURED" },
+        "energy": { "value": null, "unit": "kcal", "status": "NOT_ANALYZED" }
+      },
+      "noteCs": "STEJNÁ surovina, JINÝ dataset: tuk 1,9 g proti 2,6 g v SR Legacy. Důvod, proč databáze uchovává dataset a ne jedno „magické číslo“ (bod 4)."
+    },
+    {
+      "id": "hovezi-jatra",
+      "nameCs": "Hovězí játra",
+      "aliasesCs": ["hovězí játra", "játra hovězí"],
+      "species": "BEEF",
+      "part": "SECRETORY_LIVER",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 135, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 20.36, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 3.63, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 5, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 387, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 4.9, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 4.0, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 9.755, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 39.7, "unit": "ug", "status": "MEASURED" },
+        "vitaminA": { "value": 4968, "unit": "ug_RAE", "status": "MEASURED" }
+      },
+      "excessRisks": ["VITAMIN_A_EXCESS", "COPPER_EXCESS"],
+      "noteCs": "Játra NEJSOU zdroj vápníku (5 mg Ca proti 387 mg P). Měď 9,755 mg/100 g je extrémní koncentrace — proto limit u hepatopatie s ukládáním měďi."
+    },
+    {
+      "id": "kureci-jatra",
+      "nameCs": "Kuřecí játra",
+      "aliasesCs": ["kuřecí játra", "játra kuřecí"],
+      "species": "CHICKEN",
+      "part": "SECRETORY_LIVER",
+      "raw": true,
+      "dataset": "NEURCENO",
+      "confidence": "TABULKA",
+      "nutrients": {
+        "energy": { "value": 119, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 16.92, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 4.83, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 8, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": null, "unit": "mg", "status": "NOT_ANALYZED" },
+        "iron": { "value": null, "unit": "mg", "status": "NOT_ANALYZED" },
+        "zinc": { "value": null, "unit": "mg", "status": "NOT_ANALYZED" },
+        "copper": { "value": null, "unit": "mg", "status": "NOT_ANALYZED" },
+        "selenium": { "value": null, "unit": "ug", "status": "NOT_ANALYZED" }
+      },
+      "excessRisks": ["VITAMIN_A_EXCESS", "COPPER_EXCESS"],
+      "noteCs": "Neúplná data — fosfor, železo, zinek, měď a selen NEZMĚŘENY. Nesmí se počítat jako nula."
+    },
+    {
+      "id": "hovezi-ledvina",
+      "nameCs": "Hovězí ledvina",
+      "aliasesCs": ["hovězí ledviny", "ledvina", "ledvinky"],
+      "species": "BEEF",
+      "part": "SECRETORY_KIDNEY",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 99, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 17.4, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 3.09, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 13, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 257, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 4.6, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 1.92, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.426, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 141, "unit": "ug", "status": "MEASURED" }
+      },
+      "excessRisks": ["SELENIUM_EXCESS"],
+      "noteCs": "Selen 141 µg/100 g — nejvyšší v datasetu. Ledvina NENÍ zaměnitelná za játra (bod 15)."
+    },
+    {
+      "id": "hovezi-srdce",
+      "nameCs": "Hovězí srdce",
+      "aliasesCs": ["hovězí srdce", "srdce"],
+      "species": "BEEF",
+      "part": "MUSCLE_ORGAN",
+      "raw": true,
+      "dataset": "NEURCENO",
+      "confidence": "ODHAD",
+      "nutrients": {
+        "energy": { "value": 110, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 17.85, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 3.95, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 5.5, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 210, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 4.35, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 1.5, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.37, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 9, "unit": "ug", "status": "MEASURED" }
+      },
+      "noteCs": "POZOR: hodnoty jsou STŘEDY rozmezí ze zdroje (107–112 kcal, 17,7–18 g protein…), proto confidence ODHAD, ne DATABAZE. Srdce je nutričně SVALOVINA, ne náhrada jater (bod 50)."
+    },
+    {
+      "id": "veprova-jatra",
+      "nameCs": "Vepřová játra",
+      "aliasesCs": ["vepřová játra", "prasečí játra", "pašíkova játra"],
+      "species": "PORK",
+      "part": "SECRETORY_LIVER",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 134, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 21.4, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 3.6, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 9, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 288, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 23.3, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 5.8, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.677, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 52.7, "unit": "ug", "status": "MEASURED" },
+        "vitaminA": { "value": 6502, "unit": "ug_RAE", "status": "MEASURED" }
+      },
+      "excessRisks": ["VITAMIN_A_EXCESS"],
+      "noteCs": "Vitamin A 6 502 µg RAE/100 g — nejvyšší v datasetu. Ukazuje, proč systém nemůže stát jen na makroživinách. Železo 23,3 mg je 10× víc než hovězí svalovina."
+    },
+    {
+      "id": "vejce-cele",
+      "nameCs": "Vejce celé",
+      "aliasesCs": ["vejce", "slepičí vejce"],
+      "species": "OTHER",
+      "part": "EGG",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 143, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": 12.56, "unit": "g", "status": "MEASURED" },
+        "fat": { "value": 9.51, "unit": "g", "status": "MEASURED" },
+        "calcium": { "value": 56, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 198, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 1.75, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 1.29, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.072, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 30.7, "unit": "ug", "status": "MEASURED" }
+      },
+      "safetyNotesCs": [
+        "Surový bílek obsahuje avidin, který při vysokém a dlouhodobém příjmu interferuje s biotinem. Tepelná úprava ho deaktivuje (bod 21)."
+      ],
+      "noteCs": "Ca:P je 56:198, tedy 1:3,5 — vůči svalovině výrazně lepší, ale NENÍ to náhrada cíleného zdroje Ca (bod 20)."
+    },
+    {
+      "id": "losos-farmovany",
+      "nameCs": "Losos atlantský, farmovaný",
+      "aliasesCs": ["losos", "salmo salar"],
+      "species": "FISH",
+      "part": "FISH_FILLET",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": { "value": 208, "unit": "kcal", "status": "MEASURED" },
+        "protein": { "value": null, "unit": "g", "status": "NOT_ANALYZED" },
+        "fat": { "value": null, "unit": "g", "status": "NOT_ANALYZED" },
+        "calcium": { "value": 9, "unit": "mg", "status": "MEASURED" },
+        "phosphorus": { "value": 240, "unit": "mg", "status": "MEASURED" },
+        "iron": { "value": 0.34, "unit": "mg", "status": "MEASURED" },
+        "zinc": { "value": 0.36, "unit": "mg", "status": "MEASURED" },
+        "copper": { "value": 0.045, "unit": "mg", "status": "MEASURED" },
+        "selenium": { "value": 24, "unit": "ug", "status": "MEASURED" },
+        "epa": { "value": null, "unit": "mg", "status": "NOT_ANALYZED" },
+        "dha": { "value": null, "unit": "mg", "status": "NOT_ANALYZED" }
+      },
+      "safetyNotesCs": [
+        "Některé surové ryby obsahují thiaminázu, která narušuje dostupnost thiaminu (bod 22)."
+      ],
+      "noteCs": "EPA a DHA NEZMĚŘENY — a to je právě důvod, proč se losos používá. Bez nich nelze tvrdit, že dieta pokrývá omega-3 (bod 17)."
+    }
+  ],
+
+  "gaps": {
+    "note": "Co v datasetu v0.1 CHYBÍ. Uvedeno záměrně, aby se prázdnota nedala přehlédnout.",
+    "missingIngredients": [
+      "krůtí, králičí, jehněčí, koňské maso, zvěřina",
+      "vepřové maso (svalovina)",
+      "hovězí slezina",
+      "kuřecí srdce",
+      "sardinky, makrela",
+      "rybí olej, lososový olej, lněný olej",
+      "mrkev, brokolice, cuketa, dýně, špenát, jablko, borůvky",
+      "vaječná skořápka, kostní moučka, minerální premix"
+    ],
+    "missingNutrients": [
+      "vitamin D — u žádné suroviny",
+      "vitamin E — u žádné suroviny",
+      "jód — u žádné suroviny",
+      "mangan, magnesium, sodík, kalium",
+      "B-vitaminy (B1, B2, B3, B5, B6, B12), folát, cholin",
+      "EPA/DHA — jen jako NOT_ANALYZED u lososa",
+      "aminokyseliny, taurin"
+    ],
+    "consequenceCs": "Dokud chybí vitamin D, E, jód a EPA/DHA, nelze vydat 🟢 NUTRIČNĚ KONTROLOVANOU dávku. Každý výsledek zůstává 🟡 ORIENTAČNÍ."
+  }
+}
