@@ -1,0 +1,166 @@
+{
+  "ruleSetId": "barf-safety@1",
+  "displayName": "Bezpečnostní vrstva — surové krmení",
+  "note": "Bod 29 znalostní báze: nutriční správnost a bezpečnost jsou DVĚ NEZÁVISLÉ OSY. Nutričně perfektní dieta může být mikrobiologicky riziková. Tahle vrstva neřeší živiny, jen rizika podání.",
+  "sourceVersion": "1.0",
+  "updatedAt": "2026-09-09",
+
+  "sources": {
+    "WSAVA": "WSAVA Global Nutrition Committee — raw meat-based diets, guidelines pro majitele",
+    "MERCK": "Merck Veterinary Manual — nutrition, toxicology",
+    "FEDIAF": "FEDIAF Nutritional Guidelines 2025"
+  },
+
+  "alwaysRisks": [
+    {
+      "kind": "PATHOGEN",
+      "severity": "MEDIUM",
+      "source": "WSAVA",
+      "textCs": "Surové maso může obsahovat bakterie (Salmonella, Campylobacter, Listeria, E. coli, Yersinia) a parazity.",
+      "mitigationCs": "Maso rozmrazujte v chladničce, ne na lince. Nekrmte maso, které bylo dlouho v teple."
+    },
+    {
+      "kind": "STORAGE",
+      "severity": "MEDIUM",
+      "source": "WSAVA",
+      "textCs": "Zmrazení NENÍ sterilizace — ani mražení, sušení nebo lyofilizace nemusí odstranit všechny patogeny.",
+      "mitigationCs": "Rozmrazené maso znovu nezamrazujte. Skladujte v chladu a spotřebujte do dvou dnů od rozmrazení."
+    },
+    {
+      "kind": "HANDLING",
+      "severity": "MEDIUM",
+      "source": "WSAVA",
+      "textCs": "Riziko křížové kontaminace v kuchyni.",
+      "mitigationCs": "Oddělené náčiní a deska na surové maso, mytí rukou po manipulaci, čištění ploch. Misku myjte denně."
+    },
+    {
+      "kind": "VULNERABLE_HOUSEHOLD",
+      "severity": "MEDIUM",
+      "source": "WSAVA",
+      "textCs": "Patogeny se mohou přenášet i stolicí psa. Zvýšené riziko v domácnosti s malými dětmi, staršími nebo oslabenými lidmi.",
+      "mitigationCs": "V takové domácnosti surové krmení proberte s veterinářem i s lékařem."
+    }
+  ],
+
+  "conditionalRisks": [
+    {
+      "kind": "BONE_INJURY",
+      "severity": "HIGH",
+      "source": "MERCK",
+      "appliesWhen": "COOKED_BONE",
+      "textCs": "VAŘENÉ KOSTI se lámou na ostré střepy a mohou propíchnout zažívací trakt.",
+      "mitigationCs": "Vařené kosti nikdy nepodávejte. Systém je do doporučení nezařazuje."
+    },
+    {
+      "kind": "BONE_INJURY",
+      "severity": "MEDIUM",
+      "source": "WSAVA",
+      "appliesWhen": "BONE_IN_DIET",
+      "textCs": "Kosti mohou způsobit zlomeniny zubů, zácpu, obstrukci nebo poranění trávicího traktu. WSAVA neuvádí prokázanou ochranu kostí před onemocněním dásní.",
+      "mitigationCs": "Mleté kosti jsou bezpečnější než celé. Psa při žvýkání nenechávejte bez dozoru."
+    },
+    {
+      "kind": "EXCESS",
+      "severity": "HIGH",
+      "source": "MERCK",
+      "appliesWhen": "LIVER_OVER_10PCT",
+      "textCs": "Dlouhodobě vysoký podíl jater může vést k toxicitě vitaminem A a nadbytku měďi.",
+      "mitigationCs": "Játra držte na doporučených 5 % dávky. Více jater není zdravější."
+    },
+    {
+      "kind": "GI_OBSTRUCTION",
+      "severity": "MEDIUM",
+      "source": "WSAVA",
+      "appliesWhen": "BONE_OVER_15PCT",
+      "textCs": "Příliš vysoký podíl kostní složky vede k tvrdé stolici a zácpě.",
+      "mitigationCs": "Sledujte konzistenci stolice. Při tvrdé stolici podíl kostí snižte."
+    },
+    {
+      "kind": "FOOD_TOXICITY",
+      "severity": "HIGH",
+      "source": "WSAVA",
+      "appliesWhen": "TOXIC_INGREDIENT",
+      "textCs": "Dieta obsahuje potravinu toxickou pro psy.",
+      "mitigationCs": "Systém takové produkty z doporučení vyřazuje. U vlastních přídavků platí: nekrmit."
+    }
+  ],
+
+  "transition": {
+    "source": "WSAVA",
+    "note": "Bod 28 — přechod z granulí.",
+    "textCs": "Přechod na novou stravu dělejte postupně, přibližně 7–10 dní, ať se dá sledovat, jak ji pes snáší.",
+    "watchCs": [
+      "konzistence stolice",
+      "zvracení",
+      "chuť k jídlu",
+      "hydratace",
+      "hmotnost"
+    ],
+    "mythCs": "Tvrzení, že granule a maso se nesmí nikdy míchat, je zjednodušení. Důležitější je tolerance psa a rychlost změny."
+  },
+
+  "vetNow": {
+    "note": "Bod 45 — kdy BARF neřešit doma.",
+    "textCs": "Tyhle příznaky nejsou věc receptury, ale veterinární diagnostiky:",
+    "signsCs": [
+      "opakované zvracení",
+      "krev ve stolici",
+      "silný nebo přetrvávající průjem",
+      "výrazná ztráta hmotnosti",
+      "bolest nebo apatie",
+      "nafouknuté břicho",
+      "diagnostikované onemocnění ledvin, jater nebo slinivky"
+    ]
+  },
+
+  "myths": [
+    {
+      "claimCs": "Průjem po přechodu na BARF je detox.",
+      "status": "MYTUS",
+      "source": "MERCK",
+      "explainCs": "Průjem je příznak, ne očista. Příčinou bývá rychlý přechod, příliš tuku, velká dávka, infekce nebo intolerance."
+    },
+    {
+      "claimCs": "Zmrazení zabije všechny bakterie.",
+      "status": "MYTUS",
+      "source": "WSAVA",
+      "explainCs": "Zmrazení ani sušení nemusí odstranit všechny patogeny."
+    },
+    {
+      "claimCs": "Kosti čistí zuby.",
+      "status": "NEPROKAZANO",
+      "source": "WSAVA",
+      "explainCs": "WSAVA neuvádí prokázanou ochranu před onemocněním dásní a upozorňuje na rizika poškození zubů."
+    },
+    {
+      "claimCs": "BARF vyřeší alergii.",
+      "status": "MYTUS",
+      "source": "MERCK",
+      "explainCs": "Potravní reakce se řeší kontrolovanou eliminační dietou — 2–4 týdny u zažívacích, 8–12 týdnů u kožních projevů, bez pamlsků a jiných proteinů."
+    },
+    {
+      "claimCs": "Více jater je zdravější.",
+      "status": "MYTUS",
+      "source": "MERCK",
+      "explainCs": "Riziko toxicity vitaminem A a nadbytku měďi."
+    },
+    {
+      "claimCs": "Poměr 80/10/10 automaticky splňuje potřeby psa.",
+      "status": "MYTUS",
+      "source": "FEDIAF",
+      "explainCs": "Poměr surovin nezaručuje pokrytí živin — chybět může jód, vitamin D, E, zinek, měď, selen i mastné kyseliny."
+    },
+    {
+      "claimCs": "Pamlsky se do dávky nepočítají.",
+      "status": "MYTUS",
+      "source": "WSAVA",
+      "explainCs": "WSAVA doporučuje, aby pamlsky tvořily nejvýš přibližně 10 % denního energetického příjmu."
+    },
+    {
+      "claimCs": "Svalovina sama zajistí kompletní dietu.",
+      "status": "MYTUS",
+      "source": "MERCK",
+      "explainCs": "Svalovina má hodně fosforu a málo vápníku. Dieta převážně z masa může vést k deficitu vápníku a sekundární nutriční hyperparatyreóze."
+    }
+  ]
+}
