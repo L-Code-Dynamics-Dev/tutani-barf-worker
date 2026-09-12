@@ -13,7 +13,12 @@
 import barfCore from '../tenants/tutani/rules/barf-core.json';
 import tutaniHealth from '../tenants/tutani/rules/tutani-health.json';
 import ingredients from '../tenants/tutani/rules/ingredients.json';
+import fediaf2025 from '../tenants/tutani/rules/fediaf-2025.json';
+import ingredientsNutrition from '../tenants/tutani/rules/ingredients-nutrition.json';
+import tutaniProducts from '../tenants/tutani/rules/tutani-products.json';
 import { TUTANI_TENANT } from '../tenants/tutani/config/tenant.js';
+import { loadFediafAdultTargets } from './engine/nutrient-coverage/loadFediafTargets.js';
+import { loadNutritionData, loadTutaniProducts } from './engine/nutrient-coverage/loadNutritionData.js';
 import { KnowledgeRuleEngine } from './rules/KnowledgeRuleEngine.js';
 import type { TenantConfiguration } from './domain/tenant.js';
 import type { BarfMethodology } from './engine/feeding-calculator/calculateDose.js';
@@ -198,12 +203,26 @@ const RULES: RuleEngine = new KnowledgeRuleEngine({
     barfCore,
 });
 
+/**
+ * Nutriční vrstva (nález auditu 2026-09-12, Fáze 1 — propojení).
+ * Statická data, načtená jednou při startu isolátu — stejný důvod jako
+ * u `METHODOLOGY`/`RULES`. Chybí-li FEDIAF cíle (prázdné pole), engine
+ * to nemá jak zamaskovat — `calculateNutrientCoverage` prostě nedostane
+ * co porovnávat a vrátí prázdný seznam kontrol, nikdy vymyšlený status.
+ */
+const NUTRITION_DEPS = {
+    products: loadTutaniProducts(tutaniProducts),
+    ingredients: loadNutritionData(ingredientsNutrition),
+    targets: loadFediafAdultTargets(fediaf2025),
+};
+
 export function buildDeps(env: Env, rules: RuleEngine = RULES): Deps {
     return {
         tenant: resolveTenant(env),
         store: new D1ProductStore(env.DB),
         methodology: METHODOLOGY,
         rules,
+        nutrition: NUTRITION_DEPS,
     };
 }
 

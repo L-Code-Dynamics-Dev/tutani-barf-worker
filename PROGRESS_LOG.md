@@ -2,6 +2,73 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-12 (15:04) — FÁZE 1: napojení nutriční vrstvy do výpočtu (D-1)
+
+Implementována Fáze 1 z `docs/ARCHITECTURE_AUDIT.md` — propojka mezi
+hotovou nutriční vrstvou (FEDIAF cíle, USDA dataset surovin,
+`TutaniProduct.composition`) a produkčním výpočtem dávky, BEZ ZMĚNY
+`calculateDose`/`matchProducts` (non-interference).
+
+### Napsáno
+
+```
+src/engine/nutrient-coverage/calculateNutrientCoverage.ts   jádro propojky
+src/engine/nutrient-coverage/loadFediafTargets.ts           JSON → NutrientTarget[]
+src/engine/nutrient-coverage/loadNutritionData.ts           JSON → mapy surovin/produktů
+tests/unit/calculateNutrientCoverage.test.ts                7 testů (fixture)
+tests/unit/loadNutrientData.test.ts                         7 testů (proti reálným datům)
+```
+
+Princip: `matchProducts` výstup (SKU + gramy/období) je JIŽ HOTOVÝ
+výsledek — `calculateNutrientCoverage` na něj napočítá druhou vrstvu
+informace (kolik živin dávka reálně obsahuje), nepřepočítává dávku
+ani nevybírá produkty znovu.
+
+**Fail-safe (R7), ověřeno testy:**
+- `NOT_ANALYZED` živina u suroviny → `NEZNAME`, nikdy tichá nula
+- `PARTIAL`/`UNKNOWN` composition (produkt bez určeného podílu) →
+  `NEZNAME`, nesčítá se jako jistý příspěvek
+- chybějící energie dávky (nelze převést FEDIAF PER_1000_KCAL na
+  gramy) → `NEZNAME` pro všechny cíle, žádný dopočet
+- SKU mimo nutriční katalog → `NEZNAME`, ne tichá nula
+- FEDIAF cíl s `status: NOT_SPECIFIED` (dospělý pes, EPA+DHA) —
+  loader ho vůbec nevytvoří, nikdy `min: 0`
+
+**API (`handlers.ts`):** nové volitelné pole `Deps.nutrition` — chybí-li,
+`/v1/davka` funguje přesně jako dřív a `nutrice: null`,
+`nutrientEngineReady: false` (žádná tichá nutriční kontrola bez dat).
+S daty se `nutrice: NutrientCheck[]` počítá jen pro `status: OK` dávku
+s aspoň jedním vybraným produktem — BLOCKED/INCOMPLETE dávka nemá
+smysl nutričně hodnotit.
+
+**`src/index.ts`:** produkční `buildDeps` teď načítá `fediaf-2025.json`
++ `ingredients-nutrition.json` + `tutani-products.json` staticky
+(stejný vzor jako `RULES`/`METHODOLOGY`) a předává je jako
+`NUTRITION_DEPS`.
+
+### Ověřeno
+- `npx tsc --noEmit` — 0 chyb
+- `npm test` — 228/228 zelených (211 původních beze změny + 17 nových)
+- End-to-end test proti reálnému `tutani-products.json`
+  (TUT211, 100 % losos) prochází bez pádu na žádném z ~30 FEDIAF cílů
+
+### Co Fáze 1 NEŘEŠÍ (záměrně, mimo rozsah)
+- `NUTRIENT_LIMIT` pravidla v `RuleEngine.ts` se pořád zapisují jako
+  `unappliedRules` — vyhodnocení limitu (CKD fosfor) proti reálným
+  datům je Fáze 2 z auditu, ne tahle.
+- Nutriční databáze pořád pokrývá jen 12 surovin ze stovek SKU —
+  většina dávek bude i po tomhle kroku ukazovat `NEZNAME` u produktů
+  mimo katalog. To je SPRÁVNÉ chování (R7), ne bug.
+- Multi-produktové dávky (víc SKU najednou pokrývajících různé
+  `BarfGroup`) fungují (`calculateNutrientCoverage` sčítá přes
+  všechny `selected`), ale nebyly ověřeny end-to-end proti reálné
+  kombinaci — jen proti jednosložkovému lososu.
+
+### Další krok
+Fáze 2 (`NUTRIENT_LIMIT` reálné vyhodnocení) nebo další rozšíření
+`ingredients-nutrition.json` o chybějící suroviny — podle rozhodnutí
+Lucky/Josefa.
+
 ## 2026-09-12 (14:33) — ARCHITECTURE AUDIT + doplnění USDA dat (v0.2 → v0.3)
 
 Před plánovaným přerodem na multi-tenant Nexus Pet Nutrition Engine

@@ -28,6 +28,12 @@ import {
     type MatchResult,
 } from '../engine/product-matching/matchProducts.js';
 import { validateDoseRequest, type ValidationIssue } from './validateInput.js';
+import {
+    calculateNutrientCoverage,
+    type NutrientCoverageDeps,
+} from '../engine/nutrient-coverage/calculateNutrientCoverage.js';
+import { calculateEnergy, type EnergyInput } from '../domain/nutrition/energy.js';
+import { resolveLifeStage } from '../domain/dog/DogProfile.js';
 
 /**
  * DISCLAIMER JE V ODPOVĚDI WORKERU, NE V ŠABLONĚ (§7 ARCHITEKTURA.md).
@@ -119,6 +125,15 @@ export interface Deps {
     rules: RuleEngine;
     /** Injektovatelný čas kvůli deterministickým testům. */
     now?: () => Date;
+    /**
+     * Nutriční vrstva (FEDIAF cíle + `TutaniProduct` katalog + surovinová
+     * databáze) — VOLITELNÁ (nález auditu 2026-09-12, D-1: propojka).
+     * Chybí-li, `/v1/davka` funguje přesně jako dřív (jen `BarfGroup`
+     * úroveň) a nutriční pole v odpovědi se prostě nevygeneruje —
+     * nejde o chybu, jen o nezapojenou vrstvu (R7: neexistuje ticho
+     * předstíraná nutriční kontrola bez dat).
+     */
+    nutrition?: Omit<NutrientCoverageDeps, 'dietKcalPerDay'>;
 }
 
 /** Kód chyby na úrovni požadavku. Text si drží frontend. */
@@ -354,11 +369,14 @@ function buildResponse(
         });
     }
 
+    const nutrice = calculateNutrition(dog, dose, match, periodDays, deps);
+
     return {
         v: 1,
         status: dose.status,
         reason: dose.reason,
         knowledgeEngineReady: deps.rules.ready,
+        nutrientEngineReady: nutrice !== null,
         pes: dogEcho(dog),
         davka:
             dose.status === 'OK'
@@ -402,6 +420,24 @@ function buildResponse(
             gramy: u.gramsPerDay,
             duvod: u.reason,
         })),
+        /**
+         * NUTRIČNÍ POKRYTÍ (nález auditu 2026-09-12, D-1) — `null`, dokud
+         * `deps.nutrition` není nakonfigurováno NEBO dokud nejsou vybrané
+         * produkty (BLOCKED/INCOMPLETE dávka, chybějící katalog). Nikdy
+         * se nevrací prázdné pole místo `null` — to by vypadalo jako
+         * "zkontrolovali jsme 0 živin a je to OK", ne jako "nekontrolovalo se".
+         */
+        nutrice: nutrice === null ? null : nutrice.map((c) => ({
+            klic: c.key,
+            nazev: c.labelCs,
+            stav: c.status,
+            hodnota: c.value ?? null,
+            jednotka: c.unit ?? null,
+            cilMin: c.targetMin ?? null,
+            cilMax: c.targetMax ?? null,
+            zdroj: c.source,
+            duvod: c.reasonCs ?? null,
+        })),
         cena:
             match === null
                 ? null
@@ -414,6 +450,45 @@ function buildResponse(
         /** Nedá se odstranit úpravou frontendu — je součástí odpovědi. */
         disclaimer: DISCLAIMER_CS,
     };
+}
+
+/**
+ * Nutriční pokrytí dávky — `null` když se nedá spočítat (chybí nutriční
+ * vrstva, dávka není OK, nebo nejsou vybrané žádné produkty). NIKDY se
+ * nevrací výsledek s tichým podhodnocením (R7) — proto se hned na
+ * vstupu odmítne cokoliv, u čeho by výpočet neměl solidní základ.
+ */
+function calculateNutrition(
+    dog: DogProfile,
+    dose: DoseResult,
+    match: MatchResult | null,
+    periodDays: number,
+    deps: Deps
+): ReturnType<typeof calculateNutrientCoverage> | null {
+    if (!deps.nutrition) return null;
+    if (dose.status !== 'OK' || !match || match.products.length === 0) return null;
+
+    const energyInput: EnergyInput = {
+        weightKg: dog.weightKg,
+        idealWeightKg: dog.idealWeightKg,
+        lifeStage: resolveLifeStage(dog.ageMonths),
+        activity: dog.activity,
+        bodyCondition: dog.bodyCondition,
+        physiologicalState: dog.physiologicalState,
+        neutered: dog.neutered,
+    };
+    const energy = calculateEnergy(energyInput);
+
+    const selected = match.products.map((p) => ({
+        sku: p.sku,
+        // `coversGrams` je za CELÉ období (`periodDays`), potřeba je gramy/den.
+        gramsPerDay: p.coversGrams / periodDays,
+    }));
+
+    return calculateNutrientCoverage(selected, {
+        ...deps.nutrition,
+        dietKcalPerDay: energy.merKcal,
+    });
 }
 
 function dogEcho(dog: DogProfile) {

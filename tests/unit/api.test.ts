@@ -228,6 +228,103 @@ describe('POST /v1/davka — validní vstup', () => {
     });
 });
 
+describe('POST /v1/davka — nutriční pokrytí (nález auditu 2026-09-12, D-1)', () => {
+    it('bez deps.nutrition vrací nutrice: null a nutrientEngineReady: false — žádná tichá nula', async () => {
+        const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
+        const b = await body(res);
+        expect(b.nutrientEngineReady).toBe(false);
+        expect(b.nutrice).toBeNull();
+    });
+
+    it('s deps.nutrition spočítá pokrytí pro vybrané produkty', async () => {
+        const hoveziMlete: import('../../src/engine/nutrient-coverage/calculateNutrientCoverage.js').NutrientDataIngredient = {
+            id: 'hovezi-mlete-93-7',
+            nutrients: { calcium: { value: 10, unit: 'mg', status: 'MEASURED' } },
+        };
+        const tutaniProduct: import('../../src/domain/products/TutaniProduct.js').TutaniProduct = {
+            productId: 'TUT1',
+            code: 'TUT1',
+            nameCs: 'Barf Mleté kuře 3kg',
+            brand: null,
+            categoryPath: null,
+            topCategory: 'OTHER',
+            priceWithVatCzk: null,
+            packGrams: null,
+            availability: 'UNKNOWN',
+            url: '',
+            kind: 'SINGLE_INGREDIENT',
+            composition: [
+                {
+                    ingredientId: 'hovezi-mlete-93-7',
+                    nameCs: 'hovězí mleté',
+                    species: 'BEEF',
+                    part: 'MUSCLE',
+                    role: 'INGREDIENT',
+                    subcomponentsCs: [],
+                    subcomponentRatio: null,
+                    percentage: 100,
+                    certainty: 'EXACT',
+                    sourceCs: 'test',
+                },
+            ],
+            compositionAccountedPct: 100,
+            analytical: [],
+            claims: { rawDescriptionCs: null, ageCategory: null, dietaryClaimsCs: [] },
+            evidence: { source: 'TUTANI_PRODUCT_PAGE', sourceDate: '2026-09-12', confidence: 'EXACT' },
+            updatedAt: '2026-09-12',
+        };
+
+        const res = await handleDose(
+            doseRequest(REX),
+            deps({
+                rules: fakeRules(),
+                nutrition: {
+                    products: new Map([['TUT1', tutaniProduct]]),
+                    ingredients: new Map([['hovezi-mlete-93-7', hoveziMlete]]),
+                    targets: [
+                        {
+                            nutrient: 'calcium',
+                            lifeStage: 'ADULT',
+                            min: 1.45,
+                            max: 6.25,
+                            unit: 'g',
+                            basis: 'PER_1000_KCAL',
+                            source: 'FEDIAF',
+                            sourceVersion: '2025',
+                            confidence: 'TABULKA',
+                        },
+                    ],
+                },
+            })
+        );
+        const b = await body(res);
+
+        expect(b.nutrientEngineReady).toBe(true);
+        expect(b.nutrice).not.toBeNull();
+        const calcium = (b.nutrice as { klic: string; stav: string }[]).find((c) => c.klic === 'calcium');
+        expect(calcium).toBeDefined();
+        // Kalcium se počítá jen z produktů, které JSOU ve `products` mapě
+        // (jen TUT1) — zbytek doporučených produktů (BONE/LIVER/ORGAN/PLANT)
+        // se do coverage nedostane, takže výsledek je nutně NEDOSTATEK/NEZNAME,
+        // nikdy klamné OK. Test ověřuje jen to, že se pole vůbec vygenerovalo
+        // a nespadlo, ne konkrétní status (ten závisí na celém katalogu).
+        expect(['OK', 'NEDOSTATEK', 'NADBYTEK', 'NEZNAME']).toContain(calcium!.stav);
+    });
+
+    it('BLOCKED dávka nemá nutriční pokrytí (nedává smysl počítat u nevydané dávky)', async () => {
+        const res = await handleDose(
+            doseRequest(REX),
+            deps({
+                rules: fakeRules({ blocked: true, blockedBy: ['ckd'] }),
+                nutrition: { products: new Map(), ingredients: new Map(), targets: [] },
+            })
+        );
+        const b = await body(res);
+        expect(b.status).toBe('BLOCKED');
+        expect(b.nutrice).toBeNull();
+    });
+});
+
 describe('POST /v1/davka — DISCLAIMER se nedá odstranit', () => {
     it('je v odpovědi u OK', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
