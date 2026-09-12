@@ -2,6 +2,59 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-12 (14:33) — ARCHITECTURE AUDIT + doplnění USDA dat (v0.2 → v0.3)
+
+Před plánovaným přerodem na multi-tenant Nexus Pet Nutrition Engine
+(zadání Josefa Dlouhého) proveden kompletní audit repa bez zásahu do
+kódu: `docs/ARCHITECTURE_AUDIT.md`. Klíčový nález: nutriční vrstva
+(FEDIAF, USDA data, `TutaniProduct.composition`) je hotová jako typy
+a data, ale **není napojená** do `calculateDose`/`matchProducts` —
+ty pořád počítají jen na úrovni `BarfGroup` (gramy MUSCLE/BONE/…),
+ne na živinách. Navrženo 5 fází, Fáze 1 (napojení) čeká na schválení.
+
+Mezitím rozšířen `ingredients-nutrition.json` (v0.2 → v0.3) podle
+otevřeného úkolu z BARF triggeru (paměť): doplnit chybějící živiny.
+
+**Doplněno:** sodík, draslík, hořčík, mangan u 7 z existujících
+9 datasetů (hovězí mleté 93/7 a 80/20, kuřecí prsa SR Legacy
+i Foundation, hovězí játra, vejce celé, losos farmovaný). EPA/DHA
+u lososa (860/1100 mg) a DHA u vejce (60 mg). Přidána NOVÁ surovina
+`makrela-atlanticka` (kompletní profil vč. EPA 900 mg, DHA 1400 mg).
+
+**Nedoplněno, přiznáno v `gaps`:**
+- **Jód a chlorid** — nepokryté u ŽÁDNÉ suroviny. USDA SR Legacy
+  i Foundation Foods tyhle dvě živiny u masa/vajec/ryb systematicky
+  neměří. Nejde o mezeru v researchi, ale ve zdrojových datech —
+  bude potřeba jiný zdroj (NRC 2006, EFSA, laboratorní rozbor).
+- Kuřecí játra, hovězí ledvina, hovězí srdce, vepřová játra —
+  v datasetu `NEURCENO`/nejednoznačné FDC ID, minerály se
+  nedomýšlely přes nejistý zdroj (R7).
+- Sardinka (Atlantic, raw) nepřidána — USDA má jen konzervovanou
+  variantu, ne surovou.
+
+**DŮLEŽITÁ VÝHRADA KE ZDROJI:** USDA FDC API mělo v době práce
+vyčerpaný sdílený `DEMO_KEY` (HTTP 429). Hodnoty proto dohledány
+přes sekundární weby (rawpawiq.com, nutritionvalue.org) a křížově
+ověřeny proti existujícím v0.1/v0.2 hodnotám (shoda na desetiny
+u Ca/P/Fe/Zn/Cu/Se u týchž FDC ID). Každý nový `sourceRef` tuhle
+výhradu nese explicitně — **před použitím v produkčním doporučení
+pro klienta je třeba ověřit proti FDC API s vlastním klíčem.**
+Bez téhle opravy by `sourceRef` tvrdil přímou citaci USDA, i když
+šlo o převzetí přes třetí stranu — přesně ten problém, před kterým
+varuje `Ingredient.ts` (citace nesmí vypadat jistější, než je).
+
+### Ověřeno
+- JSON validní (`python3 -c "json.load(...)"`)
+- `npx tsc --noEmit` — 0 chyb
+- `npm test` — 211/211 zelených (data se zatím nikde nenačítají,
+  takže nemohla nic rozbít — čeká na Fázi 1 napojení)
+
+### Další krok
+Rozhodnout s Luckym/Josefem, zda pokračovat Fází 1 (napojení
+nutriční vrstvy do výpočtu) podle `docs/ARCHITECTURE_AUDIT.md`,
+nebo dál rozšiřovat surovinovou databázi (chybí krůtí, králičí,
+zvěřina, zelenina/ovoce, oleje — viz `gaps.missingIngredients`).
+
 ## 2026-09-09 (02:00) — NUTRIČNÍ VRSTVA: FEDIAF 2025 + dataset surovin
 
 Lucky dodal kompletní znalostní rámec (body 1–96 + FEDIAF tabulky
