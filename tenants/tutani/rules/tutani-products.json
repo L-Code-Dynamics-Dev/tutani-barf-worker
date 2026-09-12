@@ -1,0 +1,5871 @@
+{
+  "datasetId": "tutani-products",
+  "displayName": "Tutani — produktový katalog (ingredient-level composition)",
+  "source": "TUTANI_PRODUCT_PAGE",
+  "sourceVersion": "0.5",
+  "updatedAt": "2026-09-09",
+  "note": "v0.3: KOMPLETNÍ PŘESTAVBA kategorie 'Barf mražené maso' (103 SKU) z autoritativního scraper CSV (tutani_mrazene_maso_extracted_2026-09-09.csv), nahrazuje ruční přepisy z konverzace. Reconciliace odhalila a opravila dvě chyby: (1) TUT222 Šemíkova mňamka byla mezitím nesprávně upravena na 50/3,5/1,5 % podle ručně psané zprávy — CSV potvrzuje SPRÁVNOU původní hodnotu 50/35/15 %, vráceno zpět; (2) TUT9 (bez lomítka) je 'Kachní vznášedla', ne krůtí — kódy TUT9/1, TUT9/5, TUT9/13, TUT9/15 jsou SAMOSTATNÉ produkty, ne gramážové varianty jednoho SKU. Produkty mimo tuto kategorii (BARF strava pro psy, dravci, ZOO doplňky mimo mražené maso, BARF přílohy) zůstávají ze staršího datasetu beze změny — CSV o nich nic netvrdí. R7: kde Tutani neuvedl poměr, percentage je null a certainty PARTIAL/UNKNOWN — nikdy dopočet rovnoměrným rozdělením. v0.4: topCategory a url u shodných produktů opraveny podle SKUTEČNÉ URL cesty z crawler exportu tutani_full_catalog_2026-09-09.json (261 produktových stránek, 753 celkem prolezeno) — přesnější než dřívější odhad z jazyka názvu. | [2026-09-09] +5 inventárních záznamů (BARF na cesty, MAX deluxe) z tutani_full_catalog_2026-09-09.json crawler exportu — jen potvrzení existence (název+URL), composition je PARTIAL bez procent, ŽÁDNÁ nová cena data. 4 položek vyhodnoceno jako duplicita stávajících záznamů (aktuálně uložených v tutani-supplements.json, otevřený nález k přesunu do TutaniProduct).",
+  "products": [
+    {
+      "productId": "TUT164",
+      "code": "TUT164",
+      "nameCs": "Barf Hovězí chrupavka 2ks",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 44.0,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "chrupavka",
+          "species": "BEEF",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "2x hovězí chrupavka z lopatky 250–600 g [druh odvozen z názvu produktu: Barf Hovězí chrupavka 2ks]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hovězí chrupavka 2ks",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT8",
+      "code": "TUT8",
+      "nameCs": "Barf Díly pana Ušáka 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 109.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "králičí kosti",
+          "species": "RABBIT",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Králičí kosti stehna, žebra, hřbety"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí stehna, žebra, hřbety",
+          "species": "RABBIT",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Králičí kosti stehna, žebra, hřbety"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Díly pana Ušáka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ETUT1",
+      "code": "ETUT1",
+      "nameCs": "Barf ECM Hovězí mix 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 58.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-ecm-hovezi-mix-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "hovezi-mlete-93-7",
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 10.0,
+          "certainty": "EXACT",
+          "sourceCs": "10% hovězí maso"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "vemeno/vemínko",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 60.0,
+          "certainty": "EXACT",
+          "sourceCs": "60% vemínko"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "droby",
+          "species": "BEEF",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% droby [druh odvozen z názvu produktu: Barf ECM Hovězí mix 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf ECM Hovězí mix 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ETUT3",
+      "code": "ETUT3",
+      "nameCs": "Barf ECM Vepřové mleté s droby 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 74.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřová svalovina",
+          "species": "PORK",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% vepřová svalovina/šlachy/tuk"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové droby",
+          "species": "PORK",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% vepřové droby [druh odvozen z názvu produktu: Barf ECM Vepřové mleté s droby 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf ECM Vepřové mleté s droby 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT175",
+      "code": "TUT175",
+      "nameCs": "Barf Hovězí droby kusové 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 63.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí plíce",
+          "species": "BEEF",
+          "part": "SECRETORY_LUNG",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 40.0,
+          "certainty": "EXACT",
+          "sourceCs": "40% plíce"
+        },
+        {
+          "ingredientId": "hovezi-ledvina",
+          "nameCs": "hovězí ledviny",
+          "species": "BEEF",
+          "part": "SECRETORY_KIDNEY",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% ledviny"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "játra (druh neurčen z tohoto textu)",
+          "species": "BEEF",
+          "part": "SECRETORY_LIVER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% játra [druh odvozen z názvu produktu: Barf Hovězí droby kusové 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hovězí droby kusové 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT155",
+      "code": "TUT155",
+      "nameCs": "Barf Hovězí droby mleté 1kg",
+      "brand": null,
+      "categoryPath": "vnitrnosti-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 59.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-2/barf-hovezi-droby-mlete-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí ledviny",
+          "species": "BEEF",
+          "part": "SECRETORY_KIDNEY",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí ledviny plíce játra"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí plíce",
+          "species": "BEEF",
+          "part": "SECRETORY_LUNG",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí ledviny plíce játra"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "játra (druh neurčen z tohoto textu)",
+          "species": "BEEF",
+          "part": "SECRETORY_LIVER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí ledviny plíce játra [druh odvozen z názvu produktu: Barf Hovězí droby mleté 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hovězí droby mleté 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT152",
+      "code": "TUT152",
+      "nameCs": "Barf Hovězí mleté 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 110.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-hovezi-mlete-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí ořez"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hovězí mleté 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT223",
+      "code": "TUT223",
+      "nameCs": "Barf Hovězí mleté se zeleninou 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 119.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-hovezi-mlete-se-zeleninou-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "hovezi-mlete-93-7",
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% hovězí maso"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "mix zeleniny",
+          "species": "PLANT",
+          "part": "VEGETABLE",
+          "role": "INGREDIENT_GROUP",
+          "subcomponentsCs": [
+            "mrkev",
+            "petržel",
+            "celer"
+          ],
+          "subcomponentRatio": "UNKNOWN",
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% mix zeleniny: mrkev, petržel, celer"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hovězí mleté se zeleninou 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT215",
+      "code": "TUT215",
+      "nameCs": "Barf Hovězí svalovina mletá 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 144.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-hovezi-svalovina-mleta-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "svalovina (druh neurčen z tohoto textu)",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletá svalovina z krku [druh odvozen z názvu produktu: Barf Hovězí svalovina mletá 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "krky (druh neurčen z tohoto textu)",
+          "species": "BEEF",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletá svalovina z krku [druh odvozen z názvu produktu: Barf Hovězí svalovina mletá 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hovězí svalovina mletá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT7",
+      "code": "TUT7",
+      "nameCs": "Barf Hrubá paní Vysoká 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-4",
+      "topCategory": "ZVERINA",
+      "priceWithVatCzk": 113.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-4/barf-hruba-pani-vysoka-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": "hovezi-jatra",
+          "nameCs": "srnčí maso",
+          "species": "GAME",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% srnec, jelen a daněk"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hrubá paní Vysoká 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": [
+          "bez kostí"
+        ]
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT10",
+      "code": "TUT10",
+      "nameCs": "Barf Hrubý pan Ušák 1kg",
+      "brand": null,
+      "categoryPath": "kralici",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 129.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kralici/barf-hruby-pan-usak",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mletý králík (svalovina)",
+          "species": "RABBIT",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletý králík cca 70% kosti a chrupavky"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kosti",
+          "species": "RABBIT",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletý králík cca 70% kosti a chrupavky [druh odvozen z názvu produktu: Barf Hrubý pan Ušák 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "chrupavka",
+          "species": "RABBIT",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletý králík cca 70% kosti a chrupavky [druh odvozen z názvu produktu: Barf Hrubý pan Ušák 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hrubý pan Ušák 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT9/5",
+      "code": "TUT9/5",
+      "nameCs": "Barf Hrubý pan Ušák 500g",
+      "brand": null,
+      "categoryPath": "kralici",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 79.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kralici/barf-hruby-pan-usak-500g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mletý králík (svalovina)",
+          "species": "RABBIT",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletý králík cca 60% kosti a chrupavky"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kosti",
+          "species": "RABBIT",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletý králík cca 60% kosti a chrupavky [druh odvozen z názvu produktu: Barf Hrubý pan Ušák 500g]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "chrupavka",
+          "species": "RABBIT",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletý králík cca 60% kosti a chrupavky [druh odvozen z názvu produktu: Barf Hrubý pan Ušák 500g]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Hrubý pan Ušák 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT203",
+      "code": "TUT203",
+      "nameCs": "Barf Chrupavka paní Vysoké 500g",
+      "brand": null,
+      "categoryPath": "kosti-4",
+      "topCategory": "ZVERINA",
+      "priceWithVatCzk": 64.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti-4/barf-chrupavka-pani-vysoke-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "zvěřinová chrupavka",
+          "species": "GAME",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kloubní pouzdro ze zvěřiny"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Chrupavka paní Vysoké 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT64",
+      "code": "TUT64",
+      "nameCs": "Barf Jazyk jako kráva 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 124.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-jazyk-jako-krava-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí jazyk",
+          "species": "BEEF",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí jazyk"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Jazyk jako kráva 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT221",
+      "code": "TUT221",
+      "nameCs": "Barf Jemně mletá kuřecí prsa 1kg",
+      "brand": null,
+      "categoryPath": "svalovina",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 119.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina/barf-jemne-mleta-kureci-prsa-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí prsa",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kuřecí prsa bez kostí"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kosti",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kuřecí prsa bez kostí [druh odvozen z názvu produktu: Barf Jemně mletá kuřecí prsa 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Jemně mletá kuřecí prsa 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": [
+          "bez kostí"
+        ]
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT21",
+      "code": "TUT21",
+      "nameCs": "Barf Kachní bachory 500g",
+      "brand": null,
+      "categoryPath": "vnitrnosti-4",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 94.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-4/barf-kachni-zaludky-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní žaludky",
+          "species": "DUCK",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní žaludky"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní bachory 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT19",
+      "code": "TUT19",
+      "nameCs": "Barf Kachní hrby 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 87.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní hřbety",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní hřbety"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní hrby 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT22",
+      "code": "TUT22",
+      "nameCs": "Barf Kachní jatýrka 500g",
+      "brand": null,
+      "categoryPath": "vnitrnosti-4",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 80.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-4/barf-kachni-jatyrka-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "játra (druh neurčen z tohoto textu)",
+          "species": "DUCK",
+          "part": "SECRETORY_LIVER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní játra [druh odvozen z názvu produktu: Barf Kachní jatýrka 500g]"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní jatýrka 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT11",
+      "code": "TUT11",
+      "nameCs": "Barf Kachní mozkovny 5ks",
+      "brand": null,
+      "categoryPath": "kosti-6",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 73.0,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti-6/barf-kachni-mozkovny-5ks",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní hlavy",
+          "species": "DUCK",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní hlavy"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní mozkovny 5ks",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT9/1",
+      "code": "TUT9/1",
+      "nameCs": "Barf Kachní ohybače hlav 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 104.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní krky",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní krky"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní ohybače hlav 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT13/1",
+      "code": "TUT13/1",
+      "nameCs": "Barf Kachní rychlé nožky 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 64.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní běháky",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní běháky"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní rychlé nožky 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT6",
+      "code": "TUT6",
+      "nameCs": "Barf Kachní srdéčka 500g",
+      "brand": null,
+      "categoryPath": "vnitrnosti-4",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 99.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-4/barf-kachni-srdecka-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní srdce",
+          "species": "DUCK",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní srdce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní srdéčka 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT213",
+      "code": "TUT213",
+      "nameCs": "Barf Kachní stehýnka 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 91.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní čtvrtky/stehna s biskupem",
+          "species": "DUCK",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kachní čtvrtky stehna s biskupem"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní stehýnka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT9",
+      "code": "TUT9",
+      "nameCs": "Barf Kachní vznášedla 1kg",
+      "brand": null,
+      "categoryPath": "kosti-6",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 86.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti-6/barf-kachni-vznasedla-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní křídla",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kachní křídla"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní vznášedla 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Kód BEZ lomítka — 'Kachní vznášedla', NE krůtí. TUT9/1, TUT9/5, TUT9/13, TUT9/15 jsou SAMOSTATNÉ produkty (jiný suffix = jiné SKU, ne gramážová varianta), potvrzeno scraper CSV 2026-09-09."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT98",
+      "code": "TUT98",
+      "nameCs": "Barf Kachní žalosrdce 500g",
+      "brand": null,
+      "categoryPath": "vnitrnosti-4",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 96.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-4/barf-kachni-zalosrdce-500g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní žaludky",
+          "species": "DUCK",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% kachní žaludky"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kachní srdce",
+          "species": "DUCK",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% kachní srdce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kachní žalosrdce 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT118",
+      "code": "TUT118",
+      "nameCs": "Barf Kopyto jako kráva",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 58.0,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí noha",
+          "species": "BEEF",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí noha"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kopyto jako kráva",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT38",
+      "code": "TUT38",
+      "nameCs": "Barf Krůtí bachory 500g",
+      "brand": null,
+      "categoryPath": "vnitrnosti-5",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 105.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-5/barf-kruti-bachory-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí žaludky",
+          "species": "TURKEY",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí žaludky"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí bachory 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT34",
+      "code": "TUT34",
+      "nameCs": "Barf Krůtí jatýrka 500g",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 102.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí játra",
+          "species": "TURKEY",
+          "part": "SECRETORY_LIVER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí játra"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí jatýrka 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT14",
+      "code": "TUT14",
+      "nameCs": "Barf Krůtí ohybače hlav 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 115.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí krky",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí krky včetně kůže"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí kůže",
+          "species": "TURKEY",
+          "part": "SKIN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí krky včetně kůže"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí ohybače hlav 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT132",
+      "code": "TUT132",
+      "nameCs": "Barf Krůtí ořez a chrupavky 1kg",
+      "brand": null,
+      "categoryPath": "kruti",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 108.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kruti/barf-kruti-orez-a-chrupavky-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí svalovina",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí ořez a chrupavky"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "chrupavka",
+          "species": "TURKEY",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí ořez a chrupavky [druh odvozen z názvu produktu: Barf Krůtí ořez a chrupavky 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí ořez a chrupavky 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT54",
+      "code": "TUT54",
+      "nameCs": "Barf Krůtí prdky 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-7",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 92.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-7/barf-kruti-prdky-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí biskupy",
+          "species": "TURKEY",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí biskupy"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí prdky 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT30",
+      "code": "TUT30",
+      "nameCs": "Barf Krůtí srdéčka 500g",
+      "brand": null,
+      "categoryPath": "svalovina-7",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 105.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-7/barf-kruti-srdecka-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí srdce",
+          "species": "TURKEY",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí srdce"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí srdéčka 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT46",
+      "code": "TUT46",
+      "nameCs": "Barf Krůtí vznášedla 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 124.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí křídla",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% krůtí křídla"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí vznášedla 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT9/13",
+      "code": "TUT9/13",
+      "nameCs": "Barf Krůtí vznášedla mletá 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 124.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-2/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí křídla",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% krůtí křídla"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Krůtí vznášedla mletá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT139",
+      "code": "TUT139",
+      "nameCs": "Barf Kuře mleté s játry 1kg",
+      "brand": null,
+      "categoryPath": "svalovina",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 76.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina/barf-kure-mlete-s-jatry-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí maso, kosti, kůže, šlachy",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 70.0,
+          "certainty": "EXACT",
+          "sourceCs": "70% mleté kuřecí maso/kosti/kůže/šlachy"
+        },
+        {
+          "ingredientId": "hovezi-jatra",
+          "nameCs": "hovězí játra",
+          "species": "BEEF",
+          "part": "SECRETORY_LIVER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% hovězí játra"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuře mleté s játry 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT133",
+      "code": "TUT133",
+      "nameCs": "Barf Kuřecí díly 1kg",
+      "brand": null,
+      "categoryPath": "svalovina",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 65.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina/barf-kureci-dily-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "stehna (druh neurčen z tohoto textu)",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "stehna, křídla, krky, skelety [druh odvozen z názvu produktu: Barf Kuřecí díly 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "křídla (druh neurčen z tohoto textu)",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "stehna, křídla, krky, skelety [druh odvozen z názvu produktu: Barf Kuřecí díly 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "krky (druh neurčen z tohoto textu)",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "stehna, křídla, krky, skelety [druh odvozen z názvu produktu: Barf Kuřecí díly 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "masité skelety",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "stehna, křídla, krky, skelety [druh odvozen z názvu produktu: Barf Kuřecí díly 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí díly 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT2",
+      "code": "TUT2",
+      "nameCs": "Barf Kuřecí F16 1kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 59.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-kureci-f16-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí letky/křídla",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kuřecí letky"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí F16 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT1",
+      "code": "TUT1",
+      "nameCs": "Barf Kuřecí ohybače hlav 1kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 67.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-kureci-ohybace-hlav-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí krky",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kuřecí krky"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí ohybače hlav 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT12/1",
+      "code": "TUT12/1",
+      "nameCs": "Barf Kuřecí rychlé nožky 1kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 57.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-kureci-rychle-nozky-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí běháky",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kuřecí běháky"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí rychlé nožky 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT15",
+      "code": "TUT15",
+      "nameCs": "Barf Kuřecí srdéčka 1kg",
+      "brand": null,
+      "categoryPath": "vnitrnosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 125.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti/barf-kureci-srdecka-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí srdce",
+          "species": "CHICKEN",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kuřecí srdce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí srdéčka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT16",
+      "code": "TUT16",
+      "nameCs": "Barf Kuřecí vznášedla 1kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 77.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-kureci-vznasedla-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí letky/křídla",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% kuřecí křídla bez letek"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí vznášedla 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT187",
+      "code": "TUT187",
+      "nameCs": "Barf Kuřecí vemínko 1kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 64.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-kureci-veminko-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mleté kuře",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% mleté kuře"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "vemeno/vemínko",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 40.0,
+          "certainty": "EXACT",
+          "sourceCs": "40% hovězí vemeno"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí droby",
+          "species": "CHICKEN",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 10.0,
+          "certainty": "EXACT",
+          "sourceCs": "10% hovězí droby [druh odvozen z názvu produktu: Barf Kuřecí vemínko 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí vemínko 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT9/15",
+      "code": "TUT9/15",
+      "nameCs": "Barf Kuřecí vemínko 3kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 115.0,
+      "packGrams": 3000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-kureci-veminko-3kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mleté kuře",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% mleté kuře"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "vemeno/vemínko",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 40.0,
+          "certainty": "EXACT",
+          "sourceCs": "40% hovězí vemeno"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí droby",
+          "species": "CHICKEN",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 10.0,
+          "certainty": "EXACT",
+          "sourceCs": "10% hovězí droby [druh odvozen z názvu produktu: Barf Kuřecí vemínko 3kg]"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí vemínko 3kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT1/500",
+      "code": "TUT1/500",
+      "nameCs": "Barf Kuřecí žalosrdce 500g",
+      "brand": null,
+      "categoryPath": "vnitrnosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 84.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti/barf-kureci-zalosrdce-500g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí žaludky",
+          "species": "CHICKEN",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% kuřecí žaludky"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí srdce",
+          "species": "CHICKEN",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% kuřecí srdce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kuřecí žalosrdce 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT151",
+      "code": "TUT151",
+      "nameCs": "Barf Kus Bejka 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 135.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-kus-bejka-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí svalovina v kuse"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kus Bejka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "958",
+      "code": "958",
+      "nameCs": "Barf Makrela celá 1kg",
+      "brand": null,
+      "categoryPath": "ryby",
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 99.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/ryby/barf-makrela-cela-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "makrela celá",
+          "species": "FISH",
+          "part": "FISH_WHOLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Makrela celá, nekuchaná"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Makrela celá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT109",
+      "code": "TUT109",
+      "nameCs": "Barf Mletá kachna 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 84.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-3/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní krky",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kachní krky, křídla a masité skelety"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "křídla (druh neurčen z tohoto textu)",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kachní krky, křídla a masité skelety [druh odvozen z názvu produktu: Barf Mletá kachna 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "masité skelety",
+          "species": "DUCK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Kachní krky, křídla a masité skelety [druh odvozen z názvu produktu: Barf Mletá kachna 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mletá kachna 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT99",
+      "code": "TUT99",
+      "nameCs": "Barf Mleté droby pana Ušáka 500g",
+      "brand": null,
+      "categoryPath": "kralici",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 68.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kralici/barf-mlete-droby-pana-usaka-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% králičí srdce a plíce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mleté droby pana Ušáka 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT218",
+      "code": "TUT218",
+      "nameCs": "Barf Mleté kachní maso 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KACHNA",
+      "priceWithVatCzk": 91.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-3/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kachní svalovina",
+          "species": "DUCK",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletá kachní svalovina"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "svalovina (druh neurčen z tohoto textu)",
+          "species": "DUCK",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mletá kachní svalovina [druh odvozen z názvu produktu: Barf Mleté kachní maso 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mleté kachní maso 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT110",
+      "code": "TUT110",
+      "nameCs": "Barf Mleté kuře 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 49.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-3/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mleté kuře",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mleté kuře"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mleté kuře 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT216",
+      "code": "TUT216",
+      "nameCs": "Barf Mleté kuře 3kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 109.0,
+      "packGrams": 3000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-3/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mleté kuře",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mleté kuře"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mleté kuře 3kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT194",
+      "code": "TUT194",
+      "nameCs": "Barf Mleté kuřecí ohybače hlav 1kg",
+      "brand": null,
+      "categoryPath": "kosti",
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": 79.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti/barf-mlete-kureci-ohybace-hlav-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mleté kuře",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% mleté kuřecí krky"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mleté kuřecí ohybače hlav 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT161",
+      "code": "TUT161",
+      "nameCs": "Barf Mletý Bejk s droby 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 99.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-mlety-bejk-s-droby-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "hovezi-mlete-93-7",
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 70.0,
+          "certainty": "EXACT",
+          "sourceCs": "70% hovězí ořez"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí droby",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT_GROUP",
+          "subcomponentsCs": [
+            "játra",
+            "plíce",
+            "ledviny"
+          ],
+          "subcomponentRatio": "UNKNOWN",
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% hovězí droby: játra, plíce, ledviny"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mletý Bejk s droby 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT199",
+      "code": "TUT199",
+      "nameCs": "Barf Mletý Bejk s droby a zeleninou 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 104.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-mlety-bejk-s-droby-a-zeleninou-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "hovezi-mlete-93-7",
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 60.0,
+          "certainty": "EXACT",
+          "sourceCs": "60% hovězí ořez"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí droby",
+          "species": "BEEF",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 25.0,
+          "certainty": "EXACT",
+          "sourceCs": "25% hovězí droby [druh odvozen z názvu produktu: Barf Mletý Bejk s droby a zeleninou 1kg]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "mix zeleniny",
+          "species": "PLANT",
+          "part": "VEGETABLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 15.0,
+          "certainty": "EXACT",
+          "sourceCs": "15% mix zeleniny"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mletý Bejk s droby a zeleninou 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT168",
+      "code": "TUT168",
+      "nameCs": "Barf Mletý Salmo Salar 3kg",
+      "brand": null,
+      "categoryPath": "ryby",
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 114.0,
+      "packGrams": 3000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/ryby/barf-mlety-salmo-salar-3kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "losos mletý",
+          "species": "FISH",
+          "part": "FISH_FILLET",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100% mletý losos přidávána bříška s ploutvičkou"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Mletý Salmo Salar 3kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT148",
+      "code": "TUT148",
+      "nameCs": "Barf Ořez jako kráva 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 124.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/barf-orez-jako-krava-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí ořez"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Ořez jako kráva 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT138",
+      "code": "TUT138",
+      "nameCs": "Barf Pani Držkatá 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 69.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "dršťky",
+          "species": "BEEF",
+          "part": "SECRETORY_TRIPE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí dršťky mleté neprané [druh odvozen z textu složení: Hovězí dršťky mleté neprané]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pani Držkatá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT160",
+      "code": "TUT160",
+      "nameCs": "Barf Pašíkova chrupavka mletá 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 76.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové hrtany, uši, jícny",
+          "species": "PORK",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mleté vepřové hrtany, uši, jícny"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkova chrupavka mletá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT108",
+      "code": "TUT108",
+      "nameCs": "Barf Pašíkova játra mletá 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 69.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřová játra",
+          "species": "PORK",
+          "part": "SECRETORY_LIVER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřová mletá játra"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkova játra mletá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT65",
+      "code": "TUT65",
+      "nameCs": "Barf Pašíkova jazylka 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 54.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřová jazylka",
+          "species": "PORK",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřová jazylka"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkova jazylka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT60",
+      "code": "TUT60",
+      "nameCs": "Barf Pašíkova kopýtka 2 ks",
+      "brand": null,
+      "categoryPath": "kosti-3",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 34.0,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti-3/barf-pasikova-kopytka-2-ks",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové nožičky/kopýtka",
+          "species": "PORK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřové nožičky cca 1–1,5 kg"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkova kopýtka 2 ks",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT61",
+      "code": "TUT61",
+      "nameCs": "Barf Pašíkova žebírka 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 50.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřová žebra",
+          "species": "PORK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřová žebra"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkova žebírka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT177",
+      "code": "TUT177",
+      "nameCs": "Barf Pašíkovo srdce 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-3",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 104.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-3/barf-barf-pasikovo-srdce-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové srdce",
+          "species": "PORK",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřové srdce"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkovo srdce 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT56",
+      "code": "TUT56",
+      "nameCs": "Barf Pašíkovy kosti 1kg",
+      "brand": null,
+      "categoryPath": "kosti-3",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 49.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti-3/barf-pasikovy-kosti-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové kosti, masitá žebra",
+          "species": "PORK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřové kosti, masitá žebra"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkovy kosti 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT55",
+      "code": "TUT55",
+      "nameCs": "Barf Pašíkovy ledviny mleté 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 58.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové ledviny",
+          "species": "PORK",
+          "part": "SECRETORY_KIDNEY",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřové ledviny mleté"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkovy ledviny mleté 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT66",
+      "code": "TUT66",
+      "nameCs": "Barf Pašíkův jazyk 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 91.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřový jazyk s podjazyčím",
+          "species": "PORK",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřový jazyk s podjazyčím"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Pašíkův jazyk 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT158",
+      "code": "TUT158",
+      "nameCs": "Barf Plíce jako kráva 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 49.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí plíce",
+          "species": "BEEF",
+          "part": "SECRETORY_LUNG",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% hovězí plíce kusové"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Plíce jako kráva 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT150",
+      "code": "TUT150",
+      "nameCs": "Barf Plíce jako kráva mleté 1kg",
+      "brand": null,
+      "categoryPath": "vnitrnosti-2",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 49.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-2/barf-plice-jako-krava-mlete-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí plíce",
+          "species": "BEEF",
+          "part": "SECRETORY_LUNG",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% hovězí plíce mleté"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Plíce jako kráva mleté 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT176",
+      "code": "TUT176",
+      "nameCs": "Barf Prsíčka paní Krocanové 500g",
+      "brand": null,
+      "categoryPath": "svalovina-7",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 190.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-7/barf-prsicka-pani-krocanove-500g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí svalovina",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí prsní svalovina"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "svalovina (druh neurčen z tohoto textu)",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí prsní svalovina [druh odvozen z textu složení: Krůtí prsní svalovina]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Prsíčka paní Krocanové 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT211",
+      "code": "TUT211",
+      "nameCs": "Barf Salmo salar - ořez 1kg",
+      "brand": null,
+      "categoryPath": "ryby",
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 64.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/ryby/barf-salmo-salar-orez-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": "losos-farmovany",
+          "nameCs": "lososový ořez",
+          "species": "FISH",
+          "part": "FISH_FILLET",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% lososový ořez"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Salmo salar - ořez 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT212",
+      "code": "TUT212",
+      "nameCs": "Barf Salmo salar - škrábaný 1kg",
+      "brand": null,
+      "categoryPath": "ryby",
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 119.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/ryby/barf-salmo-salar-skrabany-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": "losos-farmovany",
+          "nameCs": "losos škrábaná svalovina",
+          "species": "FISH",
+          "part": "FISH_FILLET",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% škrábaná svalovina z lososa"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Salmo salar - škrábaný 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": [
+          "bez kostí"
+        ]
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT58",
+      "code": "TUT58",
+      "nameCs": "Barf Směs paní Krocanové 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 68.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "svalovina (druh neurčen z tohoto textu)",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "svalovina [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kosti",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "kosti [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kůže",
+          "species": "TURKEY",
+          "part": "SKIN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "kůže [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "chrupavka",
+          "species": "TURKEY",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "chrupavka [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Směs paní Krocanové 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": [
+          "bez vnitřností"
+        ]
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT117",
+      "code": "TUT117",
+      "nameCs": "Barf Směs paní Krocanové 3kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 144.0,
+      "packGrams": 3000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "svalovina (druh neurčen z tohoto textu)",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "svalovina [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kosti",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "kosti [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kůže",
+          "species": "TURKEY",
+          "part": "SKIN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "kůže [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "chrupavka",
+          "species": "TURKEY",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "chrupavka [druh odvozen z textu složení: 100% celá mletá krůta: svalovina, kosti, kůže, chrupavka; bez vnitřností]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Směs paní Krocanové 3kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": [
+          "bez vnitřností"
+        ]
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT147",
+      "code": "TUT147",
+      "nameCs": "Barf Srdce jako kráva 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 115.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí srdce",
+          "species": "BEEF",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí srdce v kuse"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Srdce jako kráva 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT156",
+      "code": "TUT156",
+      "nameCs": "Barf Srdce jako Kráva mleté 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 124.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí srdce",
+          "species": "BEEF",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí srdce mleté"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Srdce jako Kráva mleté 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT36",
+      "code": "TUT36",
+      "nameCs": "Barf Srdco-plíce pana Ušáka 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 119.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-4/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Králičí srdce a plíce"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Srdco-plíce pana Ušáka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT206",
+      "code": "TUT206",
+      "nameCs": "Barf Šprot celý 1kg",
+      "brand": null,
+      "categoryPath": "ryby",
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 125.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/ryby/barf-sprot-cely-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "šprot celý",
+          "species": "FISH",
+          "part": "FISH_WHOLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Šprot celý nekuchaný"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Šprot celý 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT20/1",
+      "code": "TUT20/1",
+      "nameCs": "Barf Ušákova mňamka 1kg",
+      "brand": null,
+      "categoryPath": "kralici",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 125.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kralici/barf-usakova-mnamka-1kg-2",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mletý králík (svalovina)",
+          "species": "RABBIT",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 70.0,
+          "certainty": "EXACT",
+          "sourceCs": "70% mletý králík"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% králičí srdce a plíce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Ušákova mňamka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT20",
+      "code": "TUT20",
+      "nameCs": "Barf Ušákova mňamka 500g",
+      "brand": null,
+      "categoryPath": "kralici",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 76.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kralici/barf-usakova-mnamka-500g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "mletý králík (svalovina)",
+          "species": "RABBIT",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 70.0,
+          "certainty": "EXACT",
+          "sourceCs": "70% mletý králík"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% králičí srdce a plíce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Ušákova mňamka 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT112",
+      "code": "TUT112",
+      "nameCs": "Barf Ušatá krůta 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 112.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-5/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí skelet",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 60.0,
+          "certainty": "EXACT",
+          "sourceCs": "60% krůtí skelet"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 40.0,
+          "certainty": "EXACT",
+          "sourceCs": "40% králičí srdce a plíce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Ušatá krůta 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT153",
+      "code": "TUT153",
+      "nameCs": "Barf Vyklepaná pani Držkatá 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 71.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-5/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "dršťky",
+          "species": "BEEF",
+          "part": "SECRETORY_TRIPE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Částečně vyprané hovězí dršťky mleté [druh odvozen z textu složení: Částečně vyprané hovězí dršťky mleté]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Vyklepaná pani Držkatá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT154",
+      "code": "TUT154",
+      "nameCs": "Barf Vypraná pani Držkatá 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 78.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-5/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "dršťky",
+          "species": "BEEF",
+          "part": "SECRETORY_TRIPE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vyprané hovězí dršťky mleté [druh odvozen z textu složení: Vyprané hovězí dršťky mleté]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Vypraná pani Držkatá 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT23",
+      "code": "TUT23",
+      "nameCs": "Barf Vysoká krůta 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-7",
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": 109.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-7/barf-vysoka-kruta-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "hovezi-jatra",
+          "nameCs": "srnčí maso",
+          "species": "GAME",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 70.0,
+          "certainty": "EXACT",
+          "sourceCs": "70% srnec, jelen a daněk"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "zvěřinový skelet",
+          "species": "GAME",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30.0,
+          "certainty": "EXACT",
+          "sourceCs": "30% masitý krůtí skelet"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Vysoká krůta 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT18",
+      "code": "TUT18",
+      "nameCs": "Barf Zvěřinové napínáky 500g",
+      "brand": null,
+      "categoryPath": "kosti-4",
+      "topCategory": "ZVERINA",
+      "priceWithVatCzk": 52.0,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kosti-4/barf-zverinove-napinaky-500g",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "zvěřinové šlachy",
+          "species": "GAME",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% šlachy ze srnčí a vysoké zvěře"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Zvěřinové napínáky 500g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP28",
+      "code": "ZP28",
+      "nameCs": "Dršťky zelené 2 kg",
+      "brand": null,
+      "categoryPath": "vnitrnosti-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 104.0,
+      "packGrams": 2000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-2/drstky-zelene-2-kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "dršťky",
+          "species": "BEEF",
+          "part": "SECRETORY_TRIPE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí dršťky mleté neprané [druh odvozen z textu složení: Hovězí dršťky mleté neprané]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Dršťky zelené 2 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP41",
+      "code": "ZP41",
+      "nameCs": "Gurgle 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 57.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-5/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřový hrtan",
+          "species": "PORK",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřový hrtan"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Gurgle 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP7",
+      "code": "ZP7",
+      "nameCs": "Hovězí mleté s červenou řepou 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 64.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/hovezi-mlete-s-cervenou-repou",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí mleté s červenou řepou"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí mleté s červenou řepou",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí mleté s červenou řepou"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Hovězí mleté s červenou řepou 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP8",
+      "code": "ZP8",
+      "nameCs": "Hovězí salám syrový 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 70.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/hovezi-salam-syrovy-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí salám",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hovězí salám syrový"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Hovězí salám syrový 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP9",
+      "code": "ZP9",
+      "nameCs": "Hovězí svalovina 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 209.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/hovezi-svalovina",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí ořez/svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Výběrová hovězí svalovina"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "svalovina (druh neurčen z tohoto textu)",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Výběrová hovězí svalovina [druh odvozen z názvu produktu: Hovězí svalovina 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Hovězí svalovina 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP10",
+      "code": "ZP10",
+      "nameCs": "Hrubomletá směs 1,5kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 95.0,
+      "packGrams": 1500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/hrubomleta-smes",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hrubě mletá směs vepřové a hovězí",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Hrubě mletá směs vepřové a hovězí [druh odvozen z textu složení: Hrubě mletá směs vepřové a hovězí]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Hrubomletá směs 1,5kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP11",
+      "code": "ZP11",
+      "nameCs": "Jazyk krmný 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 99.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-5/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřový jazyk s podjazyčím",
+          "species": "PORK",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřový jazyk"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Jazyk krmný 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT170",
+      "code": "TUT170",
+      "nameCs": "Koňské mleté 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KONINA",
+      "priceWithVatCzk": 259.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-5/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "koňská svalovina",
+          "species": "HORSE",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Koňské mleté"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Koňské mleté 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP12",
+      "code": "ZP12",
+      "nameCs": "Krájené vemínko 1kg",
+      "brand": null,
+      "categoryPath": "hovezi",
+      "topCategory": "HOVEZI",
+      "priceWithVatCzk": 50.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/hovezi/krajene-veminko-1kg-2",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vemeno/vemínko",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100.0,
+          "certainty": "EXACT",
+          "sourceCs": "100% vemeno"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Krájené vemínko 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP14",
+      "code": "ZP14",
+      "nameCs": "Krůtí masová směs 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-7",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 52.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-7/kruti-masova-smes-1kg-1",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí svalovina",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Krůtí mletá směs"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Krůtí masová směs 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP29",
+      "code": "ZP29",
+      "nameCs": "Masová směs s hovězím 1 kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 49.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/masova-smes-s-hovezim-1-kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "masová směs s hovězím",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Masová směs s hovězím"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Masová směs s hovězím 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP30",
+      "code": "ZP30",
+      "nameCs": "Masová směs s hovězím 2 kg",
+      "brand": null,
+      "categoryPath": "svalovina-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 89.0,
+      "packGrams": 2000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-2/masova-smes-s-hovezim-2-kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "masová směs s hovězím",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Masová směs s hovězím"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Masová směs s hovězím 2 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "MYS3",
+      "code": "MYS3",
+      "nameCs": "Myš hole 10ks",
+      "brand": null,
+      "categoryPath": "pro-dravce",
+      "topCategory": "BARF_PRO_DRAVCE",
+      "priceWithVatCzk": 95.0,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pro-dravce/mys-hole-10ks",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "myš celá",
+          "species": "OTHER",
+          "part": "WHOLE_PREY",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Myš hole"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Myš hole 10ks",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "MYS",
+      "code": "MYS",
+      "nameCs": "Myš mražená 16-22g 25ks",
+      "brand": null,
+      "categoryPath": "pro-dravce",
+      "topCategory": "BARF_PRO_DRAVCE",
+      "priceWithVatCzk": 405.0,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pro-dravce/mys-mrazena-25ks",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "myš celá",
+          "species": "OTHER",
+          "part": "WHOLE_PREY",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mražená myš 16–22 g"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Myš mražená 16-22g 25ks",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT172",
+      "code": "TUT172",
+      "nameCs": "Pašíkův ořez 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-3",
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": 104.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-3/pasikuv-orez-1kg",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřová svalovina",
+          "species": "PORK",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřová svalovina, kůže"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kůže",
+          "species": "PORK",
+          "part": "SKIN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřová svalovina, kůže [druh odvozen z názvu produktu: Pašíkův ořez 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Pašíkův ořez 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP18",
+      "code": "ZP18",
+      "nameCs": "Rybí filé 1kg",
+      "brand": null,
+      "categoryPath": "ryby",
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 84.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/ryby/rybi-file",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "rybí filé",
+          "species": "FISH",
+          "part": "FISH_FILLET",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Mleté filé"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Rybí filé 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP19",
+      "code": "ZP19",
+      "nameCs": "Srdce krmné vepřové 1kg",
+      "brand": null,
+      "categoryPath": "vnitrnosti-2",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 99.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/vnitrnosti-2/srdce-krmne-veprove",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové srdce",
+          "species": "PORK",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřové srdce"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Srdce krmné vepřové 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT222",
+      "code": "TUT222",
+      "nameCs": "Šemíkova mňamka 1kg",
+      "brand": null,
+      "categoryPath": "Barf mražené maso",
+      "topCategory": "KRALIK",
+      "priceWithVatCzk": 195.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/mrazene-maso/strana-6/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "koňská svalovina",
+          "species": "HORSE",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 50.0,
+          "certainty": "EXACT",
+          "sourceCs": "50% koňská svalovina"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí kosti",
+          "species": "RABBIT",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 35.0,
+          "certainty": "EXACT",
+          "sourceCs": "35% králičí kosti"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 15.0,
+          "certainty": "EXACT",
+          "sourceCs": "15% králičí srdce a plíce"
+        }
+      ],
+      "compositionAccountedPct": 100.0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Šemíkova mňamka 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "OPRAVA 2026-09-09 (podruhé): autoritativní scraper CSV potvrzuje 50/35/15 % — PŮVODNÍ hodnota z první dávky zadání byla SPRÁVNĚ. Mezitím provedená 'oprava' na 50/3,5/1,5 % (podle ručně psané zprávy tvrdící, že vidí 'aktuální stránku') byla CHYBNÁ a tímto se VRACÍ zpět. Poučení: scraper výstup > ručně přepsaný text, i když ten druhý tvrdí vyšší aktuálnost."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP42",
+      "code": "ZP42",
+      "nameCs": "Vepřový salám s kostí 1kg",
+      "brand": null,
+      "categoryPath": "svalovina-3",
+      "topCategory": "ZOO_KRMIVO",
+      "priceWithVatCzk": 84.0,
+      "packGrams": 1000,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/svalovina-3/veprovy-salam-s-kosti-1kg",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kosti",
+          "species": "PORK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Vepřové maso obsahuje i kosti poměr neznámý [druh odvozen z názvu produktu: Vepřový salám s kostí 1kg]"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Vepřový salám s kostí 1kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT195",
+      "code": "TUT195",
+      "nameCs": "Držkatá petržel 500 g",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "BARF_PRILOHA",
+      "priceWithVatCzk": null,
+      "packGrams": 500,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut195/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "petržel",
+          "species": "PLANT",
+          "part": "VEGETABLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 90,
+          "certainty": "EXACT",
+          "sourceCs": "90 % petržel"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "dršťky",
+          "species": null,
+          "part": "SECRETORY_TRIPE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 10,
+          "certainty": "EXACT",
+          "sourceCs": "10 % dršťky"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Držkatá petržel 500 g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT39",
+      "code": "TUT39",
+      "nameCs": "Kosti paní Vysoké",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "ZVERINA",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut39/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "stehenní kosti (jelen/srnec/daněk)",
+          "species": "GAME",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "jelen/srnec/daněk, stehenní kosti — druhový poměr neuveden"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Kosti paní Vysoké",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT13",
+      "code": "TUT13",
+      "nameCs": "Krůtí vznášedla mletá (varianta TUT13)",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut13/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí křídla (mletá)",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100 % krůtí křídla"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Krůtí vznášedla mletá (varianta TUT13)",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT89",
+      "code": "TUT89",
+      "nameCs": "Masíčko paní Krocanové 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "KRUTA",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut89/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí ořez",
+          "species": "TURKEY",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100 % krůtí ořez"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Masíčko paní Krocanové 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT115",
+      "code": "TUT115",
+      "nameCs": "Ušatá vysoká krůta 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "ZVERINA",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut115/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "zvěřinový ořez",
+          "species": "GAME",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 60,
+          "certainty": "EXACT",
+          "sourceCs": "60 % zvěřinový ořez"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "krůtí skelet",
+          "species": "TURKEY",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 30,
+          "certainty": "EXACT",
+          "sourceCs": "30 % krůtí skelet"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "králičí srdce a plíce",
+          "species": "RABBIT",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT_GROUP",
+          "subcomponentsCs": [
+            "králičí srdce",
+            "králičí plíce"
+          ],
+          "subcomponentRatio": "UNKNOWN",
+          "percentage": 10,
+          "certainty": "EXACT",
+          "sourceCs": "10 % králičí srdce/plíce"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Ušatá vysoká krůta 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Tříduhový kompozit napříč zvěřina/krůta/králík, EXACT 60/30/10."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT208",
+      "code": "TUT208",
+      "nameCs": "Barf Kus Šemíka 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "KONINA",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut208/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "koňská svalovina",
+          "species": "HORSE",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "čistá koňská svalovina bez kostí"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Barf Kus Šemíka 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT107",
+      "code": "TUT107",
+      "nameCs": "Pašíkovy ocásky 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut107/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové ocásky",
+          "species": "PORK",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100 % ocásky"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Pašíkovy ocásky 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT114",
+      "code": "TUT114",
+      "nameCs": "Vepřové uši syrové 2 ks",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut114/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřové uši",
+          "species": "PORK",
+          "part": "CARTILAGE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "2 ks"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Vepřové uši syrové 2 ks",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ZP24",
+      "code": "ZP24",
+      "nameCs": "Vepřová svalovina 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "VEPROVE",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/zp24/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "vepřová svalovina",
+          "species": "PORK",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100 % vepřová svalovina"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Vepřová svalovina 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "ZOO krmiva Pošvář sortiment."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT25",
+      "code": "TUT25",
+      "nameCs": "Ořez paní Vysoké 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "ZVERINA",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut25/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "srnčí/jelení/muflonní ořez",
+          "species": "GAME",
+          "part": "MUSCLE",
+          "role": "INGREDIENT_GROUP",
+          "subcomponentsCs": [
+            "srnčí maso",
+            "jelení maso",
+            "muflon"
+          ],
+          "subcomponentRatio": "UNKNOWN",
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100 % ořezy srnce, jelena, muflona"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Ořez paní Vysoké 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": [
+          "bez kostí",
+          "možné zbytky střeliva (upozornění výrobce)"
+        ]
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT210",
+      "code": "TUT210",
+      "nameCs": "Salmo salar mletý 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "RYBY",
+      "priceWithVatCzk": 44,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut210/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": "losos-farmovany",
+          "nameCs": "losos mletý",
+          "species": "FISH",
+          "part": "FISH_FILLET",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "100 % losos"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Salmo salar mletý 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT136",
+      "code": "TUT136",
+      "nameCs": "Mleté kuřecí maso 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut136/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": "kureci-prsa-sr-legacy",
+          "nameCs": "kuřecí svalovina",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "jemně mletá kuřecí svalovina bez kostí"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Mleté kuřecí maso 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT219",
+      "code": "TUT219",
+      "nameCs": "Kuřecí nudličky 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut219/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí maso",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "maso (bez poměru)"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí kost",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "kost (bez poměru)"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí kůže",
+          "species": "CHICKEN",
+          "part": "SKIN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "kůže (bez poměru)"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Kuřecí nudličky 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Stránka uvádí maso s kostí a kůží současně, ale BEZ procentního poměru — tři PARTIAL složky."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT186",
+      "code": "TUT186",
+      "nameCs": "Kuřecí kousky 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut186/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "kureci-prsa-sr-legacy",
+          "nameCs": "kuřecí prsa na kousky",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "prsa na kousky, může obsahovat kůži"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Kuřecí kousky 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "'Může obsahovat kůži' je podmínečné tvrzení, ne potvrzený fakt — proto zůstává PARTIAL i při jediné hlavní surovině (prsa), ne SINGLE_INGREDIENT/EXACT 100 %."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DRZKATE-KURE-BEZ-KODU",
+      "code": "DRZKATE-KURE-BEZ-KODU",
+      "nameCs": "Držkaté kuře 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "DRUBEZ",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/drzkate-kure-bez-kodu/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí dršťky",
+          "species": "BEEF",
+          "part": "SECRETORY_TRIPE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 40,
+          "certainty": "EXACT",
+          "sourceCs": "40 % hovězí dršťky"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí skelety mleté",
+          "species": "CHICKEN",
+          "part": "BONE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 60,
+          "certainty": "EXACT",
+          "sourceCs": "60 % mleté kuřecí skelety"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Držkaté kuře 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Kód produktu v aktuálním výpisu KATALOGU NENÍ VIDĚT (Lucky 2026-09-09: 'kód v aktuálním výpisu není vidět, tak ho zatím vedu bez kódu'). productId/code je dočasné zástupné ID — MUSÍ se nahradit skutečným Tutani kódem, jakmile ho scraper nebo ruční kontrola produktové stránky potvrdí. URL je proto také placeholder, NEKLIKATELNÁ do potvrzení."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT224",
+      "code": "TUT224",
+      "nameCs": "Pidi ryby 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "RYBY",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut224/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "drobné rybičky (cca 5 cm)",
+          "species": "FISH",
+          "part": "FISH_WHOLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "rybičky cca 5 cm, deklarováno jako lidská kvalita, druh + přesná nutriční analýza chybí"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Pidi ryby 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Druh + velikost EXACT, ale bez nutriční analýzy — PARTIAL na úrovni ingredientId (žádný USDA záznam pro tento konkrétní druh/velikost), přesně dle instrukce Lucky ('druh + velikost, ale bez nutriční analýzy → PARTIAL')."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT122",
+      "code": "TUT122",
+      "nameCs": "Kuřátka jednodenní 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "BARF_PRO_DRAVCE",
+      "priceWithVatCzk": 91,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut122/",
+      "kind": "SINGLE_INGREDIENT",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuře jednodenní celé",
+          "species": "CHICKEN",
+          "part": "WHOLE_PREY",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 100,
+          "certainty": "EXACT",
+          "sourceCs": "cca 24–26 kuřátek/kg"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Kuřátka jednodenní 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Cena 91 Kč/kg — první konkrétně potvrzený produkt v kategorii BARF pro dravce (dřív jen CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED, viz tutani-catalog-categories.json)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "ETUT4",
+      "code": "ETUT4",
+      "nameCs": "ECM Hovězí mix 3 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "BARF_KOMPLET",
+      "priceWithVatCzk": 134,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/etut4/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": "hovezi-mlete-93-7",
+          "nameCs": "hovězí maso",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 10,
+          "certainty": "EXACT",
+          "sourceCs": "10 % hovězí maso"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí vemeno",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": 60,
+          "certainty": "EXACT",
+          "sourceCs": "60 % vemeno"
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí vnitřnosti",
+          "species": "BEEF",
+          "part": "SECRETORY_OTHER",
+          "role": "INGREDIENT_GROUP",
+          "subcomponentsCs": [],
+          "subcomponentRatio": "UNKNOWN",
+          "percentage": 30,
+          "certainty": "EXACT",
+          "sourceCs": "30 % vnitřnosti"
+        }
+      ],
+      "compositionAccountedPct": 100,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "ECM Hovězí mix 3 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Gramážní varianta ETUT1 (3 kg) — popis u 3kg balení říká 'vnitřnosti' místo 'droby', stejný význam, zaznamenáno beze změny podle zdrojového textu."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT214",
+      "code": "TUT214",
+      "nameCs": "Hovězí kostky 1 kg",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "BARF_KOMPLET",
+      "priceWithVatCzk": 165,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut214/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí kostky (složení nedeklarováno)",
+          "species": "BEEF",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "UNKNOWN",
+          "sourceCs": "'Hovězí kostky' — konkrétní surovinové zastoupení (maso/kost/orgán) v BARF strava pro psy sekci nedeklarováno"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Hovězí kostky 1 kg",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "`certainty: UNKNOWN` — na rozdíl od PARTIAL tu nemáme ani vyjmenované složky, jen název. Engine s tímhle produktem nesmí počítat žádnou nutriční hodnotu."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT216B",
+      "code": "TUT216B",
+      "nameCs": "Mleté kuře 3 kg (BARF strava pro psy)",
+      "brand": null,
+      "categoryPath": null,
+      "topCategory": "BARF_KOMPLET",
+      "priceWithVatCzk": 109,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut216b/",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "kuřecí mleté maso s kostmi",
+          "species": "CHICKEN",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "drůbeží mleté s kostmi, přesný poměr neuveden"
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "Mleté kuře 3 kg (BARF strava pro psy)",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "V sekci 'Barf strava pro psy' se stejný produktový název (Mleté kuře 3 kg) objevuje znovu s cenou 109 Kč — kód TUT216 byl už použit v drůbeží sekci (bez ceny). Uloženo pod odlišeným kódem TUT216B, dokud se nepotvrdí, že jde o TOTOŽNÉ SKU napříč kategoriemi (pak se sloučí a tenhle záznam zanikne)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "max-deluxe-srnec-danek-jelen-800g",
+      "code": "max-deluxe-srnec-danek-jelen-800g",
+      "nameCs": "MAX deluxe SRNEC,DANĚK,JELEN 800g",
+      "brand": "MAX deluxe",
+      "categoryPath": "Barf na cesty",
+      "topCategory": "BARF_NA_CESTY",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/barf-na-cesty/max-deluxe-srnec-danek-jelen-800g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "srnec/daněk/jelen (zvěřina, druh v rámci balení nerozlišen)",
+          "species": "GAME",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "Název uvádí tři druhy zvěřiny (srnec, daněk, jelen) bez podílu mezi nimi — PARTIAL, poměr NEVYMÝŠLEN (R7)."
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "MAX deluxe SRNEC,DANĚK,JELEN 800g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "max-deluxe-3-4-kure-s-drubezimi-zaludky-1200g",
+      "code": "max-deluxe-3-4-kure-s-drubezimi-zaludky-1200g",
+      "nameCs": "MAX deluxe 3/4 KUŘE s drůbežími žaludky 1200g",
+      "brand": "MAX deluxe",
+      "categoryPath": "Barf na cesty",
+      "topCategory": "BARF_NA_CESTY",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/barf-na-cesty/max-deluxe-3-4-kure-s-drubezimi-zaludky-1200g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "3/4 kuřete (celé kuře bez čtvrtiny, přesné části neuvedeny)",
+          "species": "CHICKEN",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "'3/4 kuře' — bez rozpisu na svalovinu/kosti/kůži, PARTIAL."
+        },
+        {
+          "ingredientId": null,
+          "nameCs": "drůbeží žaludky",
+          "species": "CHICKEN",
+          "part": "MUSCLE_ORGAN",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "'s drůbežími žaludky' — druh drůbeže u žaludků samotných neupřesněn, odvozen z kontextu (kuřecí balení), bez podílu — PARTIAL."
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "MAX deluxe 3/4 KUŘE s drůbežími žaludky 1200g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "max-deluxe-kostky-hovezi-svaloviny-800g",
+      "code": "max-deluxe-kostky-hovezi-svaloviny-800g",
+      "nameCs": "MAX deluxe KOSTKY HOVĚZÍ SVALOVINY 800g",
+      "brand": "MAX deluxe",
+      "categoryPath": "Barf na cesty",
+      "topCategory": "BARF_NA_CESTY",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/barf-na-cesty/max-deluxe-kostky-hovezi-svaloviny-800g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "'kostky hovězí svaloviny' — název naznačuje jednu surovinu (hovězí svalovina), ale scraper nepotvrdil explicitní '100 %' v textu, proto kind=COMPOSITE/PARTIAL, ne SINGLE_INGREDIENT s percentage 100 (R7)."
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "MAX deluxe KOSTKY HOVĚZÍ SVALOVINY 800g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "max-deluxe-kostky-hovezi-svaloviny-400g",
+      "code": "max-deluxe-kostky-hovezi-svaloviny-400g",
+      "nameCs": "MAX deluxe KOSTKY HOVĚZÍ SVALOVINY 400g",
+      "brand": "MAX deluxe",
+      "categoryPath": "Barf na cesty",
+      "topCategory": "BARF_NA_CESTY",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/barf-na-cesty/max-deluxe-kostky-hovezi-svaloviny-400g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "hovězí svalovina",
+          "species": "BEEF",
+          "part": "MUSCLE",
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "'kostky hovězí svaloviny' — stejné odůvodnění jako 800g varianta výše, bez explicitního '100 %' proto PARTIAL."
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "MAX deluxe KOSTKY HOVĚZÍ SVALOVINY 400g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "max-deluxe-1-kure-1200g",
+      "code": "max-deluxe-1-kure-1200g",
+      "nameCs": "MAX deluxe 1 KUŘE 1200g",
+      "brand": "MAX deluxe",
+      "categoryPath": "Barf na cesty",
+      "topCategory": "BARF_NA_CESTY",
+      "priceWithVatCzk": null,
+      "packGrams": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/barf-na-cesty/max-deluxe-1-kure-1200g",
+      "kind": "COMPOSITE",
+      "composition": [
+        {
+          "ingredientId": null,
+          "nameCs": "celé kuře (1 ks, přesné části neuvedeny)",
+          "species": "CHICKEN",
+          "part": null,
+          "role": "INGREDIENT",
+          "subcomponentsCs": [],
+          "subcomponentRatio": null,
+          "percentage": null,
+          "certainty": "PARTIAL",
+          "sourceCs": "'1 KUŘE' — celé kuře jako jedna jednotka, bez rozpisu na svalovinu/kosti/kůži/droby, PARTIAL."
+        }
+      ],
+      "compositionAccountedPct": 0,
+      "analytical": [],
+      "claims": {
+        "rawDescriptionCs": "MAX deluxe 1 KUŘE 1200g",
+        "ageCategory": null,
+        "dietaryClaimsCs": []
+      },
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    }
+  ]
+}

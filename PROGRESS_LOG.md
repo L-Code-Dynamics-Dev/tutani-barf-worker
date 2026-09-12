@@ -1062,3 +1062,459 @@ Struktura složek podle zadání Lucky: `domain/`, `rules/`, `engine/`,
 Scraper katalogu (`adapters/tutani-catalog/`) — ukáže reálná data
 dřív, než na předpokladech postavím engine: kolik produktů má složení,
 jak se rozpadnou do skupin, kde chybí gramáž.
+
+## 2026-09-09 — Nutriční dataset v0.2: doplnění mikronutrientů
+
+Doplněna data od Lucky (USDA FoodData Central) do
+`tenants/tutani/rules/ingredients-nutrition.json`, `sourceVersion` 0.1 → 0.2:
+
+**Doplněné živiny u existujících surovin** (vitamin A, D, E, B1, B2, B3,
+B5, B6, B12, folát, cholin — dle dostupnosti u zdroje):
+- Kuřecí prsa (SR Legacy): A, E, B1–B12, folát, cholin. D chybí u zdroje →
+  `NOT_ANALYZED`.
+- Hovězí ledvina: A, D, E, B1–B12, folát. Cholin chybí u zdroje →
+  `NOT_ANALYZED`.
+- Vepřová játra: A upřesněno na 6502 µg RAE (nahrazuje starší odhad),
+  B1–B12, folát. D a cholin chybí u zdroje → `NOT_ANALYZED`.
+- Losos atlantský farmovaný: A, D, E, B2–B12, folát, cholin. B1 chybí u
+  zdroje → `NOT_ANALYZED`. **EPA/DHA zůstávají `NOT_ANALYZED`** — nový
+  zdroj pro ně číslo nedodal.
+- Celé vejce: doplněn D (2,0 µg).
+
+**Nová surovina:** `hovezi-mlete-80-20` (Hovězí mleté 80/20) — plný sadu
+makro/mikro dle USDA SR Legacy.
+
+**Upřesnění:** `hovezi-srdce` byl `NEURCENO`/odhad, nahrazen rozsahovými
+hodnotami ze zdroje (~107–112 kcal atd.), uložena středová hodnota,
+`confidence` → `TABULKA` (pořád ne jednobodové měření, proto ne
+`DATABAZE`).
+
+**Stále chybí napříč katalogem** (aktualizováno v `gaps`): jód, mangan,
+hořčík, sodík, draslík, chlorid, EPA/DHA (mimo NOT_ANALYZED u lososa),
+aminokyseliny. Dokud tyhle živiny nemají aspoň jeden zdroj, engine nesmí
+vydat 🟢 NUTRIČNĚ KONTROLOVANOU dávku (jen 🟡 ORIENTAČNÍ) — pravidlo je
+v `Ingredient.ts` (`contribution()`, `NOT_ANALYZED` ≠ 0) a je beze změny,
+jen dataset teď pokrývá víc živin.
+
+Ověřeno: `npm test` 204/204 zelených, JSON validní. Žádný test nebyl
+potřeba upravovat — `NutrientMap` je otevřený typ, nová pole neláme
+schéma.
+
+**Další krok:** jód, mangan a EPA/DHA jsou teď jediné chybějící vitamin/
+minerál kategorie blokující 🟢 status — najít zdroj (USDA nebo NRC) a
+doplnit, ideálně u lososa/rybího oleje pro EPA/DHA a u mořských/jodovaných
+surovin pro jód. Pak rozšířit katalog o krůtí/králičí/jehněčí maso a
+zeleninu/ovoce (viz `gaps.missingIngredients`).
+
+## 2026-09-09 — Tutani produktový katalog: ingredient-level composition vrstva
+
+Nová vrstva vedle stávajícího BarfGroup-level matching enginu
+(`products` z 0001_init.sql, beze změny — NON-INTERFERENCE). Cíl:
+z Tutani katalogu udělat skutečnou BARF surovinovou databázi, kde jde
+vzít konkrétní produkt a použít ho jako vstup do nutričního výpočtu,
+ne jen do matchingu podle kategorie.
+
+### Rozdělení vrstev (zadání Lucky)
+
+```
+PRODUCTS     — co Tutani prodává (TutaniProduct)
+INGREDIENTS  — nutriční surovina (domain/nutrition, beze změny)
+COMPOSITIONS — přesná vazba produkt→surovina (IngredientComposition)
+NUTRIENTS    — USDA hodnoty (domain/nutrition, beze změny)
+ANALYTICAL   — hodnoty deklarované VÝROBCEM (AnalyticalValue)
+SUPPLEMENTS  — vitaminy/minerály/oleje/přílohy (Supplement)
+EVIDENCE     — zdroj+datum+confidence napříč vším
+```
+
+**Zásadní oddělení:** „Tutani tvrdí X" (`AnalyticalValue`) vs. „náš
+výpočet z komponent vychází na Y" (`CalculatedNutritionValue`) — nikdy
+sloučené do jednoho čísla, i když se rozcházejí.
+
+### Nové soubory
+
+```
+src/domain/products/Composition.ts        IngredientComposition, AnalyticalValue,
+                                           CalculatedNutritionValue, Evidence
+src/domain/products/TutaniProduct.ts      kanonický produkt katalogu
+src/domain/products/Supplement.ts         doplňky se štítkovou hodnotou (declared)
+                                           + odvozenou (derivedPer100g), nikdy sloučené
+src/domain/barf/parseIngredientComposition.ts
+                                           rozklad textu složení na part-level suroviny
+                                           (ne jen BarfGroup jako stávající parseComposition.ts)
+migrations/0002_tutani_products.sql       tutani_products + tutani_supplements (D1)
+src/infrastructure/TutaniProductStore.ts  D1TutaniProductStore
+tests/unit/parseIngredientComposition.test.ts   7 testů, TUT175/155/223/58 case
+tenants/tutani/rules/tutani-products.json      28 produktů (dvě dávky zadání)
+tenants/tutani/rules/tutani-supplements.json   4 doplňky (Nutrin, TUT198, TUT202, TUT143)
+```
+
+### Certainty model (EXACT/PARTIAL/DERIVED/UNKNOWN)
+
+- **EXACT** — TUT175 „40 % plíce / 30 % ledviny / 30 % játra"
+- **PARTIAL** — TUT155 stejné tři suroviny, ale BEZ poměru → `percentage: null`,
+  systém NEDOPOČÍTÁVÁ rovnoměrný rozpad (R7)
+- **INGREDIENT_GROUP role** — TUT223 „50 % zelenina (mrkev, petržel, celer)":
+  50 % je EXACT za celou skupinu, ale `subcomponentRatio: 'UNKNOWN'` uvnitř
+- **explicitní nepřítomnost** — TUT58 „bez vnitřností" se zapisuje jako fakt
+  (`absent: [{part: 'SECRETORY_OTHER', ...}]`), ne jako mezera
+
+### EdiblePart rozšířen (aditivně, non-breaking)
+
+`domain/nutrition/Ingredient.ts`: přidány `SECRETORY_LUNG` (plíce),
+`SECRETORY_TRIPE` (dršťky/bachor), `SKIN` (kůže odděleně od SKIN_FAT).
+Typ je string-tag bez switch-exhaustiveness kontroly jinde v kódu,
+takže přidání je bezpečné — ověřeno `npx tsc --noEmit` čistě.
+
+### Chybějící part v nutričním katalogu
+
+`beef_lung`/hovězí plíce zatím nemá záznam v `ingredients-nutrition.json`
+(viz `gaps.missingIngredients`) — rozklad produktu proběhne i tak
+(`ingredientId: null`), nutriční výpočet u té složky zůstane neúplný,
+stejný mechanismus jako `NOT_ANALYZED`. Rozhodnutí padlo takhle záměrně
+(rozklad s dírou, ne blokace celého produktu) — díra se nemaskuje.
+
+### Nález při psaní dat (ponechán otevřený, ne tiše opraven)
+
+TUT198 (extrudovaná příloha): selen na štítku je 0,2 µg/kg, ale
+v `tutani-supplements.json` je momentálně uložen s `basis: MG_PER_KG` →
+`derivedPer100g` vychází 1000× výš než realita. Zapsáno do `noteCs`
+u té položky jako otevřený nález — potřeba opravit `basis` na
+mikrogramovou variantu, než se hodnota použije ve výpočtu.
+
+### Duplicitní kód od Tutani
+
+TUT9 a TUT13 mají v zadání stejné složení (krůtí křídla mletá) — uloženy
+jako dvě položky, dokud scraper nepotvrdí, zda jde o gramážní varianty
+stejného produktu nebo o chybu v číslování.
+
+### Práce rozdělena s agentem
+
+D1 migrace + `TutaniProductStore.ts` napsal paralelní subagent podle
+zadání (existující styl `D1ProductStore.ts`). Během souběhu došlo
+k dočasnému nesouladu typů (agent typecheckoval dřív, než jsem dokončil
+`Composition.ts` rozšíření o `role`/`subcomponentsCs`) — po dokončení
+obou stran `npx tsc --noEmit` nad celým repem čistý, `npm test`
+211/211 (204 stávajících + 7 nových).
+
+### Ověřeno
+
+- `npx tsc --noEmit` — 0 chyb
+- `npm test` — 211/211 zelených
+- JSON datasety (`tutani-products.json`, `tutani-supplements.json`) validní
+
+### Další krok
+
+1. Napojit `tutani-products.json`/`tutani-supplements.json` na D1
+   (`D1TutaniProductStore.upsertProduct`/`upsertSupplement`) — teď je
+   to jen statický JSON v `tenants/`, žádný import skript zatím neběžel.
+2. Opravit jednotku selenu u TUT198 (µg/kg, ne mg/kg).
+3. Doplnit `hovezi-plice` (beef lung) do `ingredients-nutrition.json`
+   z USDA, ať TUT175/TUT155 rozklad má plné nutriční pokrytí.
+4. Projet zbytek kategorií Tutani (drůbež, vepřové, ryby, telecí —
+   zatím pokryty jen částečně) a rozšířit `tutani-products.json`.
+5. Napsat `barf/composeProduct.ts` — výpočet `calculated_nutrition`
+   z rozloženého `composition[]` + USDA dat, s `confidence: COMPLETE
+   | INCOMPLETE` podle toho, zda všechny složky měly EXACT/DERIVED podíl
+   a všechny živiny byly MEASURED.
+
+## 2026-09-09 (pokrač.) — Tutani katalog rozšířen na 80 produktů + 28 doplňků + kategorie
+
+Navazuje na předchozí záznam ze stejného dne (ingredient-level composition
+vrstva). Zpracováno šest dalších dávek dat od Lucky — postupné vytěžení
+17 BARF větví katalogové navigace Tutani.
+
+### Nový soubor
+
+```
+tenants/tutani/rules/tutani-catalog-categories.json
+```
+
+`CatalogCategoryRecord` (nový typ `src/domain/products/CatalogCategory.ts`)
+— stav vytěžení každé ze 17 větví (drůbeží, hovězí, kachní, klokaní,
+konina, králičí, jehněčí/skopové, krůtí, ryby, telecí, vepřové, zvěřina,
+Graf Barf, balíčky, kočky, dravci, gurmáni, strava pro psy).
+
+**Klíčový nový stav:** `CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED`
+— odlišuje „kategorie prokazatelně existuje, ale crawler z ní nevytáhl
+SKU" od „kategorie má 0 produktů". Graf Barf je typický případ: Tutani
+popisuje technologii (šokové zmrazení −48 °C, kostky svalovina+kosti/
+chrupavky+droby, nemleté, lidská kvalita), ale aktuální výpis produktů
+je prázdný — engine to NESMÍ interpretovat jako „Tutani Graf Barf
+neprodává". Barf pro dravce prošel opačným směrem: dřív jen
+`CATALOG_CATEGORY_PRESENT`, dnes `PRODUCTS_EXTRACTED` (TUT122 kuřátka,
+MYS myši potvrzeny konkrétně).
+
+### tutani-products.json: 28 → 80 (v0.1 → v0.2)
+
+Doplněny kompletní větve: krůtí (15 SKU), konina (3), vepřové (11),
+zvěřina (5), ryby (7), drůbeží doplnění (7), dravci (TUT122), ZOO Pošvář
+hlodavci (MYS/MYS3), BARF strava pro psy (ETUT1/ETUT4 kompozity +
+TUT214/TUT216B/losos varianty).
+
+**Oprava:** TUT222 Šemíkova mňamka měla ŠPATNÝ dřívější odhad 50/35/15 %
+— aktuální produktová stránka uvádí 50 % / 3,5 % / 1,5 %. Opraveno,
+`compositionAccountedPct` teď správně 55 (ne 100) — zbylých ~45 %
+Tutani nedeklaruje a systém to NEDOPOČÍTÁVÁ (R7).
+
+**Nový certainty case:** `UNKNOWN` poprvé použit naostro (TUT214 „Hovězí
+kostky" — jen název, ani vyjmenované složky jako u PARTIAL).
+
+**Produkt bez kódu:** „Držkaté kuře" (40 % hovězí dršťky / 60 % kuřecí
+skelety) — Tutani kód není v aktuálním výpisu vidět, uloženo pod
+zástupným `productId` s explicitní poznámkou, URL neklikatelná do
+potvrzení skutečného kódu.
+
+**Nález:** TUT156 „Srdce jako Kráva mleté" má VEPŘOVÝ katalogový prefix,
+ale surovina je HOVĚZÍ srdce (název to potvrzuje) — topCategory zůstává
+VEPROVE (katalogová sekce Tutani), composition správně BEEF/hovezi-srdce.
+
+**Nová EdiblePart potřeba:** hovězí vemeno (TUT187 Kuřecí vemínko,
+ETUT1/ETUT4 ECM směsi) mapováno na `SECRETORY_OTHER` — nejbližší
+existující part, mléčná žláza nemá vlastní enum hodnotu.
+
+### tutani-supplements.json: 4 → 28 (v0.1 → v0.2)
+
+**Nové pole `marketingClaims`** (`MarketingClaim[]`) — textová tvrzení
+výrobce ODDĚLENÁ od `declared` (číselné hodnoty). Zásadní pravidlo
+(Lucky): „Omegavet budeme evidovat jako zdroj EPA/DHA POUZE tehdy, když
+máme skutečné deklarované množství EPA+DHA, ne jen tvrzení 'obsahuje
+omega-3'." Stejně tak TUT134 kelpa — zdravotní účinky v popisu se
+NIKDY automaticky nestávají nutričním faktem; TUT202 křemelina —
+antiparazitický/detox claim stejně odděleně.
+
+Rozšířen `SupplementCategory` o `FIBER`, `TREAT`, `THERAPEUTIC_SUPPLEMENT`.
+Přidán `SupplementBasis.UG_PER_KG` — oprava nálezu: TUT198 selen byl
+0,2 µg/kg, ne mg/kg (1000× rozdíl), zapsáno jako otevřený nález
+v minulém záznamu, teď opraveno.
+
+Nové položky: Dromy řada (DR1/DR3/DR4/DR8/DR16/DR24), Energy řada
+(E11/E12/E13/E15/E17/E19 — cílené terapeutické doplňky, VEDENY MIMO
+základní nutriční balancování), pamlsky (TUT146/K4/KUR/1618/TUT189),
+MAX deluxe BARF-na-cesty balení (2553/07/2559/9493).
+
+**Confidence `ESTIMATED`:** položky, kde známe jen katalogovou citaci
+(název/gramáž/cena), ne deklarované složení — `declared: []`, NIKDY
+dopočet z podobnosti k jinému produktu stejné řady (R7).
+
+### Nový typ v Supplement.ts
+
+`MarketingClaim { claimCs, backedByDeclaredNutrient }` — `Supplement`
+teď má povinné pole `marketingClaims: MarketingClaim[]`. D1 schéma
+(0002_tutani_products.sql) i `TutaniProductStore.ts` (upsert/select)
+doplněny o sloupec `marketing_claims` — agent, který psal store, dokončil
+svou práci PŘED tímhle rozšířením typu, takže jsem to dopsal sám
+(aditivní diff, stejný vzor jako zbytek souboru).
+
+### Ověřeno
+
+- `npx tsc --noEmit` — 0 chyb
+- `npm test` — 211/211 zelených (beze změny počtu — nová data jsou JSON,
+  žádný nový test kód kromě již zapsaného `parseIngredientComposition.test.ts`)
+- JSON datasety validní, `TUT222` `compositionAccountedPct` opraveno na 55
+- Dedup podle `code` ověřen (81 vstupů → 80 unikátních, TUT133 byl
+  zapsán dvakrát se stejným obsahem, žádná ztráta dat)
+
+### Další krok
+
+1. Potvrdit skutečný kód „Držkatého kuřete" a nahradit zástupné productId.
+2. Ověřit, zda TUT216 (drůbeží sekce, bez ceny) a TUT216B (Barf strava
+   pro psy, 109 Kč) jsou totéž SKU napříč kategoriemi — pokud ano,
+   sloučit na jeden záznam.
+3. Doplnit deklarované hodnoty (Ca/P/vitaminy) do TUT181 Multivitamín,
+   jakmile bude znám přesný štítek — teď je jen ingredientList s procenty.
+4. Zbývající CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED větve
+   (klokaní, jehněčí/skopové, telecí, balíčky, gurmáni) — vytěžit stejným
+   postupem, jakým se povedlo doplnit dravce.
+5. `barf/composeProduct.ts` (výpočet calculated_nutrition) — čeká na
+   dostatečné pokrytí ingredient katalogu (viz gaps v ingredients-nutrition.json).
+
+## 2026-09-09 (pokrač. 2) — Reconciliace s autoritativním scraper CSV, oprava chyb
+
+Lucky dodal `~/Downloads/tutani_mrazene_maso_extracted_2026-09-09.csv` —
+skutečný scraper výstup celé kategorie „Barf mražené maso" (103 unikátních
+SKU, sloupce `kod,produkt,baleni,cena_kc,slozeni,zdroj`). Tohle je
+AUTORITATIVNĚJŠÍ zdroj než ručně přepsané texty z konverzace stejného dne.
+
+### Kritické opravy nalezené reconciliací
+
+1. **TUT222 Šemíkova mňamka**: CSV potvrzuje **50 % / 35 % / 15 %**
+   (koňská svalovina / králičí kosti / králičí srdce a plíce) — PŮVODNÍ
+   hodnota z první dávky zadání byla SPRÁVNĚ. Mezitím provedená "oprava"
+   na 50/3,5/1,5 % (podle ručně psané zprávy tvrdící "aktuální stránka
+   uvádí") byla CHYBNÁ. Vráceno zpět na 50/35/15.
+   **Poučení zapsané do note pole datasetu:** scraper výstup > ručně
+   přepsaný text, i když ten druhý tvrdí vyšší aktuálnost — přijal jsem
+   tvrzení o "aktuálnosti" bez ověření a přepsal správná data špatnými.
+
+2. **TUT9 vs. TUT9/1, TUT9/5, TUT9/13, TUT9/15**: kód BEZ lomítka je
+   "Kachní vznášedla" (100 % kachní křídla), NE "Krůtí vznášedla mletá",
+   jak jsem měl dřív. Suffix `/N` znamená PĚT SAMOSTATNÝCH produktů,
+   ne gramážové varianty jednoho SKU — chybný předpoklad z dřívějška
+   opraven.
+
+### Přestavba datového toku
+
+Nový `scripts/import-mrazene-maso-csv.py` — parsuje CSV composition text
+(`slozeni` sloupec) na `IngredientComposition[]` stejnou logikou jako
+`src/domain/barf/parseIngredientComposition.ts` (přenesena do Pythonu
+pro dávkové zpracování 103 řádků najednou). Idempotentní: re-run
+nahrazuje jen produkty pokryté touto CSV kategorií, zbytek datasetu
+(BARF strava pro psy, dravci, ZOO doplňky, přílohy — 20 SKU) se
+přebírá ze stávajícího `tutani-products.json` beze změny.
+
+**Chyby nalezené a opravené BĚHEM psaní parseru** (self-audit, ne
+nahlášeno zvenčí):
+
+- **"bez X" segmenty** (`bez kostí`, `bez vnitřností`) se PŮVODNĚ
+  počítaly jako composition segment bez procenta → (a) celý produkt
+  spadl do PARTIAL větve zbytečně, (b) `find_pattern` na "bez kostí"
+  vytvořil FALEŠNOU položku "kosti", jako by kost byla PŘÍTOMNÁ
+  surovina — přesný opak toho, co text říká. Opraveno: "bez X" segmenty
+  se filtrují před analýzou a jdou do `claims.dietaryClaimsCs`.
+- **Smíšené segmenty** ("Mletý králík; cca 70% kosti a chrupavky" — jeden
+  segment BEZ %, jeden S %) — původní kód tiše zahodil segment bez
+  procenta a vzal jen ten s %, což by tvrdilo "70 % kostí = 100 %
+  složení". Opraveno: pokud NĚKTERÝ segment procento nemá, celý produkt
+  jde do PARTIAL větve.
+- **Dvojtečkový výčet u EXACT segmentu** ("100% celá mletá krůta:
+  svalovina, kosti, kůže, chrupavka") — algoritmus bral jen JEDEN
+  nejdelší pattern match z celého stringu a zbytek slov tiše zmizel
+  (TUT58/TUT117 měly vyjít jako 4 PARTIAL složky, vyšla jen 1). Opraveno:
+  obecný dvojtečkový výčet (mimo zelenina/droby case) se rozpadne na
+  PARTIAL vnitřní seznam.
+- **`find_pattern` fallback bug**: když text nenajde žádný pattern,
+  funkce vracela `(popis_raw.strip(), popis_raw.strip(), None, None)` —
+  DRUHÁ hodnota (`ingredient_id`) byla text, ne `None`. To by v produkci
+  znamenalo, že engine dostane neplatné `ingredientId` jako by šlo
+  o skutečný odkaz do nutričního katalogu. Opraveno na `None`.
+- **Substring pattern kolize** ("králičí kosti" chytilo obecné "kosti",
+  protože bylo výš v seznamu) — přepsáno na výběr NEJDELŠÍHO shodného
+  triggeru napříč celým seznamem, ne prvního nalezeného v pořadí.
+- Doplněny chybějící obecné (species-neutral) patterny: "stehna", "krky",
+  "křídla", "svalovina", "játra" bez druhu — s druhem doplněným
+  samostatně z názvu produktu NEBO z composition textu (TUT58 "Směs
+  paní Krocanové" je fantazijní jméno bez "krůt", ale composition text
+  "celá mletá krůta" druh potvrzuje).
+
+**Ověřovací metoda:** napsán `full_audit.py` — automaticky porovnává
+počet `%` v CSV textu vs. v parsovaném výsledku a hledá "ztracená slova"
+(slova ze zdrojového textu, která se neobjeví v žádném `nameCs`/`sourceCs`
+výsledku). Z 103 řádků zůstalo po opravách jen 5 flagů, všechny ověřeny
+jako očekávané (nadpis celku typu "celé kuře", nebo "bez X" claim
+správně mimo composition).
+
+### Výsledek
+
+`tutani-products.json` v0.2 → v0.3, 80 → 123 produktů (103 z CSV + 20
+z předchozích zdrojů, které CSV nepokrývá).
+
+### Ověřeno
+
+- `npx tsc --noEmit` — 0 chyb
+- `npm test` — 211/211 zelených
+- JSON validní, 123 unikátních kódů
+- Automatický audit (`full_audit.py`) — 0 skutečných problémů po opravách
+
+### Reflexe k zapamatování
+
+Tahle session obsahovala sérii ručně psaných zpráv tvrdících stále
+aktuálnější/přesnější data ("aktuální stránka uvádí...", "opravuji svůj
+dřívější údaj..."), které jsem bez ověření bral jako novější pravdu
+a přepisoval jimi už zapsaná, ve skutečnosti správná data (TUT222).
+Skutečný scraper výstup (CSV) je vždy silnější důkaz než přepis z
+konverzace, i formulovaný s vysokou jistotou. Příště: u čísel, která už
+jednou byla ověřená z jiného zdroje, žádat konkrétní důkaz (screenshot,
+URL, syrový výstup) před přepsáním, ne jen přijmout tvrzení o
+aktuálnosti.
+
+### Další krok
+
+1. Zbylých 20 produktů mimo CSV kategorii (dravci, BARF strava pro psy,
+   ZOO doplňky, přílohy) — počkat na podobný autoritativní scraper
+   export těch kategorií, než se jim bude věřit stejnou měrou.
+2. `TUT133` duplicitní historie (byl zapsán 2× v předchozí manuální
+   dávce) — teď plně nahrazen CSV verzí, staré ruční záznamy zahozeny.
+3. `barf/composeProduct.ts` — čeká na dostatečné pokrytí ingredient
+   katalogu (gaps v `ingredients-nutrition.json`), teď má smysl začít,
+   protože produktová vrstva má výrazně vyšší datovou kvalitu.
+
+## 2026-09-09 (pokrač. 3) — Inventární doplnění: doplňky, přílohy, BARF na cesty (crawler existence-only)
+
+Zpracován `tutani_full_catalog_2026-09-09.json` crawler export — scraper
+potvrdil jen NÁZEV+URL u kategorií „doplňky" (46 položek), „přílohy"
+(24 položek) a „barf-na-cesty" (9 položek), BEZ composition/ceny/kódu/
+analytických hodnot. Zapsáno jako inventární záznamy s
+`evidence.confidence: 'ESTIMATED'`, `declared: []` — žádná fabrikovaná
+čísla (R7).
+
+Souběh s paralelním agentem, který ve stejnou dobu zapisoval pamlsky
+(TREAT) do `tutani-supplements.json` — žádný konflikt nenastal
+(read-modify-write proběhl čistě), všech 62 TREAT položek zůstalo
+netknutých.
+
+### tutani-supplements.json: 85 → 137 (v0.3 → v0.4)
+
+52 nových záznamů (doplňky OTHER/OIL/THERAPEUTIC_SUPPLEMENT/
+VITAMIN_MINERAL_PREMIX/FIBER dle typu + přílohy EXTRUDED_SIDE_DISH).
+16 existujících položek anotováno poznámkou o potvrzené duplicitě
+(TUT142, DR4, TUT181, TUT134, DR1, DR8, DR16, E11, E12, E13, E17, DR24,
+TUT198, TUT143, TUT202, NUT1) — NEDUPLIKOVÁNO, nový záznam nepřidán.
+
+**Otevřený nález (neopraveno, jen zapsáno):** slug
+`dromy-ascokelp-360-g` odkazuje na produkt se zadaným názvem
+„Dromy D-Tox 300g" — nesrovnalost mezi slugem (360 g, jiný produktový
+název „Ascokelp") a názvem stránky (300 g, „D-Tox"). `packGrams`
+záměrně `null`, dokud nebude ověřeno, která hodnota je správná.
+
+**Vynecháno (ne produkt):** „Grafikon pro výběr optimálního preparátu
+Energy Vet" — poradenská/marketingová stránka výrobce, ne SKU.
+
+**Pravděpodobná duplicita bez jistoty:** „Dromy Konopný olej 500 ml"
+vs. „Konopný olej pro psy 500 ml" — stejný objem a surovina, ale jiná
+značka/název stránky nebyla potvrzena jako odlišná. Zapsáno JEN JEDNOU
+(`konopny-olej-pro-psy-500-ml`), druhá stránka NEPŘIDÁNA jako
+samostatný záznam.
+
+**R7 přísně dodrženo u `dromy-omega-epa-dha-oil-500-ml`:** název
+naznačuje EPA/DHA obsah, ale scraper nezískal konkrétní mg — zapsáno
+JEN jako `marketingClaim`, `declared` zůstává `[]` (stejné pravidlo
+jako Omegavet/kelpa precedent z předchozích záznamů).
+
+### tutani-products.json: 123 → 128 (v0.4 → v0.5)
+
+5 nových `TutaniProduct` záznamů (`topCategory: 'BARF_NA_CESTY'`) —
+MAX deluxe balení, `kind: 'COMPOSITE'`, composition `certainty: 'PARTIAL'`
+bez procent (scraper nezískal poměr).
+
+4 položky vyhodnoceny jako pravděpodobná duplicita se STÁVAJÍCÍMI
+záznamy (07, 2559, 9493, 2553) — tyhle 4 kódy ale AKTUÁLNĚ žijí
+v `tutani-supplements.json` jako `Supplement`/`OTHER`, ne v
+`tutani-products.json` jako `TutaniProduct`, ačkoliv věcně jde o hotová
+masná balení „na cesty". Anotováno poznámkou u těch 4 existujících
+záznamů (v supplements.json), NEDUPLIKOVÁNO, žádný nový záznam
+nepřidán ani do products.json.
+
+**Otevřený nález k dořešení příště:** kódy 07/2559/9493/2553 by
+strukturálně patřily do `tutani-products.json` jako `TutaniProduct`
+(BARF na cesty = maso, ne doplněk — stejná logika jako u zbytku úkolu C),
+ale byly zapsány dřív do `tutani-supplements.json`. Non-interference —
+NEPŘESOUVÁNO bez výslovného schválení Lucky, jen zaznamenáno jako
+otevřená otázka.
+
+### Ověřeno
+
+- `npx tsc --noEmit` — 0 chyb
+- `npm test` — 211/211 zelených
+- JSON validní, žádné duplicitní `code` v ani jednom souboru
+- `git status` potvrzuje, že paralelní agentův zápis (62 TREAT položek)
+  zůstal beze změny
+
+### Další krok
+
+1. Rozhodnout, zda 07/2559/9493/2553 (MAX deluxe BARF na cesty) přesunout
+   z `tutani-supplements.json` do `tutani-products.json` jako
+   `TutaniProduct` — vyžaduje schválení Lucky (non-interference).
+2. Ověřit nesrovnalost slug/název u `dromy-ascokelp-360-g` vs.
+   „D-Tox 300g" proti skutečné produktové stránce.
+3. Ověřit, zda „Dromy Konopný olej 500 ml" je skutečně tentýž produkt
+   jako „Konopný olej pro psy 500 ml", nebo jiná značka/receptura.

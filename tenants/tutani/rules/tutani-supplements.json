@@ -1,0 +1,4362 @@
+{
+  "datasetId": "tutani-supplements",
+  "displayName": "Tutani — doplňky, přílohy, pamlsky, minerální produkty a BARF na cesty",
+  "source": "MANUFACTURER_LABEL",
+  "sourceVersion": "0.4",
+  "updatedAt": "2026-09-09",
+  "note": "Vitaminové/minerální premixy, extrudované přílohy, minerální produkty, terapeutické doplňky (Energy řada), pamlsky a hotová BARF balení. Štítková hodnota (declared) se ukládá PŘESNĚ jak ji výrobce uvádí; derivedPer100g je odvozená hodnota pro engine. `marketingClaims` drží textová tvrzení výrobce (zdravotní účinky, 'obsahuje omega-3'…) ODDĚLENĚ od declared — z tvrzení se NIKDY automaticky nestává nutriční hodnota (viz TUT134 kelpa, E15 Omegavet). `evidence.confidence: ESTIMATED' u položek, kde zatím známe jen katalogovou citaci (název/gramáž/cena), ne deklarované složení — `declared` je [] a NEDOPOČÍTÁVÁ se z podobných produktů (R7). | 2026-09-09: +57 pamlsky (kategorie 'pamlsky') ze scraper URL-listu bez composition/ceny/kódu — code=URL-slug placeholder, declared=[], confidence=ESTIMATED (R7). | [2026-09-09] +52 inventárních záznamů (doplňky+přílohy) z tutani_full_catalog_2026-09-09.json crawler exportu — jen potvrzení existence (název+URL), ŽÁDNÁ nová composition/cena data. 16 existujících položek anotováno poznámkou o potvrzené duplicitě.",
+  "supplements": [
+    {
+      "productId": "NUT1",
+      "code": "NUT1",
+      "nameCs": "Nutrin Barf Balancer 2500 g",
+      "brand": "Nutrin",
+      "category": "VITAMIN_MINERAL_PREMIX",
+      "declared": [
+        {
+          "nutrient": "calcium",
+          "value": 2.6,
+          "unit": "%",
+          "basis": "PERCENT_OF_PRODUCT"
+        },
+        {
+          "nutrient": "phosphorus",
+          "value": 0.7,
+          "unit": "%",
+          "basis": "PERCENT_OF_PRODUCT"
+        },
+        {
+          "nutrient": "sodium",
+          "value": 0.3,
+          "unit": "%",
+          "basis": "PERCENT_OF_PRODUCT"
+        },
+        {
+          "nutrient": "magnesium",
+          "value": 0.6,
+          "unit": "%",
+          "basis": "PERCENT_OF_PRODUCT"
+        },
+        {
+          "nutrient": "vitaminA",
+          "value": 29040,
+          "unit": "IU/kg",
+          "basis": "IU_PER_KG"
+        },
+        {
+          "nutrient": "vitaminD3",
+          "value": 2970,
+          "unit": "IU/kg",
+          "basis": "IU_PER_KG"
+        },
+        {
+          "nutrient": "vitaminE",
+          "value": 120,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "vitaminB1",
+          "value": 3.5,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "vitaminB2",
+          "value": 6.8,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "vitaminB6",
+          "value": 3.6,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "vitaminB12",
+          "value": 0.34,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "biotin",
+          "value": 0.67,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "folate",
+          "value": 0.68,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "niacin",
+          "value": 20,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "vitaminB5",
+          "value": 26.9,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "choline",
+          "value": 1666,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "copper",
+          "value": 16.7,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "zinc",
+          "value": 300,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "manganese",
+          "value": 80,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "iron",
+          "value": 400,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "selenium",
+          "value": 0.15,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "iodine",
+          "value": 1.3,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "taurine",
+          "value": 1,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        }
+      ],
+      "derivedPer100g": [
+        {
+          "nutrient": "calcium",
+          "value": 2600.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "phosphorus",
+          "value": 700.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "sodium",
+          "value": 300.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "magnesium",
+          "value": 600.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "vitaminA",
+          "value": 2904.0,
+          "unit": "IU"
+        },
+        {
+          "nutrient": "vitaminD3",
+          "value": 297.0,
+          "unit": "IU"
+        },
+        {
+          "nutrient": "vitaminE",
+          "value": 12.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "vitaminB1",
+          "value": 0.35,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "vitaminB2",
+          "value": 0.68,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "vitaminB6",
+          "value": 0.36,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "vitaminB12",
+          "value": 0.034,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "biotin",
+          "value": 0.067,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "folate",
+          "value": 0.068,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "niacin",
+          "value": 2.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "vitaminB5",
+          "value": 2.69,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "choline",
+          "value": 166.6,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "copper",
+          "value": 1.67,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "zinc",
+          "value": 30.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "manganese",
+          "value": 8.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "iron",
+          "value": 40.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "selenium",
+          "value": 0.015,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "iodine",
+          "value": 0.13,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "taurine",
+          "value": 0.1,
+          "unit": "mg"
+        }
+      ],
+      "marketingClaims": [
+        {
+          "claimCs": "kompletní deklarovaná analytika i vitaminovo-minerální profil — jeden z nejhodnotnějších produktů pro databázi, lze pracovat přímo s deklarovanými nutrienty",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": "1 díl granulí na 3 díly masa (dávkování dle výrobce, NENÍ univerzální BARF pravidlo)",
+      "packGrams": 2500,
+      "priceWithVatCzk": 490,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/nut1/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Kompletní vitaminovo-minerální premix — pokrývá jód, mangan a taurin, což chybí u všech USDA masných surovin (viz gaps.missingNutrients v ingredients-nutrition.json). Kód sjednocen na NUT1 (dřív dočasně NUTRIN-BARF-BALANCER) podle skutečného katalogového kódu Tutani. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Nutrin Barf Balancer 2500g' (slug nutrin-barf-balancer-2500g) v crawler exportu 2026-09-09 — pravděpodobně TENTÝŽ produkt jako existující NUT1 Nutrin Barf Balancer 2500 g, jen bez Tutani kódu ve slugu. NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT198",
+      "code": "TUT198",
+      "nameCs": "Extrudovaná příloha s kelpu 1 kg",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [
+        {
+          "nutrient": "protein",
+          "value": 14.5,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "fat",
+          "value": 4.5,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "fiber",
+          "value": 10.5,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "carbohydrates",
+          "value": 3,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "ash",
+          "value": 11,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "starch",
+          "value": 27,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "moisture",
+          "value": 10,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "calcium",
+          "value": 2.2,
+          "unit": "%",
+          "basis": "PERCENT_OF_PRODUCT"
+        },
+        {
+          "nutrient": "phosphorus",
+          "value": 0.8,
+          "unit": "%",
+          "basis": "PERCENT_OF_PRODUCT"
+        },
+        {
+          "nutrient": "magnesium",
+          "value": 530,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "copper",
+          "value": 6.8,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "iron",
+          "value": 74,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "zinc",
+          "value": 25,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        },
+        {
+          "nutrient": "selenium",
+          "value": 0.2,
+          "unit": "ug/kg",
+          "basis": "UG_PER_KG"
+        },
+        {
+          "nutrient": "iodine",
+          "value": 12,
+          "unit": "mg/kg",
+          "basis": "MG_PER_KG"
+        }
+      ],
+      "derivedPer100g": [
+        {
+          "nutrient": "protein",
+          "value": 14500.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "fat",
+          "value": 4500.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "fiber",
+          "value": 10500.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "carbohydrates",
+          "value": 3000,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "ash",
+          "value": 11000,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "starch",
+          "value": 27000,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "moisture",
+          "value": 10000,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "calcium",
+          "value": 2200.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "phosphorus",
+          "value": 800.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "magnesium",
+          "value": 53.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "copper",
+          "value": 0.68,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "iron",
+          "value": 7.4,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "zinc",
+          "value": 2.5,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "selenium",
+          "value": 0.02,
+          "unit": "ug"
+        },
+        {
+          "nutrient": "iodine",
+          "value": 1.2,
+          "unit": "mg"
+        }
+      ],
+      "marketingClaims": [
+        {
+          "claimCs": "výrobce ho výslovně označuje jako DOPLŇKOVÉ krmivo k masu, ne samostatné krmivo",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": {
+        "itemsCs": [
+          "pohanka",
+          "jáhly",
+          "pivovarské kvasnice",
+          "rýže",
+          "jablečná dřeň",
+          "hrášek",
+          "pšeničné klíčky",
+          "vaječné skořápky",
+          "konopná moučka",
+          "lněné pokrutiny",
+          "kelpa",
+          "rybí tuk"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 1000,
+      "priceWithVatCzk": 102,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut198/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Selen opraven na basis UG_PER_KG (0,2 µg/kg dle štítku) — v0.1 byl chybně MG_PER_KG, což by dalo 1000× vyšší derivedPer100g. Oprava z otevřeného nálezu zapsaného 2026-09-09 při první verzi datasetu. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Barf Extrudovaná příloha pro BARF s kelpu 1kg' (slug barf-extrudovana-priloha-pro-barf-s-kelpu-1kg) v crawler exportu 2026-09-09 — odpovídá existujícímu TUT198 Extrudovaná příloha s kelpu 1kg. NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT202",
+      "code": "TUT202",
+      "nameCs": "Potravinářská křemelina 200 g",
+      "brand": null,
+      "category": "MINERAL_ASSAY",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "antiparazitický/detoxikační účinek (tvrzení výrobce) — NEPŘEVEDENO na nutriční ani léčebný fakt",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": [
+        {
+          "compound": "SiO2",
+          "percentOfProduct": 91.84
+        },
+        {
+          "compound": "Al2O3",
+          "percentOfProduct": 2.44
+        },
+        {
+          "compound": "Fe2O3",
+          "percentOfProduct": 0.36
+        },
+        {
+          "compound": "CaO",
+          "percentOfProduct": 3.48
+        },
+        {
+          "compound": "MgO",
+          "percentOfProduct": 0.76
+        },
+        {
+          "compound": "K2O",
+          "percentOfProduct": 0.12
+        },
+        {
+          "compound": "Na2O",
+          "percentOfProduct": 0.39
+        },
+        {
+          "compound": "P2O5",
+          "percentOfProduct": 0.08
+        },
+        {
+          "compound": "MnO",
+          "percentOfProduct": 0.018
+        }
+      ],
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": 104,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut202/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Evidováno jako MINERÁLNÍ PRODUKT, ne potravina — 100% amorfní křemelina, vysoký podíl SiO2. Oxidové procento (SiO2, CaO…) NENÍ totéž co elementární obsah minerálu — nesmí se sčítat s calcium/magnesium z jiných surovin bez přepočtu (CaO → Ca vyžaduje molární poměr). Marketingová tvrzení o antiparazitickém/detox účinku zůstávají v marketingClaims, engine je NIKDY nepřevádí na nutriční ani léčebný fakt. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Barf Potravinářská křemelina 200g' (slug barf-potravinarska-kremelina-200g) v crawler exportu 2026-09-09 — odpovídá existujícímu TUT202 Potravinářská křemelina 200 g. NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT143",
+      "code": "TUT143",
+      "nameCs": "Sušená zeleninová směs s rýží 1 kg",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [
+        {
+          "nutrient": "protein",
+          "value": 12.5,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "fat",
+          "value": 1.8,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "ash",
+          "value": 6,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "fiber",
+          "value": 9,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        },
+        {
+          "nutrient": "starch",
+          "value": 43,
+          "unit": "%",
+          "basis": "PERCENT_ANALYTICAL"
+        }
+      ],
+      "derivedPer100g": [
+        {
+          "nutrient": "protein",
+          "value": 12500.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "fat",
+          "value": 1800.0,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "ash",
+          "value": 6000,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "fiber",
+          "value": 9000,
+          "unit": "mg"
+        },
+        {
+          "nutrient": "starch",
+          "value": 43000,
+          "unit": "mg"
+        }
+      ],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "rýže",
+          "pohanka",
+          "mrkev",
+          "brambory",
+          "pastinák",
+          "hrášek",
+          "jablko",
+          "špenát"
+        ],
+        "orderedByQuantity": true
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 1000,
+      "priceWithVatCzk": 144,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut143/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "EXACT",
+        "noteCs": "Jen rýže (25 %) a pohanka (20 %) mají uvedené procento — zbytek beze podílu. Tutani upozorňuje, že přesný sortiment zeleniny se může mezi šaržemi lišit. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Barf Sušená zeleninová směs s rýží 1kg' (slug barf-susena-zeleninova-smes-s-ryzi-1kg) v crawler exportu 2026-09-09 — odpovídá existujícímu TUT143 Sušená zeleninová směs s rýží 1 kg. NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DR1",
+      "code": "DR1",
+      "nameCs": "Dromy Balancer BARF 8in1 200 g",
+      "brand": "Dromy",
+      "category": "VITAMIN_MINERAL_PREMIX",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": 181,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/dr1/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Zatím jen katalogová citace (název, gramáž, cena) — konkrétní deklarované hodnoty (Ca/P/vitaminy/stopové prvky) NEJSOU k dispozici, `declared` je prázdné pole, ne dopočet z podobnosti k Nutrin Balanceru (R7). [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Dromy Balancer BARF 8in1 - 200 g' (slug dromy-balancer-barf-8in1-200-g) v crawler exportu 2026-09-09 — odpovídá existujícímu DR1 (stejný název a gramáž). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DR3",
+      "code": "DR3",
+      "nameCs": "Dromy Balancer BARF 8in1 400 tbl",
+      "brand": "Dromy",
+      "category": "VITAMIN_MINERAL_PREMIX",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 195,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/dr3/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tabletová varianta stejné řady jako DR1/DR4 — počet tablet (400), ne gramáž; packGrams zůstává null, dokud není známa hmotnost jedné tablety."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DR4",
+      "code": "DR4",
+      "nameCs": "Dromy Balancer BARF 8in1 800 g",
+      "brand": "Dromy",
+      "category": "VITAMIN_MINERAL_PREMIX",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 800,
+      "priceWithVatCzk": 420,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/dr4/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Dromy Balancer BARF 8in1 - 800g' (slug dromy-balancer-barf-8in1-800g) v crawler exportu 2026-09-09 — odpovídá existujícímu DR4 (stejný název a gramáž). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DR16",
+      "code": "DR16",
+      "nameCs": "Dromy FLEX 500 ml",
+      "brand": "Dromy",
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "kloubní výživa (FLEX řada)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 589,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/dr16/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Objem v ml, ne g — packGrams null, dokud není známa hustota produktu. Marketingové tvrzení 'kloubní výživa' zapsáno odděleně od declared (prázdné) — žádné konkrétní deklarované látky/množství zatím nemáme. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Dromy FLEX 500 ml' (slug dromy-flex-500-ml) v crawler exportu 2026-09-09 — odpovídá existujícímu DR16 (stejný název a objem). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DR24",
+      "code": "DR24",
+      "nameCs": "Dromy Krill Pure 500 g",
+      "brand": "Dromy",
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "100 % krill (Euphausia superba)",
+          "backedByDeclaredNutrient": null
+        },
+        {
+          "claimCs": "EPA + DHA ve formě fosfolipidů (tvrzení výrobce, BEZ deklarovaného mg EPA/DHA)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": {
+        "itemsCs": [
+          "100 % krill (Euphausia superba)"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 500,
+      "priceWithVatCzk": 478,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/dr24/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Krillový olej je typicky zdroj EPA/DHA, ale dokud Tutani neuvede konkrétní mg/kg, produkt se NESMÍ evidovat jako nutričně započitatelný zdroj EPA/DHA — jen jako marketingové tvrzení. Přesně pravidlo ze zadání (Omegavet příklad): forma fosfolipidů je navíc jiná vazba než triglyceridová (rybí olej) — i to je nutriční detail, který se nesmí ztratit tichým sloučením se standardním EPA/DHA polem. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Dromy Krill pure 500g' (slug krill-pure-500-g) v crawler exportu 2026-09-09 — odpovídá existujícímu DR24 Dromy Krill Pure 500 g (stejný název a gramáž). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT181",
+      "code": "TUT181",
+      "nameCs": "Multivitamín sypký 200 g",
+      "brand": null,
+      "category": "VITAMIN_MINERAL_PREMIX",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "deklarované vitaminy a minerály zmíněny v popisu, ale konkrétní hodnoty/jednotky zatím NEPŘEPSÁNY do declared — čeká na doplnění ze štítku",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": {
+        "itemsCs": [
+          "kelpa 30 %",
+          "krill 25 %",
+          "pivovarské kvasnice 10 %",
+          "spirulina 5 %",
+          "další složky (podíl neuveden)"
+        ],
+        "orderedByQuantity": true
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": 89,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut181/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Složení kelpa/krill/kvasnice/spirulina JE po procentech (30/25/10/5), zapsáno jako ingredientList (ne composition — Multivitamín je Supplement, ne maso). Tutani u něj zmiňuje 'deklarované vitaminy a minerály', ale konkrétní čísla ještě nejsou přepsána do `declared` — dokud nejsou, engine s nimi NESMÍ počítat (R7). [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Multivitamín sypký 200g' (slug multivitamin-sypky-200g) v crawler exportu 2026-09-09 — odpovídá existujícímu TUT181 (stejný název a gramáž). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT134",
+      "code": "TUT134",
+      "nameCs": "KELPA 200 g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "řada deklarovaných zdravotních účinků (výrobce) — NEPŘEVEDENO na nutriční hodnotu",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": {
+        "itemsCs": [
+          "Ascophyllum nodosum (mořská řasa)"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": 95,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut134/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Kelpa = Ascophyllum nodosum. Tutani u ní uvádí zdravotní účinky v popisu, ale ŽÁDNÉ z nich se nesmí automaticky stát nutričním faktem v enginu (Lucky: 'do našeho nutričního engine se z toho nesmí automaticky stát účinek'). Kelpa je typicky zdroj jódu, ALE u jódu se vyžaduje konkrétní ANALYTICKÁ hodnota (mg/kg) — obecné tvrzení o 'minerálech' nestačí. Dokud Tutani konkrétní mg jódu neuvede, `declared` zůstává [] a jód se tady NEPOČÍTÁ. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Barf KELPA - Hnědá mořská řasa 200g' (slug barf-kelpa-hneda-morska-rasa-200g) v crawler exportu 2026-09-09 — odpovídá existujícímu TUT134 KELPA 200g (hnědá mořská řasa = Ascophyllum nodosum, stejná gramáž). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT142",
+      "code": "TUT142",
+      "nameCs": "Psyllium 200 g",
+      "brand": null,
+      "category": "FIBER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora trávení (rozpustná vláknina)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": {
+        "itemsCs": [
+          "mleté slupky Plantago ovata (jitrocel indický)"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": 142,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut142/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Barf PSYLLIUM - Rozpustná vláknina 200g' (slug barf-psyllium-rozpustna-vlaknina-200g) v tutani_full_catalog_2026-09-09.json crawler exportu — vypadá jako TENTÝŽ produkt jako TUT142 Psyllium 200g, jen jinak pojmenovaná stránka. NEDUPLIKOVÁNO, nový záznam nepřidán."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "E19",
+      "code": "E19",
+      "nameCs": "Energy Skelevet 135 tbl",
+      "brand": "Energy",
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "kloubní výživa (název 'Skelevet' odkazuje na skelet/klouby)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 450,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/e19/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Energy řada — cílené terapeutické doplňky, ne základní BARF balancer. Počet tablet (135), gramáž neznámá."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "E15",
+      "code": "E15",
+      "nameCs": "Energy Omegavet 30 ml",
+      "brand": "Energy",
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "obsahuje omega-3 mastné kyseliny (tvrzení výrobce, BEZ deklarovaného mg EPA/DHA)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 240,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/e15/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "KLÍČOVÝ PŘÍKLAD ZE ZADÁNÍ: 'Omegavet budeme evidovat jako zdroj EPA/DHA pouze tehdy, když máme skutečné deklarované množství EPA+DHA, ne jen tvrzení obsahuje omega-3.' Dokud katalog/štítek needá konkrétní mg, `declared` zůstává [] a tvrzení žije jen v marketingClaims s `backedByDeclaredNutrient: null`."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "E17",
+      "code": "E17",
+      "nameCs": "Energy Regavet 30 ml",
+      "brand": "Energy",
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "bylinný přípravek — veden MIMO základní nutriční balancování",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 390,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/e17/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Energy Regavet 30ml' (slug energy-regavet-30ml) v crawler exportu 2026-09-09 — odpovídá existujícímu E17 (stejný název a objem). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "E13",
+      "code": "E13",
+      "nameCs": "Energy Korovet 30 ml",
+      "brand": "Energy",
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/e13/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Cena zatím nepotvrzena (chybí v dodaném zdroji) — priceWithVatCzk zůstává null, NEODVOZUJE se z podobných produktů řady Energy (R7). [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Energy Korovet 30ml' (slug energy-korovet-30-ml) v crawler exportu 2026-09-09 — odpovídá existujícímu E13. Tento zdroj cenu NEMÁ (jen název+URL, žádná cena získána), takže E13.priceWithVatCzk zůstává beze změny (null) — NEDOPLŇOVÁNO z domněnky, jen potvrzena existence produktu."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "E12",
+      "code": "E12",
+      "nameCs": "Energy Kingvet 30 ml",
+      "brand": "Energy",
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "bylinný doplněk — veden MIMO základní nutrient calculator",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 340,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/e12/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Energy Kingvet 30ml' (slug energy-kingvet-30-ml) v crawler exportu 2026-09-09 — odpovídá existujícímu E12 (stejný název a objem). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "E11",
+      "code": "E11",
+      "nameCs": "Energy Imunovet 30 ml",
+      "brand": "Energy",
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora imunity (název 'Imunovet')",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 470,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/e11/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Energy Imunovet 30ml' (slug energy-imunovet-30-ml) v crawler exportu 2026-09-09 — odpovídá existujícímu E11 (stejný název a objem). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "DR8",
+      "code": "DR8",
+      "nameCs": "Dromy Bronchovet 500 ml",
+      "brand": "Dromy",
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "doplňkové krmivo pro psy a kočky — funkční doplněk, NE součást základního nutričního výpočtu",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 247,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/dr8/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Bronchovet — cílený funkční doplněk (dýchací cesty dle názvu), zařazen jako THERAPEUTIC_SUPPLEMENT, mimo BARF balancování stejně jako Energy řada. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'Dromy Bronchovet 500 ml' (slug dromy-bronchovet-500-ml) v crawler exportu 2026-09-09 — odpovídá existujícímu DR8 (stejný název a objem). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT146",
+      "code": "TUT146",
+      "nameCs": "Výcvikový mini pamlsek hmyzí protein + aktivní uhlí 200 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "hmyzí protein",
+          "aktivní uhlí"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": 99,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut146/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "K4",
+      "code": "K4",
+      "nameCs": "Rewards Dog kuřecí + mrkev + bazalka 80 g",
+      "brand": "Rewards Dog",
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuřecí maso",
+          "mrkev",
+          "bazalka"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 80,
+      "priceWithVatCzk": 55,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/k4/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "KUR",
+      "code": "KUR",
+      "nameCs": "Sušené kuřecí pařáty 100 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuřecí pařáty"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": 45,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/kur/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "1618",
+      "code": "1618",
+      "nameCs": "Kroužky MIX poloměkké 500 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 500,
+      "priceWithVatCzk": 108,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/1618/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED"
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "TUT189",
+      "code": "TUT189",
+      "nameCs": "Sušená vepřová kost 1 ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "vepřová kost"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": 20,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/tut189/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Prodáváno na kus, ne na gramáž — packGrams null."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "2553",
+      "code": "2553",
+      "nameCs": "MAX deluxe 3/4 kuře s dršťkami 1200 g",
+      "brand": "MAX deluxe",
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuře",
+          "dršťky"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 1200,
+      "priceWithVatCzk": 125,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/2553/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Hotové BARF balení 'na cesty' — kategorie OTHER v Supplement, protože jde nutričně o maso+orgán, ne o doplněk; do TutaniProduct/COMPOSITE patří lépe, až bude scraper potvrzovat přesné složení. Zatím zaevidováno tady, ať položka z katalogu nechybí. [POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'MAX deluxe 3/4 KUŘE s dršťkami 1200g' (slug max-deluxe-3-4-kure-s-drstkami-1200g, kategorie barf-na-cesty) v crawler exportu 2026-09-09 — odpovídá tomuto existujícímu záznamu code=2553. Stejná otevřená otázka jako u code=07/2559/9493. NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "07",
+      "code": "07",
+      "nameCs": "MAX deluxe 3/4 kuřete 1200 g",
+      "brand": "MAX deluxe",
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 1200,
+      "priceWithVatCzk": 109,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/07/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'MAX deluxe 3/4 KUŘETE 1200g' (slug max-deluxe-3-4-kurete-1200g, kategorie barf-na-cesty) v tutani_full_catalog_2026-09-09.json crawler exportu — odpovídá tomuto existujícímu záznamu code=07. Tenhle záznam je uložen jako Supplement/OTHER, ačkoliv jde věcně o hotové masné balení (BARF na cesty), které by patřilo do TutaniProduct/topCategory=BARF_NA_CESTY — otevřený nález k budoucímu přesunu, NEMĚNÍME strukturu bez dalšího zadání (non-interference). NEDUPLIKOVÁNO, nový záznam nepřidán."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "2559",
+      "code": "2559",
+      "nameCs": "MAX deluxe kostky libové svaloviny 400 g",
+      "brand": "MAX deluxe",
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 400,
+      "priceWithVatCzk": 99,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/2559/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'MAX deluxe KOSTKY LIBOVÉ SVALOVINY 400g' (slug max-deluxe-kostky-libove-svaloviny-400g, kategorie barf-na-cesty) v crawler exportu 2026-09-09 — odpovídá tomuto existujícímu záznamu code=2559. Stejná otevřená otázka jako u code=07 (patří spíš do TutaniProduct). NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "9493",
+      "code": "9493",
+      "nameCs": "MAX deluxe kostky libové svaloviny s dršťkami 800 g",
+      "brand": "MAX deluxe",
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "libová svalovina",
+          "dršťky"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 800,
+      "priceWithVatCzk": 150,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/9493/",
+      "evidence": {
+        "source": "MANUFACTURER_LABEL",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "[POTVRZENO 2026-09-09 crawler] Potvrzena existence stránky 'MAX deluxe KOSTKY LIBOVÉ SVALOVINY s dršťkami 800g' (slug max-deluxe-kostky-libove-svaloviny-s-drstkami-800g-2, kategorie barf-na-cesty) v crawler exportu 2026-09-09 — odpovídá tomuto existujícímu záznamu code=9493. Stejná otevřená otázka jako u code=07/2559. NEDUPLIKOVÁNO."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-usakova-ouska-susena-100g",
+      "code": "barf-usakova-ouska-susena-100g",
+      "nameCs": "Barf Ušákova ouška sušená 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-usakova-ouska-susena-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-rewards-dog-hovezi-s-boruvkami-a-tymianem-80-g",
+      "code": "barf-rewards-dog-hovezi-s-boruvkami-a-tymianem-80-g",
+      "nameCs": "Barf Rewards Dog hovězí s borůvkami a tymiánem 80 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "borůvky",
+          "tymián",
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 80,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-rewards-dog-hovezi-s-boruvkami-a-tymianem-80-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-susene-kureci-paraty-100g",
+      "code": "barf-susene-kureci-paraty-100g",
+      "nameCs": "Barf Sušené kuřecí pařáty 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-susene-kureci-paraty-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-susena-veprova-zaouska-10ks",
+      "code": "barf-susena-veprova-zaouska-10ks",
+      "nameCs": "Barf Sušená vepřová zaouška 10ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-susena-veprova-zaouska-10ks",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-hovezi-ucho-susene-3ks",
+      "code": "barf-hovezi-ucho-susene-3ks",
+      "nameCs": "Barf Hovězí ucho sušené 3ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-hovezi-ucho-susene-3ks",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "susene-plice",
+      "code": "susene-plice",
+      "nameCs": "Sušené plíce 80g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "plíce"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 80,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/susene-plice",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "strivkove-makarony",
+      "code": "strivkove-makarony",
+      "nameCs": "Střívkové makarony 12cm-8ks, 25cm-6ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/strivkove-makarony",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-veprova-noha-susena-1ks",
+      "code": "barf-veprova-noha-susena-1ks",
+      "nameCs": "Barf Vepřová noha sušená 1ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-veprova-noha-susena-1ks",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-susena-veprova-zaouska-5ks",
+      "code": "barf-susena-veprova-zaouska-5ks",
+      "nameCs": "Barf Sušená vepřová zaouška 5ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-susena-veprova-zaouska-5ks",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dried-fish-susena-ryba-100g",
+      "code": "dried-fish-susena-ryba-100g",
+      "nameCs": "Dried Fish - sušená ryba 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/dried-fish-susena-ryba-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-hovezi-mulec-suseny-200-g",
+      "code": "barf-hovezi-mulec-suseny-200-g",
+      "nameCs": "Barf Hovězí mulec sušený 200 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 200,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-hovezi-mulec-suseny-200-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-rewards-cat-kureci-se-santou-a-brusinkou-80-g",
+      "code": "barf-rewards-cat-kureci-se-santou-a-brusinkou-80-g",
+      "nameCs": "Barf REWARDS Cat kuřecí se šantou a brusinkou 80 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "šanta",
+          "brusinka",
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 80,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-rewards-cat-kureci-se-santou-a-brusinkou-80-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-rewards-dog-kureci-s-mrkvi-a-bazalkou-80-g",
+      "code": "barf-rewards-dog-kureci-s-mrkvi-a-bazalkou-80-g",
+      "nameCs": "Barf Rewards Dog Kuřecí s mrkví a bazalkou 80 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "mrkev",
+          "bazalka",
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 80,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-rewards-dog-kureci-s-mrkvi-a-bazalkou-80-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-rewards-dog-veprove-s-dyni-a-rozmarynem-80-g",
+      "code": "barf-rewards-dog-veprove-s-dyni-a-rozmarynem-80-g",
+      "nameCs": "Barf Rewards Dog vepřové s dýní a rozmarýnem 80 g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "dýně",
+          "rozmarýn"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 80,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-rewards-dog-veprove-s-dyni-a-rozmarynem-80-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-usakovo-ousko-susene-1ks",
+      "code": "barf-usakovo-ousko-susene-1ks",
+      "nameCs": "Barf Ušákovo ouško sušené 1ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-usakovo-ousko-susene-1ks",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-veprova-chrupavka-z-lopatky-susena-100g",
+      "code": "barf-veprova-chrupavka-z-lopatky-susena-100g",
+      "nameCs": "Barf Vepřová chrupavka z lopatky sušená 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-veprova-chrupavka-z-lopatky-susena-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-veprova-kost-susena-1ks",
+      "code": "barf-veprova-kost-susena-1ks",
+      "nameCs": "Barf Vepřová kost sušená 1ks",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/barf-veprova-kost-susena-1ks",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "filety-z-hoveziho-masa-250g",
+      "code": "filety-z-hoveziho-masa-250g",
+      "nameCs": "Filety z hovězího masa 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/filety-z-hoveziho-masa-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "hranolky-lososove-100-g",
+      "code": "hranolky-lososove-100-g",
+      "nameCs": "Hranolky lososové -100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "losos"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/hranolky-lososove-100-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "kolecko-kachni-250g",
+      "code": "kolecko-kachni-250g",
+      "nameCs": "Kolečko kachní-250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/kolecko-kachni-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "kost-kalciova-obalena-kachnim-masem-250g",
+      "code": "kost-kalciova-obalena-kachnim-masem-250g",
+      "nameCs": "Kost kalciová obalená kachním masem-250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/kost-kalciova-obalena-kachnim-masem-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "kosticky-kureci-s-krevetkami-mini-100g",
+      "code": "kosticky-kureci-s-krevetkami-mini-100g",
+      "nameCs": "Kostičky kuřecí s krevetkami-mini 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "krevety",
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/kosticky-kureci-s-krevetkami-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "kosticky-mix-500g",
+      "code": "kosticky-mix-500g",
+      "nameCs": "Kostičky Mix 500g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 500,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/kosticky-mix-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "kostky-kachni-s-treskou-100g",
+      "code": "kostky-kachni-s-treskou-100g",
+      "nameCs": "Kostky kachní s treskou 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/kostky-kachni-s-treskou-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "kousky-hovezi-100-g",
+      "code": "kousky-hovezi-100-g",
+      "nameCs": "Kousky hovězí -100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/kousky-hovezi-100-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "platek-kachni-mekky-100g",
+      "code": "platek-kachni-mekky-100g",
+      "nameCs": "Plátek kachní měkký-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/platek-kachni-mekky-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "platek-kachni-mekky-250g",
+      "code": "platek-kachni-mekky-250g",
+      "nameCs": "Plátek kachní měkký-250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/platek-kachni-mekky-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "platek-kachni-suseny-100g",
+      "code": "platek-kachni-suseny-100g",
+      "nameCs": "Plátek kachní sušený -100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/platek-kachni-suseny-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "platek-kachni-suseny-250g",
+      "code": "platek-kachni-suseny-250g",
+      "nameCs": "Plátek kachní sušený -250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/platek-kachni-suseny-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "prouzek-kachni-mekky-12cm-100g",
+      "code": "prouzek-kachni-mekky-12cm-100g",
+      "nameCs": "Proužek kachní měkký 12cm 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/prouzek-kachni-mekky-12cm-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "prouzek-kachni-mini-100g",
+      "code": "prouzek-kachni-mini-100g",
+      "nameCs": "Proužek kachní mini-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/prouzek-kachni-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "prouzek-kureci-mekky-100g",
+      "code": "prouzek-kureci-mekky-100g",
+      "nameCs": "Proužek kuřecí měkký-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/prouzek-kureci-mekky-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-hovezi-250g",
+      "code": "rolka-hovezi-250g",
+      "nameCs": "Rolka hovězí 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-hovezi-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-kachna-treska-100g",
+      "code": "rolka-kachna-treska-100g",
+      "nameCs": "Rolka kachna treska 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-kachna-treska-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-kralik-treska-100g",
+      "code": "rolka-kralik-treska-100g",
+      "nameCs": "Rolka králík treska 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "králičí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-kralik-treska-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-sushi-kachni-100g",
+      "code": "rolka-sushi-kachni-100g",
+      "nameCs": "Rolka sushi kachní 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-sushi-kachni-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-sushi-kachni-250g",
+      "code": "rolka-sushi-kachni-250g",
+      "nameCs": "Rolka sushi kachní 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-sushi-kachni-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-sushi-kralici-jatra-100g-2",
+      "code": "rolka-sushi-kralici-jatra-100g-2",
+      "nameCs": "Rolka sushi králičí játra-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "králičí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-sushi-kralici-jatra-100g-2",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-sushi-kralici-jatra-250g",
+      "code": "rolka-sushi-kralici-jatra-250g",
+      "nameCs": "Rolka sushi králičí játra 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "králičí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-sushi-kralici-jatra-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "rolka-sushi-losos-treska-100g",
+      "code": "rolka-sushi-losos-treska-100g",
+      "nameCs": "Rolka sushi losos/treska 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "losos"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/rolka-sushi-losos-treska-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "sendvic-hovezi-s-treskou-250g",
+      "code": "sendvic-hovezi-s-treskou-250g",
+      "nameCs": "Sendvič hovězí s treskou-250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "hovězí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/sendvic-hovezi-s-treskou-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "sendvic-jehneci-s-treskou-250g",
+      "code": "sendvic-jehneci-s-treskou-250g",
+      "nameCs": "Sendvič jehněčí s treskou 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "jehněčí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/sendvic-jehneci-s-treskou-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "sendvic-kachna-mini-100g",
+      "code": "sendvic-kachna-mini-100g",
+      "nameCs": "Sendvič kachna mini 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/sendvic-kachna-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "sendvic-kachna-treska-rolovany-250g",
+      "code": "sendvic-kachna-treska-rolovany-250g",
+      "nameCs": "Sendvič kachna treska rolovaný-250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/sendvic-kachna-treska-rolovany-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "sendvic-kralici-jatra-treska-mini-100g",
+      "code": "sendvic-kralici-jatra-treska-mini-100g",
+      "nameCs": "Sendvič králičí játra treska mini 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "králičí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/sendvic-kralici-jatra-treska-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "sendvic-losos-treska-250g",
+      "code": "sendvic-losos-treska-250g",
+      "nameCs": "Sendvič losos treska 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "losos"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/sendvic-losos-treska-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "susenky-s-matou-500g",
+      "code": "susenky-s-matou-500g",
+      "nameCs": "Sušenky s mátou 500g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "máta"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 500,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/susenky-s-matou-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "tycinka-jehneci-mini-100g",
+      "code": "tycinka-jehneci-mini-100g",
+      "nameCs": "Tyčinka jehněčí mini-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "jehněčí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/tycinka-jehneci-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "tycinka-kureci-1-cm-100g",
+      "code": "tycinka-kureci-1-cm-100g",
+      "nameCs": "Tyčinka kuřecí 1 cm-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/tycinka-kureci-1-cm-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "tycinka-lososove-mini-100g",
+      "code": "tycinka-lososove-mini-100g",
+      "nameCs": "Tyčinka lososové mini-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "losos"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/tycinka-lososove-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "tycinka-s-lososem-mini-100g",
+      "code": "tycinka-s-lososem-mini-100g",
+      "nameCs": "Tyčinka s lososem mini-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "losos"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/tycinka-s-lososem-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "tycinka-tunakova-1-cm-100g",
+      "code": "tycinka-tunakova-1-cm-100g",
+      "nameCs": "Tyčinka tuňáková 1 cm-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "tuňák"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/tycinka-tunakova-1-cm-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "uzel-kureci-mekky-mini-100g",
+      "code": "uzel-kureci-mekky-mini-100g",
+      "nameCs": "Uzel kuřecí měkký mini-100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/uzel-kureci-mekky-mini-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "zavitek-jehneci-s-treskou-250g",
+      "code": "zavitek-jehneci-s-treskou-250g",
+      "nameCs": "Závitek jehněčí s treskou 250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "jehněčí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/zavitek-jehneci-s-treskou-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "zavitek-kachni-s-treskou-100g",
+      "code": "zavitek-kachni-s-treskou-100g",
+      "nameCs": "Závitek kachní s treskou 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "kachní maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/zavitek-kachni-s-treskou-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "zavitek-kureci-s-treskou-250g",
+      "code": "zavitek-kureci-s-treskou-250g",
+      "nameCs": "Závitek kuřecí s treskou -250g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 250,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/zavitek-kureci-s-treskou-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "zavitek-kureci-s-treskou-100g",
+      "code": "zavitek-kureci-s-treskou-100g",
+      "nameCs": "Závitek kuřecí s treskou 100g",
+      "brand": null,
+      "category": "TREAT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": {
+        "itemsCs": [
+          "treska",
+          "kuřecí maso"
+        ],
+        "orderedByQuantity": false
+      },
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": 100,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/pamlsky/zavitek-kureci-s-treskou-100g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Scraper export potvrzuje existenci produktu (URL slug + název z kategorie 'pamlsky'), ale NEZÍSKAL Tutani kód, composition ani cenu. `code` je URL-slug placeholder, NE skutečný Tutani kód (ten zatím neznámý) — nezaměňovat s TUT-formátem u ostatních položek. `declared: []` a `priceWithVatCzk: null`, protože zdroj žádná čísla neuvádí (R7: nedopočítávat)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "pivovarske-kvasnice",
+      "code": "pivovarske-kvasnice",
+      "nameCs": "Pivovarské kvasnice 500g, 1kg",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "pivovarské kvasnice — přírodní zdroj B-vitaminů a bílkovin (obecné tvrzení, bez konkrétního mg)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/pivovarske-kvasnice",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-caulerpa-zelena-morska-rasa-200g",
+      "code": "barf-caulerpa-zelena-morska-rasa-200g",
+      "nameCs": "Barf CAULERPA - Zelená mořská řasa 200g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "zelená mořská řasa (Caulerpa) — mineralizační doplněk dle názvu, bez deklarovaných hodnot",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/barf-caulerpa-zelena-morska-rasa-200g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-omega-epa-dha-oil-500-ml",
+      "code": "dromy-omega-epa-dha-oil-500-ml",
+      "nameCs": "Dromy OMEGA EPA & DHA oil 500ml",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "název produktu tvrdí obsah EPA/DHA, ale scraper NEZÍSKAL konkrétní mg — dle R7/Omegavet pravidla se NEPŘEVÁDÍ na declared bez skutečné deklarované hodnoty",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-omega-epa-dha-oil-500-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. POZOR: název sám naznačuje EPA/DHA obsah, ale BEZ konkrétního mg — declared zůstává [] přesně dle R7 pravidla (Omegavet/kelpa precedent). | tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-mlady-jecmen-500g",
+      "code": "dromy-mlady-jecmen-500g",
+      "nameCs": "Dromy Mladý ječmen 500g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "mladý ječmen — zelená potrava, obecné tvrzení o obsahu vlákniny/chlorofylu bez konkrétních čísel",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-mlady-jecmen-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "konopny-olej-pro-psy-500-ml",
+      "code": "konopny-olej-pro-psy-500-ml",
+      "nameCs": "Konopný olej pro psy 500 ml",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/konopny-olej-pro-psy-500-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-gastro-250-g",
+      "code": "dromy-gastro-250-g",
+      "nameCs": "Dromy Gastro 250 g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora trávicího traktu (název 'Gastro') — funkční doplněk, mimo základní BARF balancování",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-gastro-250-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-klickovy-olej-500-ml",
+      "code": "dromy-klickovy-olej-500-ml",
+      "nameCs": "Dromy Kličkový olej 500ml",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-klickovy-olej-500-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-energy-drink-ions-4dog-250g",
+      "code": "barf-energy-drink-ions-4dog-250g",
+      "nameCs": "Barf ENERGY DRINK IONS 4DOG 250g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "iontový nápoj/doplněk pro psy (rehydratace dle názvu) — funkční doplněk mimo základní BARF balancování",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/barf-energy-drink-ions-4dog-250g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-chlorella-sladkovodni-rasa--200g",
+      "code": "barf-chlorella-sladkovodni-rasa--200g",
+      "nameCs": "Barf CHLORELLA - Sladkovodní řasa 200g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "sladkovodní řasa chlorella — obecné tvrzení o detoxikačních/nutričních účincích, bez konkrétních čísel",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/barf-chlorella-sladkovodni-rasa--200g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-spirulina-200g",
+      "code": "barf-spirulina-200g",
+      "nameCs": "Barf Spirulina 200g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "spirulina — sinice, obecné tvrzení o obsahu bílkovin/mikroživin bez konkrétních čísel",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/barf-spirulina-200g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-boswellia-liquid-500-ml",
+      "code": "dromy-boswellia-liquid-500-ml",
+      "nameCs": "Dromy Boswellia liquid 500ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "kadidlovník (Boswellia) — bylinný doplněk, typicky kloubní/protizánětlivé použití dle názvu řady, bez deklarovaných hodnot",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-boswellia-liquid-500-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-brutnakovy-olej-200-ml",
+      "code": "dromy-brutnakovy-olej-200-ml",
+      "nameCs": "Dromy Brutnákový olej 200 ml",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-brutnakovy-olej-200-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-collagen-160-tbl",
+      "code": "dromy-collagen-160-tbl",
+      "nameCs": "Dromy Collagen 160 tbl.",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "kolagenový doplněk (klouby/kůže/srst dle typického určení kolagenu), bez deklarovaného množství",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-collagen-160-tbl",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-cuketa-powder-300g",
+      "code": "dromy-cuketa-powder-300g",
+      "nameCs": "Dromy Cuketa powder 300g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "sušená cuketa v prášku — zeleninový doplněk, obecné tvrzení bez konkrétních čísel",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-cuketa-powder-300g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-ascokelp-360-g",
+      "code": "dromy-ascokelp-360-g",
+      "nameCs": "Dromy D-Tox 300g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "detoxikační doplněk (název 'D-Tox') — funkční doplněk mimo základní BARF balancování",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-ascokelp-360-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. OTEVŘENÝ NÁLEZ: URL slug říká 'dromy-ascokelp-360-g' (360 g, jiný produktový název 'Ascokelp'), ale dodaný název stránky říká 'Dromy D-Tox 300g'. Nesrovnalost mezi slugem a názvem NEOPRAVENA ani nedomyšlena — packGrams záměrně null, dokud nebude ověřeno, který údaj (300g/D-Tox vs. 360g/Ascokelp) je správný. | tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-annovet-30-ml",
+      "code": "energy-annovet-30-ml",
+      "nameCs": "Energy Annovet 30ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-annovet-30-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-audivet-30-ml",
+      "code": "energy-audivet-30-ml",
+      "nameCs": "Energy Audivet 30ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora sluchu (název 'Audivet') — cílený funkční doplněk",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-audivet-30-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-cytovet-90-tbl",
+      "code": "energy-cytovet-90-tbl",
+      "nameCs": "Energy Cytovet 90 tbl",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-cytovet-90-tbl",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-etovet-30-ml",
+      "code": "energy-etovet-30-ml",
+      "nameCs": "Energy Etovet 30ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-etovet-30-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-nutrivet-90-tbl",
+      "code": "energy-nutrivet-90-tbl",
+      "nameCs": "Energy Nutrivet 90 tbl",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-nutrivet-90-tbl",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-probiovet-90-tbl",
+      "code": "energy-probiovet-90-tbl",
+      "nameCs": "Energy Probiovet 90 tbl",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "probiotický doplněk (název 'Probiovet') — podpora střevní mikroflóry dle názvu",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-probiovet-90-tbl",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-renovet-30ml",
+      "code": "energy-renovet-30ml",
+      "nameCs": "Energy Renovet 30ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora ledvin (název 'Renovet') — cílený funkční doplněk",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-renovet-30ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-vet-tickvet-10-ml",
+      "code": "energy-vet-tickvet-10-ml",
+      "nameCs": "Energy Vet Tickvet 10 ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "repelentní/antiparazitický přípravek (název 'Tickvet' — klíšťata) — cílený funkční doplněk",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-vet-tickvet-10-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "energy-virovet-30ml",
+      "code": "energy-virovet-30ml",
+      "nameCs": "Energy Virovet 30ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora imunity proti virovým infekcím (název 'Virovet') — cílený funkční doplněk",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/energy-virovet-30ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-krill-pure-130-g",
+      "code": "dromy-krill-pure-130-g",
+      "nameCs": "Dromy Krill pure 130g",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "krill (Euphausia superba) — stejná řada jako DR24 Krill Pure 500g, jiná gramáž; EPA/DHA tvrzení výrobce BEZ deklarovaného mg (stejné pravidlo jako DR24)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-krill-pure-130-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-lneny-olej-500-ml",
+      "code": "dromy-lneny-olej-500-ml",
+      "nameCs": "Dromy Lněný olej 500ml",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-lneny-olej-500-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-malpicoll-250-g",
+      "code": "dromy-malpicoll-250-g",
+      "nameCs": "Dromy Malpicoll 250 g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-malpicoll-250-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-mast-bylinna-hojiva-500-ml",
+      "code": "dromy-mast-bylinna-hojiva-500-ml",
+      "nameCs": "Dromy mast bylinná hojivá 500 ml",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "hojivá bylinná mast (zevní použití dle názvu) — funkční doplněk mimo základní BARF balancování",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-mast-bylinna-hojiva-500-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-osteo-450-g",
+      "code": "dromy-osteo-450-g",
+      "nameCs": "Dromy Osteo 450 g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora kostí/kloubů (název 'Osteo') — cílený funkční doplněk",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-osteo-450-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-parasitic-600-g",
+      "code": "dromy-parasitic-600-g",
+      "nameCs": "Dromy Parasitic 600 g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "antiparazitický doplněk (název 'Parasitic') — cílený funkční doplněk",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-parasitic-600-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-pupalkovy-olej-200-ml",
+      "code": "dromy-pupalkovy-olej-200-ml",
+      "nameCs": "Dromy Pupalkovy olej 200ml",
+      "brand": null,
+      "category": "OIL",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-pupalkovy-olej-200-ml",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-zvapenatele-morske-rasy-500-g",
+      "code": "dromy-zvapenatele-morske-rasy-500-g",
+      "nameCs": "Dromy Zvápenatělé mořské řasy 500 g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "zvápenatělé mořské řasy — typicky přírodní zdroj vápníku, ale bez konkrétní deklarované hodnoty (%Ca) se nezapisuje do declared (R7)",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/doplnky/dromy-zvapenatele-morske-rasy-500-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "zeleninovy-mix-300-g",
+      "code": "zeleninovy-mix-300-g",
+      "nameCs": "Dromy Zeleninový mix 300g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/zeleninovy-mix-300-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-zeleninova-smes-500g",
+      "code": "barf-zeleninova-smes-500g",
+      "nameCs": "Barf Zeleninová směs 500g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/barf-zeleninova-smes-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-cervena-repa-500g",
+      "code": "barf-cervena-repa-500g",
+      "nameCs": "Barf Červená Řepa 500g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "sušená/mražená červená řepa — zeleninová příloha",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/barf-cervena-repa-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-mrkev-500g",
+      "code": "barf-mrkev-500g",
+      "nameCs": "Barf Mrkev 500g",
+      "brand": null,
+      "category": "OTHER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "sušená/mražená mrkev — zeleninová příloha",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/barf-mrkev-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-instantni-ryzova-kase-1kg",
+      "code": "barf-instantni-ryzova-kase-1kg",
+      "nameCs": "Barf Instantní rýžová kaše 1kg",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/barf-instantni-ryzova-kase-1kg",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-instantni-ryzova-kase-500g",
+      "code": "barf-instantni-ryzova-kase-500g",
+      "nameCs": "Barf Instantní rýžová kaše 500g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/barf-instantni-ryzova-kase-500g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "barf-herbal",
+      "code": "barf-herbal",
+      "nameCs": "Dromy BARF HERBAL 500g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "bylinná příloha/doplněk (název 'HERBAL') — funkční doplněk, konkrétní bylinné složení scraper nezískal",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/barf-herbal",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-bramborovy-mix-1000-g",
+      "code": "dromy-bramborovy-mix-1000-g",
+      "nameCs": "Dromy Bramborový mix 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-bramborovy-mix-1000-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-digestive-barf-300-g",
+      "code": "dromy-digestive-barf-300-g",
+      "nameCs": "Dromy Digestive BARF 300 g",
+      "brand": null,
+      "category": "THERAPEUTIC_SUPPLEMENT",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "podpora trávení (název 'Digestive') — funkční doplněk mimo základní BARF balancování",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-digestive-barf-300-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-extrudo-alfalfa-fibre-1000-g",
+      "code": "dromy-extrudo-alfalfa-fibre-1000-g",
+      "nameCs": "Dromy Extrudo ALFALFA FIBRE 1000 g",
+      "brand": null,
+      "category": "FIBER",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [
+        {
+          "claimCs": "vojtěška (alfalfa) — vlákninová extrudovaná příloha",
+          "backedByDeclaredNutrient": null
+        }
+      ],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-extrudo-alfalfa-fibre-1000-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-extrudo-barf-900g",
+      "code": "dromy-extrudo-barf-900g",
+      "nameCs": "Dromy Extrudo BARF 900g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-extrudo-barf-900g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "instantni-jahlovy-mix",
+      "code": "instantni-jahlovy-mix",
+      "nameCs": "Dromy Jáhlový mix 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/instantni-jahlovy-mix",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "instantni-kuskus-se-zeleninou",
+      "code": "instantni-kuskus-se-zeleninou",
+      "nameCs": "Dromy Kuskus se zeleninou 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/instantni-kuskus-se-zeleninou",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-morsky-mix-900-g",
+      "code": "dromy-morsky-mix-900-g",
+      "nameCs": "Dromy Mořský mix 900 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-morsky-mix-900-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-obilny-mix-se-zeleninou-1000-g",
+      "code": "dromy-obilny-mix-se-zeleninou-1000-g",
+      "nameCs": "Dromy Obilný mix se zeleninou 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-obilny-mix-se-zeleninou-1000-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-ovocny-mix-450-g",
+      "code": "dromy-ovocny-mix-450-g",
+      "nameCs": "Dromy Ovocný mix 450 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-ovocny-mix-450-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-pohankovy-mix-se-zeleninou-1000g",
+      "code": "dromy-pohankovy-mix-se-zeleninou-1000g",
+      "nameCs": "Dromy Pohankový mix se zeleninou 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-pohankovy-mix-se-zeleninou-1000g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-ryzovy-mix-se-zeleninou-1000-g",
+      "code": "dromy-ryzovy-mix-se-zeleninou-1000-g",
+      "nameCs": "Dromy Rýžový mix se zeleninou 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-ryzovy-mix-se-zeleninou-1000-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-seminkovy-mix-600-g",
+      "code": "dromy-seminkovy-mix-600-g",
+      "nameCs": "Dromy Semínkový mix 600 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-seminkovy-mix-600-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    },
+    {
+      "productId": "dromy-vlockovy-mix-1000-g",
+      "code": "dromy-vlockovy-mix-1000-g",
+      "nameCs": "Dromy Vločkový mix 1000 g",
+      "brand": null,
+      "category": "EXTRUDED_SIDE_DISH",
+      "declared": [],
+      "derivedPer100g": [],
+      "marketingClaims": [],
+      "ingredientList": null,
+      "mineralAssay": null,
+      "dosageInstructionCs": null,
+      "packGrams": null,
+      "priceWithVatCzk": null,
+      "availability": "UNKNOWN",
+      "url": "https://obchod.tutani.cz/prilohy/dromy-vlockovy-mix-1000-g",
+      "evidence": {
+        "source": "TUTANI_PRODUCT_PAGE",
+        "sourceDate": "2026-09-09",
+        "confidence": "ESTIMATED",
+        "noteCs": "Tutani kód zatím NEZNÁM — code je URL-slug, ne skutečný katalogový kód. tutani_full_catalog_2026-09-09.json crawler export — jen inventární potvrzení existence (název+URL slug), ŽÁDNÁ nová composition/cena data. declared/ingredientList/cena zůstávají prázdné/null, dokud nebude dostupný skutečný štítek/scraper výstup s hodnotami (R7)."
+      },
+      "updatedAt": "2026-09-09"
+    }
+  ]
+}

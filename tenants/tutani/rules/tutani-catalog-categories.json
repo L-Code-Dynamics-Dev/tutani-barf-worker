@@ -1,0 +1,216 @@
+{
+  "datasetId": "tutani-catalog-categories",
+  "displayName": "Tutani — stav vytěžení 17 BARF větví katalogové navigace",
+  "sourceVersion": "0.2",
+  "updatedAt": "2026-09-09",
+  "note": "17 samostatných BARF větví v navigaci Tutani (mimo doplňky a pamlsky, které žijí v tutani-supplements.json): drůbeží, hovězí, kachní, klokaní, konina, králičí, jehněčí/skopové, krůtí, ryby, telecí, vepřové, zvěřina, Graf Barf, balíčky, kočky, dravci, gurmáni, strava pro psy. `PRODUCTS_EXTRACTED` = položky jsou v tutani-products.json/tutani-supplements.json. `CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED` = kategorie prokazatelně existuje (Tutani ji zmiňuje/popisuje), ale konkrétní SKU se zatím nevytěžily — TOHLE NENÍ 0 produktů, engine to nesmí interpretovat jako prázdný sortiment. Deduplikace probíhá podle produktového KÓDU napříč kategoriemi (produkt se může objevit ve více větvích, např. TUT30/TUT15/TUT151 v psí i kočičí sekci). v0.2: doplněn `crawlerMetadata` a `shoptetUrlCategories` z tutani_full_catalog_2026-09-09.json (1300 stránek prolezeno, 753 nalezeno, 261 skutečných produktových detailů). POZOR: tenhle konkrétní export selhal strukturovanou extrakci (composition/cena/kód jsou UNKNOWN u všech 753 řádků) — použit JEN jako inventární mapa existence + Shoptet URL kategorie, NE jako zdroj čísel. `shoptetUrlCategories` je JINÁ osa než `categories` výše: Shoptet dělí web podle typu tkáně napříč druhy (svalovina-2, vnitrnosti-4…), zatímco `categories` je BARF doménový model podle druhu zvířete (drůbeží, hovězí…) — obě osy platí současně, produkt patří do jedné doménové kategorie i jedné Shoptet kategorie.",
+  "categories": [
+    {
+      "categoryId": "drubez",
+      "nameCs": "Drůbeží",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 5,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "hovezi",
+      "nameCs": "Hovězí",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 6,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "kachni",
+      "nameCs": "Kachní",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 3,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "klokani",
+      "nameCs": "Klokaní",
+      "status": "CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 0,
+      "noteCs": "Zmíněno v seznamu 17 větví, žádné konkrétní SKU zatím vytěženo.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "konina",
+      "nameCs": "Konina",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 1,
+      "noteCs": "Jen jako součást kompozitu TUT222 Šemíkova mňamka — čistá koňská svalovina jako samostatné SKU zatím nepotvrzena.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "kralici",
+      "nameCs": "Králičí",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 3,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "jehneci_skopove",
+      "nameCs": "Jehněčí/skopové",
+      "status": "CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 0,
+      "noteCs": "Zmíněno v seznamu 17 větví, žádné konkrétní SKU zatím vytěženo.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "kruti",
+      "nameCs": "Krůtí",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 11,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "ryby",
+      "nameCs": "Ryby",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 4,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "teleci",
+      "nameCs": "Telecí",
+      "status": "CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 0,
+      "noteCs": "Zmíněno v seznamu 17 větví, žádné konkrétní SKU zatím vytěženo.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "veprove",
+      "nameCs": "Vepřové",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 6,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "zverina",
+      "nameCs": "Zvěřina",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 2,
+      "noteCs": null,
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "graf_barf",
+      "nameCs": "Graf Barf",
+      "status": "CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED",
+      "confirmedProductModelCs": "Šokově mražené kostky (šokové zmrazení −48 °C, krájení na kostky): svalovina + kosti/chrupavky + droby v jedné kostce, NEMLETÉ, deklarováno jako kvalita pro lidskou spotřebu.",
+      "extractedProductCount": 0,
+      "noteCs": "Kategorie je AKTIVNÍ v navigaci a popis technologie potvrzuje produktový model, ale aktuální katalogový výpis produktů je na stránce prázdný. CATEGORY_EXISTS=true, PRODUCT_EXTRACTION=EMPTY_CURRENT_SNAPSHOT — NENÍ to totéž jako 0 produktů, engine to NESMÍ interpretovat jako 'Tutani Graf Barf neprodává'.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "balicky",
+      "nameCs": "Balíčky",
+      "status": "CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 0,
+      "noteCs": "Zmíněno v seznamu 17 větví, žádné konkrétní SKU zatím vytěženo.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "cat_barf",
+      "nameCs": "BARF pro kočky",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 4,
+      "noteCs": "CAT/KUR Alaska Mleté mix + sdílené SKU s psí nabídkou (TUT30 Krůtí srdéčka 500g, TUT15 Kuřecí srdéčka 1kg, TUT151 Kus Bejka) — stejná surovina, jiná gramáž/balení než psí varianta stejného kódu prefixu.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "dravci",
+      "nameCs": "BARF pro dravce",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": "Jednodenní kuřátka a mražené myši v různých baleních (dle popisu kategorie).",
+      "extractedProductCount": 2,
+      "noteCs": "TUT122 Kuřátka jednodenní a MYS Mražená myš potvrzeny konkrétně 2026-09-09 — dřív byla kategorie jen CATALOG_CATEGORY_PRESENT bez SKU, teď má extrahované produkty.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "gurmani",
+      "nameCs": "Gurmáni",
+      "status": "CATALOG_CATEGORY_PRESENT_PRODUCTS_NOT_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 0,
+      "noteCs": "Zmíněno v seznamu 17 větví, žádné konkrétní SKU zatím vytěženo.",
+      "sourceDate": "2026-09-09"
+    },
+    {
+      "categoryId": "barf_strava_pro_psy",
+      "nameCs": "Barf strava pro psy",
+      "status": "PRODUCTS_EXTRACTED",
+      "confirmedProductModelCs": null,
+      "extractedProductCount": 7,
+      "noteCs": "Tutani u této kategorie uvádí 7 produktů celkem; 7 potvrzeno explicitně (ETUT1, ETUT4, TUT214, TUT216, TUT168, TUT210, TUT211). Kategorie zároveň nese obecné marketingové popisy BARFu, které NEJSOU zdrojem nutričních požadavků — ty se řídí výhradně `fediaf-2025.json`, ne textem této kategorie.",
+      "sourceDate": "2026-09-09"
+    }
+  ],
+  "crawlerMetadata": {
+    "pagesCrawled": 1300,
+    "productsFound": 753,
+    "productDetailPagesIdentified": 261,
+    "barfRelevantProductPages": 214,
+    "nonBarfPagesExcluded": [
+      "hracky",
+      "obaly-2",
+      "obojky",
+      "darkove-poukazky",
+      "https-darkove-predmety-",
+      "klient",
+      "znacka"
+    ],
+    "extractionMethod": "same-origin crawl, no inferred composition — but this particular export failed structured extraction (all fields except name/URL are UNKNOWN, extraction_status=EXTRACTED_RAW for all 753 rows). Used ONLY as an inventory/category map, not as a data source for composition/price/code."
+  },
+  "shoptetUrlCategories": {
+    "note": "Shoptet interní kategorie webu (URL cesta), NE BARF doménová kategorie. Čísla = kolik produktových detail stránek do ní spadá dle crawleru 2026-09-09. Číslované varianty (svalovina-2, kosti-3…) jsou Shoptet duplicitní kategorie stejného typu — pravděpodobně kvůli přeorganizaci e-shopu v čase, ne odlišný obsah.",
+    "counts": {
+      "svalovina": 4,
+      "svalovina-2": 15,
+      "svalovina-3": 3,
+      "svalovina-4": 2,
+      "svalovina-7": 5,
+      "vnitrnosti": 4,
+      "vnitrnosti-2": 4,
+      "vnitrnosti-4": 4,
+      "vnitrnosti-5": 1,
+      "kosti": 8,
+      "kosti-3": 2,
+      "kosti-4": 2,
+      "kosti-6": 2,
+      "kosti-a-chrupavky": 1,
+      "kralici": 6,
+      "ryby": 8,
+      "kruti": 1,
+      "hovezi": 1,
+      "barf-na-cesty": 9,
+      "komplety": 1,
+      "pro-dravce": 3,
+      "prilohy": 24,
+      "doplnky": 47,
+      "pamlsky": 57
+    }
+  }
+}

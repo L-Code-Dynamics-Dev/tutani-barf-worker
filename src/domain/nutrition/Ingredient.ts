@@ -106,7 +106,10 @@ export type EdiblePart =
     | 'SECRETORY_LIVER' // játra
     | 'SECRETORY_KIDNEY'
     | 'SECRETORY_SPLEEN'
+    | 'SECRETORY_LUNG'  // plíce — přidáno 2026-09-09, viz TUT175 „40 % plíce"
+    | 'SECRETORY_TRIPE' // dršťky/bachor — TUT195 „10 % dršťky"
     | 'SECRETORY_OTHER'
+    | 'SKIN'            // kůže bez tuku, odděleno od SKIN_FAT (TUT58: kůže je součást, tuk zvlášť)
     | 'BONE'
     | 'CARTILAGE'
     | 'SKIN_FAT'
