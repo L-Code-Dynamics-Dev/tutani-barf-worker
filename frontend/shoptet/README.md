@@ -2,8 +2,8 @@
 
 Upoutávka na homepage → stránka /barf-kalkulacka/ (v menu) → kalkulačka.
 
-1. FTP e-shopu `upload/lcode/`: `konfigurator.js`, `konfigurator.css`, `pes-zlaty-retrivr.webp` (z `frontend/`).
-   Před nahráním `node --check konfigurator.js`, po nahrání ověřit CDN curlem.
+1. FTP e-shopu `upload/lcode/`: `python3 scripts/nasadit-frontend.py --live` (JS+CSS, ověří CDN a zapíše `verze.txt`
+   → změna platí HNED, bez zásahu do adminu). Fotka `pes-tutani-stene.webp` je nahraná zvlášť.
 2. Admin → HTML kódy → Zápatí: `3-zapati-zavadec.html`.
 3. Admin → Stránky → nová „BARF kalkulačka“, URL `/barf-kalkulacka/`, zaškrtnout **zobrazit v hlavním menu** a v pořadí menu ji dát **na první místo** (hned za domeček, před „Mražené maso“); červenou barvu dělá styl v zápatí: `2-stranka-barf-kalkulacka.html`.
 4. Admin → úvodní text homepage (zdrojový kód): `1-upoutavka-homepage.html` úplně nahoru
