@@ -34,7 +34,7 @@
  */
 
 import Decimal from 'decimal.js';
-import type { BarfGroup } from '../../domain/tenant.js';
+import type { BarfGroup, GroupNameRule } from '../../domain/tenant.js';
 import type { ResolvedConstraints } from '../../domain/health/Condition.js';
 import type { CompositionItem } from '../feeding-calculator/calculateDose.js';
 
@@ -86,7 +86,10 @@ export interface MatchOptions {
     priceBandRatio?: number;
     /** Kolik různých produktů smí pokrýt jednu složku. */
     maxProductsPerGroup?: number;
+    /** Pravidla tenanta, co smí podle názvu plnit složku (viz `GroupNameRule`). */
+    groupNameRules?: Partial<Record<BarfGroup, GroupNameRule>>;
 }
+
 
 export const DEFAULT_PRICE_BAND_RATIO = 0.15;
 const DEFAULT_MAX_PRODUCTS_PER_GROUP = 4;
@@ -187,7 +190,7 @@ export function matchProducts(
         let hadStockIssueOnly = true;
 
         for (const p of inGroup) {
-            const reason = filterReason(p, item.group, constraints);
+            const reason = filterReason(p, item.group, constraints) ?? groupNameReason(p, options.groupNameRules?.[item.group]);
             if (reason === null) {
                 usable.push(p);
                 hadStockIssueOnly = false;
@@ -389,6 +392,14 @@ function applyProductAttrFilters(
     _p: CatalogProduct,
     _constraints: ResolvedConstraints
 ): string | null {
+    return null;
+}
+
+function groupNameReason(p: CatalogProduct, rule: GroupNameRule | undefined): string | null {
+    if (!rule) return null;
+    const n = p.name.toLocaleLowerCase('cs');
+    const has = (w: string) => n.includes(w.toLocaleLowerCase('cs'));
+    if (rule.forbidAny.some(has) || !rule.requireAny.some(has)) return rule.reasonCs;
     return null;
 }
 

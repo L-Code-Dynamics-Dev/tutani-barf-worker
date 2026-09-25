@@ -40,6 +40,21 @@ export const TUTANI_TENANT: TenantConfiguration = {
      * Id ověřena z detailu produktu 2026-09-25 (/obaly-2/…), cena 0 Kč.
      * Popis ze stránky /doprava/: „v přepravce (E2), nebo v nevratném termoboxu".
      */
+    /**
+     * Zelenina = jen zelenina a ovoce (Lucky 2026-09-25: „nepočítat tam
+     * obiloviny"). Kategorie „Barf - Přílohy" míchá zeleninu s rýží,
+     * pohankou, vločkami a doplňky (křemelina, Herbal, Balancer…).
+     * Nový zeleninový produkt bez slova ze `requireAny` se NEnabídne,
+     * dokud se slovo nedoplní sem.
+     */
+    groupNameRules: {
+        PLANT: {
+            requireAny: ['zelenin', 'mrkev', 'mrkv', 'řep', 'repa', 'dýn', 'dyn', 'špenát', 'spenat', 'ovoc', 'jabl', 'brokol', 'cuket', 'celer', 'petržel', 'hrušk', 'banán', 'borůvk'],
+            forbidAny: ['rýž', 'ryz', 'pohank', 'obil', 'vloč', 'vloc', 'jáhl', 'jahl', 'kuskus', 'ovsen', 'extrud', 'křemelin', 'kremelin', 'herbal', 'digestive', 'balancer', 'semínk', 'semink', 'alfalf', 'mořsk', 'morsk', 'kelp'],
+            reasonCs: 'nejde o čistou zeleninu nebo ovoce (obilná příloha nebo doplněk) — do zeleninové části dávky se nepočítá',
+        },
+    },
+
     packagingOptions: [
         { productId: '5259', priceId: '8088', labelCs: 'Přepravka E2', hintCs: 'vratná plastová přepravka na maso', priceCzk: 0 },
         { productId: '5256', priceId: '8085', labelCs: 'Thermobox', hintCs: 'nevratný termobox, zůstane vám', priceCzk: 0 },

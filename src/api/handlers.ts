@@ -283,6 +283,7 @@ async function computeDose(request: Request, deps: Deps): Promise<DoseOutcome> {
         const catalog = await loadCatalog(deps.store, deps.tenant.tenantId);
         match = matchProducts(dose.composition, catalog, constraints, periodDays, {
             seed: rotationSeed(deps.tenant.tenantId, dog, (deps.now ?? (() => new Date()))()),
+            groupNameRules: deps.tenant.groupNameRules,
         });
     } catch (e) {
         // Katalog nedostupný: dávka je platná a vydá se, jen bez

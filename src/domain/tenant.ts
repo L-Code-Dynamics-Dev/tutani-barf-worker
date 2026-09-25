@@ -84,6 +84,8 @@ export interface TenantConfiguration {
      * s nákupem. Chybí-li, volba se nezobrazí.
      */
     packagingOptions?: readonly PackagingOption[];
+    /** Co smí podle názvu plnit složku dávky (fail-closed), viz matchProducts. */
+    groupNameRules?: Partial<Record<BarfGroup, GroupNameRule>>;
 }
 
 export interface PackagingOption {
@@ -130,4 +132,20 @@ export type BarfGroup =
 export interface TenantRegistry {
     get(tenantId: TenantId): Promise<TenantConfiguration | null>;
     list(): Promise<TenantId[]>;
+}
+
+/**
+ * Co smí podle názvu plnit danou složku (Lucky 2026-09-25). Kategorie
+ * e-shopu je hrubá — „Barf - Přílohy" obsahuje zeleninu, obiloviny
+ * i doplňky (křemelina!), které se nesmí dávkovat jako zelenina.
+ * FAIL-CLOSED: produkt bez povoleného slova se vyřadí a přizná
+ * v `excluded`; nový zeleninový produkt se doplní slovem do konfigurace.
+ */
+export interface GroupNameRule {
+    /** Název musí obsahovat aspoň jedno (bez ohledu na velikost písmen). */
+    requireAny: readonly string[];
+    /** Název nesmí obsahovat žádné z nich — má přednost před `requireAny`. */
+    forbidAny: readonly string[];
+    /** Důvod pro zákazníka/audit, když produkt neprojde. */
+    reasonCs: string;
 }
