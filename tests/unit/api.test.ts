@@ -345,10 +345,14 @@ describe('POST /v1/davka — DISCLAIMER se nedá odstranit', () => {
     });
 
     it('je v odpovědi i u INCOMPLETE', async () => {
-        // Senior s vysokou aktivitou — v metodice pro něj pásmo není.
+        // Metodika bez seniorských pásem — senior s vysokou aktivitou pak pásmo nemá.
+        const bezSeniora = {
+            ...METHODOLOGY,
+            doseMatrix: METHODOLOGY.doseMatrix.filter((r) => r.lifeStage !== 'SENIOR'),
+        };
         const res = await handleDose(
             doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'HIGH' } }),
-            deps({ rules: fakeRules() })
+            deps({ rules: fakeRules(), methodology: bezSeniora })
         );
         const b = await body(res);
         expect(b.status).toBe('INCOMPLETE');
@@ -376,15 +380,30 @@ describe('POST /v1/davka — BLOCKED a INCOMPLETE', () => {
     });
 
     it('INCOMPLETE u chybějícího pásma vysvětlí důvod v auditu', async () => {
+        const bezSeniora = {
+            ...METHODOLOGY,
+            doseMatrix: METHODOLOGY.doseMatrix.filter((r) => r.lifeStage !== 'SENIOR'),
+        };
         const res = await handleDose(
             doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'HIGH' } }),
-            deps({ rules: fakeRules() })
+            deps({ rules: fakeRules(), methodology: bezSeniora })
         );
         const b = await body(res);
         expect(b.status).toBe('INCOMPLETE');
         expect(b.reason).toBe('NO_MATCHING_DOSE_RULE');
         expect(b.produkty).toEqual([]);
         expect((b.audit as { krok: string }[]).map((a) => a.krok)).toContain('DOSE_RULE');
+    });
+
+    it('senior se střední aktivitou dostane dávku i produkty (dřív INCOMPLETE)', async () => {
+        const res = await handleDose(
+            doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'MEDIUM' } }),
+            deps({ rules: fakeRules() })
+        );
+        const b = await body(res);
+        expect(b.status).toBe('OK');
+        expect((b.davka as { pravidlo: string }).pravidlo).toBe('senior-medium');
+        expect((b.produkty as unknown[]).length).toBeGreaterThan(0);
     });
 
     it('nadváha se počítá z IDEÁLNÍ hmotnosti', async () => {

@@ -4,6 +4,20 @@ Nejnovější záznam nahoře.
 
 
 
+## 2026-09-25 (večer) — senior dostane dávku při každé aktivitě
+
+**Problém:** metodika od klienta měla pro seniora (8+ let) jen „nízká aktivita". Senior se střední (= výchozí volba formuláře), vysokou nebo pracovní aktivitou dostal INCOMPLETE / NO_MATCHING_DOSE_RULE → žádná dávka, žádné produkty.
+
+**Řešení (Lucky: „udělat sami podle veřejně dostupných informací"):** `barf-core.json` + 3 pásma, každé má `sourceCs` se zdrojem:
+- `senior-medium` 1,75–2,25 %, `senior-high` 2,25–3 %, `senior-working` 2,25–3 % (3 porce).
+- Zdroj: FEDIAF Nutritional Guidelines 2021, tab. VII-6 (95 vs. 110 kcal/kg^0,75) a kap. 7.2.3.3 („dogs over seven years may need 10–15 % less energy"; aktivní starší psi víc). Pásmo = dospělý se stejnou aktivitou × 0,875, zaokrouhleno na 0,25 %.
+- Bílkoviny/složení misky beze změny (FEDIAF u seniorů bílkoviny nesnižuje).
+
+**Dry-run:** 264 profilů stará vs. nová metodika → změněno 18, všechno senior IDEAL + MEDIUM/HIGH/WORKING (dřív INCOMPLETE). Ostatní beze změny do gramu.
+**Testy:** 401/401 (nové: pásma seniora, senior o 10–15 % méně než dospělý, nadváha seniora má dál redukční dietu, každá kombinace věk × aktivita má pásmo; INCOMPLETE testováno na metodice bez seniorských pásem).
+**Nasazeno:** Worker `ff23cdd7-6cf0-45c2-884f-1742cfcefc6c` (rollback `9de17c9d-05bf-4a29-9e00-53d0569463c6`). Ověřeno naostro API i v kalkulačce (Playwright, mobil): senior 10 let 15 kg střední → 300 g/den.
+**Otevřené:** potvrdit pásma s Láďou (zapsáno v `conflictResolution.openCases`). Typecheck `tsconfig.node.json` má 8 starších chyb v testech/skriptech (stejné na HEAD před změnou), Worker kód čistý.
+
 ## 2026-09-25 14:45 — nemoci, obal, homepage
 - Nemoci bez výpočtu dávky (12) v rozbalovátku „Jiné vážné onemocnění“ na konci seznamu; při zaškrtnuté zůstává otevřené.
 - Povinný obal doručení (Přepravka E2 8088 / Thermobox 8085) v košíkové části; bez volby se nevloží nic. Ověřeno naživo: E2 v košíku.

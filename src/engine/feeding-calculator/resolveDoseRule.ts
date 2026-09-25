@@ -111,9 +111,9 @@ export interface DoseRuleSelection {
  * pravidlo — engine to musí ohlásit jako neúplnou metodiku, ne dopočítat
  * (R7: nehádá se).
  *
- * Reálný případ chybějícího pravidla: senior s vysokou aktivitou.
- * V dodané tabulce má senior jen „nízká aktivita", takže tenhle pes
- * nemá pásmo — a je to jedna z otázek na klienta, ne věc k odhadu.
+ * Dřívější reálný případ: senior se střední/vysokou aktivitou — dodaná
+ * tabulka měla pro seniora jen „nízká aktivita". 25. 9. 2026 doplněno
+ * v barf-core.json podle FEDIAF 2021 (viz `sourceCs` u senior-*).
  */
 export function resolveDoseRule(
     rules: DoseRule[],

@@ -278,13 +278,57 @@ describe('zdravotní omezení', () => {
 });
 
 describe('chybějící metodika se nedopočítává', () => {
-    it('senior s vysokou aktivitou nemá v dodané tabulce pásmo → INCOMPLETE', () => {
+    it('pes bez pásma v tabulce → INCOMPLETE (nehádá se)', () => {
+        // Metodika bez seniorských pásem = stav před 25. 9. 2026.
+        const bezSeniora: BarfMethodology = {
+            ...METHODOLOGY,
+            doseMatrix: METHODOLOGY.doseMatrix.filter((r) => r.lifeStage !== 'SENIOR'),
+        };
+        const r = calculateDose(dog({ ageMonths: 120, activity: 'HIGH' }), bezSeniora, noConstraints());
+        expect(r.status).toBe('INCOMPLETE');
+        expect(r.reason).toBe('NO_MATCHING_DOSE_RULE');
+    });
+});
+
+describe('senior (8+ let) — pásma doplněná podle FEDIAF 2021 (25. 9. 2026)', () => {
+    // Dřív měl senior jen „nízká aktivita" → s výchozí střední aktivitou nedostal dávku vůbec.
+    it.each([
+        ['LOW', 'senior-low', 1.5, 2.0],
+        ['MEDIUM', 'senior-medium', 1.75, 2.25],
+        ['HIGH', 'senior-high', 2.25, 3.0],
+        ['WORKING', 'senior-working', 2.25, 3.0],
+    ] as const)('aktivita %s → %s (%s–%s %%)', (activity, id, min, max) => {
+        const r = calculateDose(dog({ ageMonths: 120, activity }), METHODOLOGY, noConstraints());
+        expect(r.status).toBe('OK');
+        expect(r.ruleId).toBe(id);
+        const rule = METHODOLOGY.doseMatrix.find((x) => x.id === id)!;
+        expect([rule.pctMin, rule.pctMax]).toEqual([min, max]);
+    });
+
+    it('senior dostane o 10–15 % méně než dospělý se stejnou aktivitou (FEDIAF)', () => {
+        for (const activity of ['MEDIUM', 'HIGH', 'WORKING'] as const) {
+            const adult = calculateDose(dog({ ageMonths: 60, activity }), METHODOLOGY, noConstraints());
+            const senior = calculateDose(dog({ ageMonths: 120, activity }), METHODOLOGY, noConstraints());
+            const ratio = senior.totalGramsPerDay! / adult.totalGramsPerDay!;
+            expect(ratio).toBeGreaterThanOrEqual(0.85);
+            expect(ratio).toBeLessThanOrEqual(0.9);
+        }
+    });
+
+    it('senior s nadváhou má pořád redukční dietu, ne pásmo aktivity', () => {
         const r = calculateDose(
-            dog({ ageMonths: 120, activity: 'HIGH' }),
+            dog({ ageMonths: 120, activity: 'HIGH', bodyCondition: 'OVER', idealWeightKg: 20 }),
             METHODOLOGY,
             noConstraints()
         );
-        expect(r.status).toBe('INCOMPLETE');
-        expect(r.reason).toBe('NO_MATCHING_DOSE_RULE');
+        expect(r.ruleId).toBe('over-weight-senior');
+    });
+
+    it('každá kombinace věk × aktivita má pásmo (žádný pes bez dávky)', () => {
+        for (const ageMonths of [3, 9, 18, 60, 96, 150])
+            for (const activity of ['LOW', 'MEDIUM', 'HIGH', 'WORKING'] as const) {
+                const r = calculateDose(dog({ ageMonths, activity }), METHODOLOGY, noConstraints());
+                expect(r.status, `${ageMonths} měs, ${activity}`).toBe('OK');
+            }
     });
 });

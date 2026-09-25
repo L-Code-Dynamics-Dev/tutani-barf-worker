@@ -96,6 +96,41 @@
       "portions": 2,
       "labelCs": "senior, nízká aktivita"
     },
+    {
+      "id": "senior-medium",
+      "lifeStage": "SENIOR",
+      "activity": "MEDIUM",
+      "pctMin": 1.75,
+      "pctMax": 2.25,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "senior, střední aktivita",
+      "sourceCs": "Doplněno L-Code 2026-09-25 (klient pásmo nedodal). FEDIAF Nutritional Guidelines 2021, tab. VII-6 a kap. 7.2.3.3: psi nad 7 let potřebují o 10–15 % méně energie (95 vs. 110 kcal/kg^0,75). Pásmo = adult-medium (2–2,5 %) × 0,875, zaokrouhleno na 0,25 %."
+    },
+    {
+      "id": "senior-high",
+      "lifeStage": "SENIOR",
+      "activity": "HIGH",
+      "pctMin": 2.25,
+      "pctMax": 3.0,
+      "baseWeight": "ACTUAL",
+      "portions": 2,
+      "labelCs": "senior, vysoká aktivita",
+      "warningCs": "Aktivní senior: sledujte hmotnost a kondici, při hubnutí dávku zvyšte v rámci pásma.",
+      "sourceCs": "Doplněno L-Code 2026-09-25. FEDIAF 2021 kap. 7.2.3.3–7.2.4.1: senior o 10–15 % méně energie, ale starší psi, kteří si stále hrají a běhají, potřebují víc. Pásmo = adult-high (2,5–3,5 %) × 0,875, zaokrouhleno na 0,25 %."
+    },
+    {
+      "id": "senior-working",
+      "lifeStage": "SENIOR",
+      "activity": "WORKING",
+      "pctMin": 2.25,
+      "pctMax": 3.0,
+      "baseWeight": "ACTUAL",
+      "portions": 3,
+      "labelCs": "pracovní pes – senior",
+      "warningCs": "Aktivní senior: sledujte hmotnost a kondici, při hubnutí dávku zvyšte v rámci pásma.",
+      "sourceCs": "Doplněno L-Code 2026-09-25. FEDIAF 2021 jako senior-high; pásmo = adult-working (2,5–3,5 %) × 0,875, zaokrouhleno na 0,25 %."
+    },
 
     {
       "id": "over-weight-adult",
@@ -174,7 +209,7 @@
     "note": "ŘEŠENÍ PŘEKRYVŮ v dodané tabulce (návrh L-Code, ČEKÁ NA POTVRZENÍ KLIENTA). Bez tohoto pravidla by systém u části psů hádal.",
     "openCases": [
       "kastrovaný dospělý s vysokou aktivitou → adult-neutered (1,5–2 %) vs. adult-high (2,5–3,5 %)",
-      "senior s vysokou aktivitou → senior-low neplatí, ADULT pásma na SENIOR nesedí",
+      "senior se střední/vysokou/pracovní aktivitou → DOPLNĚNO L-Code 2026-09-25 podle FEDIAF 2021 (senior-medium/high/working = dospělý × 0,875); potvrdit s klientem",
       "laktující fena s nadváhou → over-weight (1–1,5 %) vs. lactating (4–6 %)",
       "štěně s nadváhou → doplněno puppy-over-weight (6–7 %), redukce v růstu je riziková; potvrdit s klientem/veterinářem"
     ],
