@@ -90,6 +90,10 @@ export interface PackagingOption {
     productId: string;
     priceId: string;
     labelCs: string;
+    /** Co to je — krátce pro zákazníka (fakta ze stránky Doprava, nic domyšleného). */
+    hintCs: string;
+    /** Cena pro popisek; skutečnou cenu účtuje Shoptet. */
+    priceCzk: number;
 }
 
 export interface ActivityOption {

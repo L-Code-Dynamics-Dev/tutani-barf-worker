@@ -38,10 +38,11 @@ export const TUTANI_TENANT: TenantConfiguration = {
     /**
      * Povinný obal doručení (lišta e-shopu „DŮLEŽITÉ VYBRAT OBAL DORUČENÍ").
      * Id ověřena z detailu produktu 2026-09-25 (/obaly-2/…), cena 0 Kč.
+     * Popis ze stránky /doprava/: „v přepravce (E2), nebo v nevratném termoboxu".
      */
     packagingOptions: [
-        { productId: '5259', priceId: '8088', labelCs: 'Přepravka E2' },
-        { productId: '5256', priceId: '8085', labelCs: 'Thermobox' },
+        { productId: '5259', priceId: '8088', labelCs: 'Přepravka E2', hintCs: 'vratná plastová přepravka na maso', priceCzk: 0 },
+        { productId: '5256', priceId: '8085', labelCs: 'Thermobox', hintCs: 'nevratný termobox, zůstane vám', priceCzk: 0 },
     ],
 
     activityOptions: [

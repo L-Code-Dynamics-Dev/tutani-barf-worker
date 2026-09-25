@@ -1256,8 +1256,12 @@
             if (knowledge.obaly.length) {
                 var obalBox = el('div', 'tb-obal');
                 obalBox.id = 'tb-obal';
-                obalBox.appendChild(el('span', 'tb-label', 'Obal na doručení (povinný, 0 Kč)'));
-                obalBox.appendChild(prepinac(knowledge.obaly.map(function (o) { return [o.priceId, o.nazev]; }), zvolenyObal, function (v) {
+                obalBox.appendChild(el('span', 'tb-label', 'Obal na doručení (povinný)'));
+                obalBox.appendChild(el('span', 'tb-obal-info', 'Maso vozíme vlastním chlazeným rozvozem, nikdy ho neposíláme přepravní společností. Vyberte, v čem vám ho přivezeme.'));
+                obalBox.appendChild(prepinac(knowledge.obaly.map(function (o) {
+                    var cena = typeof o.cenaCzk === 'number' ? (o.cenaCzk > 0 ? formatCislo(o.cenaCzk) + ' Kč' : 'zdarma') : null;
+                    return [o.priceId, o.nazev + (cena ? ' · ' + cena : ''), o.popis || null];
+                }), zvolenyObal, function (v) {
                     zvolenyObal = String(v);
                     obalBox.classList.remove('tb-obal--chyba');
                 }, { aria: 'Obal na doručení' }));

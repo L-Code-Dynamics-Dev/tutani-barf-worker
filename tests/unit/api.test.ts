@@ -660,8 +660,8 @@ describe('GET /v1/knowledge', () => {
     it('posílá povinné obaly doručení s productId i priceId (Přepravka E2 / Thermobox)', async () => {
         const b = await body(await handleKnowledge(deps({ rules: fakeRules() })));
         expect(b.obaly).toEqual([
-            { productId: '5259', priceId: '8088', nazev: 'Přepravka E2' },
-            { productId: '5256', priceId: '8085', nazev: 'Thermobox' },
+            { productId: '5259', priceId: '8088', nazev: 'Přepravka E2', popis: 'vratná plastová přepravka na maso', cenaCzk: 0 },
+            { productId: '5256', priceId: '8085', nazev: 'Thermobox', popis: 'nevratný termobox, zůstane vám', cenaCzk: 0 },
         ]);
     });
 
