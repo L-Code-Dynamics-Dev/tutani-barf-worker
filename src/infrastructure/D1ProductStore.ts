@@ -31,7 +31,7 @@ export interface StoredProduct extends Omit<CatalogProduct, 'packGrams'> {
      */
     packGrams: number | null;
     categoryPath: string | null;
-    packGramsSource: 'DATALAYER' | 'PARAM' | 'NAME' | 'RESOLVED_PRICE' | null;
+    packGramsSource: 'DATALAYER' | 'PARAM' | 'NAME' | 'RESOLVED_PRICE' | 'EXPORT' | null;
     stockQuantity: number | null;
     /** Rozpor v gramáži — uchovává se i po vyřešení, klient ho má opravit. */
     weightConflict: WeightConflictRecord | null;
@@ -67,6 +67,46 @@ export interface StoredProduct extends Omit<CatalogProduct, 'packGrams'> {
      * dělá rozdíl.
      */
     compositionParts: CompositionPart[];
+    /**
+     * Rozpad na suroviny (úroveň INGREDIENT v `product_composition`).
+     * Volitelné — starší kód a testy ho nevyplňují; chybí-li, zapíšou
+     * se jen řádky BARF_GROUP.
+     */
+    ingredientBreakdown?: IngredientBreakdownRow[];
+    /** guid ze Shoptetu — společný exportu i detailu. */
+    guid?: string | null;
+    /** U varianty kód hlavního produktu, jinak `null`. */
+    parentCode?: string | null;
+    /** Název varianty z tabulky na detailu. */
+    variantName?: string | null;
+    /** `false` = produkt je v adminu skrytý, do doporučení nevstupuje. */
+    visible?: boolean;
+    /** Kdy byla naposledy potvrzena skladová zásoba. */
+    stockSyncedAt?: string | null;
+}
+
+/** Surovina produktu — řádek `product_composition` s `level = 'INGREDIENT'`. */
+export interface IngredientBreakdownRow {
+    ingredientId: string | null;
+    /** Podíl v %, `null` = zdroj ho neuvádí (NEHÁDÁ se, R7). */
+    pct: number | null;
+    certainty: 'EXACT' | 'DETECTED';
+    source: 'EXPORT_DESCRIPTION' | 'PRODUCT_PAGE' | 'CURATED' | 'NAME';
+    sourceCs: string | null;
+}
+
+export interface StockState {
+    sku: string;
+    stockQuantity: number | null;
+    visible: boolean;
+}
+
+/** Aktualizace skladu z 10minutového syncu — jen to, co se rychle mění. */
+export interface StockUpdate {
+    sku: string;
+    stockQuantity: number;
+    priceCzk: number | null;
+    visible: boolean;
 }
 
 export interface WeightConflictRecord {
@@ -104,6 +144,8 @@ export interface CatalogHealth {
     productCount: number;
     /** Kolik produktů reálně může vstoupit do doporučení. */
     usableCount: number;
+    /** Nejnovější potvrzení skladu (10min sync). `null` = ještě neproběhl. */
+    stockSyncedAt?: string | null;
     lastSync: SyncRunRecord | null;
 }
 
@@ -130,6 +172,15 @@ export interface ProductStore {
     /** Smaže produkty, které v e-shopu už nejsou. */
     deleteBySkus(tenantId: string, skus: string[]): Promise<number>;
     recordSyncRun(tenantId: string, run: SyncRunRecord): Promise<void>;
+    /**
+     * Rychlá aktualizace skladu a ceny (10min sync z exportu). Mění JEN
+     * existující řádky — nový produkt přidává pouze plný sync, protože
+     * bez detailu nemá `price_id` a do košíku by nešel vložit.
+     * Vrací počet změněných řádků.
+     */
+    updateStock?(tenantId: string, updates: StockUpdate[], syncedAt: string): Promise<number>;
+    /** Aktuální sklad všech produktů — vstup pro diff 10min syncu. */
+    listStockState?(tenantId: string): Promise<StockState[]>;
     health(tenantId: string): Promise<CatalogHealth>;
 }
 
@@ -157,7 +208,28 @@ const UPSERT_COLUMNS = [
     'pack_grams', 'pack_grams_source', 'price_czk', 'price_id', 'product_id',
     'in_stock', 'stock_quantity', 'ingredients', 'ingredients_unknown',
     'is_cooked', 'has_variants', 'composition_parts', 'weight_conflict', 'source_feed_at', 'updated_at',
+    'guid', 'parent_code', 'variant_name', 'visible', 'stock_synced_at',
 ] as const;
+
+/**
+ * Placeholdery jednoho řádku — GENEROVANÉ ze `UPSERT_COLUMNS`.
+ *
+ * CHYBA NALEZENÁ 2026-09-24: řetězec byl natvrdo s 18 `?`, zatímco
+ * sloupců bylo 21. Testy běžely proti falešnému storu, takže to
+ * neodhalily — ostrý zápis do D1 by spadl na „column count mismatch"
+ * a noční sync by nezapsal ani jeden produkt. Teď test
+ * `D1ProductStore.sqlite.test.ts` pouští skutečné SQL proti SQLite
+ * se všemi migracemi.
+ */
+const ROW_PLACEHOLDERS = `(${UPSERT_COLUMNS.map(() => '?').join(', ')})`;
+
+/** Sloupce `product_composition` — stejný princip jediného zdroje pravdy. */
+const COMPOSITION_COLUMNS = [
+    'tenant_id', 'sku', 'ordinal', 'level', 'barf_group', 'ingredient_id',
+    'pct', 'certainty', 'source', 'source_cs', 'updated_at',
+] as const;
+const COMPOSITION_ROW_PLACEHOLDERS = `(${COMPOSITION_COLUMNS.map(() => '?').join(', ')})`;
+const COMPOSITION_CHUNK = Math.max(1, Math.floor(96 / COMPOSITION_COLUMNS.length));
 
 const COLUMNS_PER_PRODUCT = UPSERT_COLUMNS.length;
 /** Skutečný limit D1 je 100; rezerva na jistotu. */
@@ -189,7 +261,10 @@ ${UPSERT_COLUMNS.filter((c) => c !== 'tenant_id' && c !== 'sku')
  * Podmínka je TADY na jednom místě, ne rozkopírovaná po handlerech —
  * jinak by se za rok rozešla.
  */
-const USABLE_CONDITION = 'pack_grams IS NOT NULL AND pack_grams > 0 AND price_czk IS NOT NULL';
+const USABLE_CONDITION =
+    'pack_grams IS NOT NULL AND pack_grams > 0 AND price_czk IS NOT NULL AND visible = 1' +
+    // Košík potřebuje OBĚ id (Lucky 2026-09-24) — bez nich produkt nejde koupit.
+    " AND price_id IS NOT NULL AND price_id <> '' AND product_id IS NOT NULL AND product_id <> ''";
 
 export class D1ProductStore implements ProductStore {
     constructor(private readonly db: D1Database) {}
@@ -236,19 +311,100 @@ export class D1ProductStore implements ProductStore {
 
         for (let i = 0; i < products.length; i += UPSERT_CHUNK) {
             const chunk = products.slice(i, i + UPSERT_CHUNK);
-            const placeholders = chunk
-                .map(() => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                .join(', ');
+            const placeholders = chunk.map(() => ROW_PLACEHOLDERS).join(', ');
             const binds: (string | number | null)[] = [];
-            for (const p of chunk) binds.push(...productToBinds(tenantId, p, now));
+            for (const p of chunk) {
+                const row = productToBinds(tenantId, p, now);
+                // Pojistka proti návratu chyby z 2026-09-24: počet hodnot
+                // musí přesně sedět na sloupce, jinak se nic neposílá.
+                if (row.length !== COLUMNS_PER_PRODUCT) {
+                    throw new Error(
+                        `productToBinds vrací ${row.length} hodnot, sloupců je ${COLUMNS_PER_PRODUCT}`
+                    );
+                }
+                binds.push(...row);
+            }
             statements.push(
                 this.db.prepare(UPSERT_SQL_HEAD + placeholders + UPSERT_SQL_TAIL).bind(...binds)
             );
         }
 
+        /**
+         * Rozpad se přepisuje CELÝ pro zapsaná SKU (smazat + vložit) ve
+         * STEJNÉ transakci jako produkty. Rozpad a produkt se tak nikdy
+         * nerozejdou — ani na okamžik, ani po pádu uprostřed.
+         */
+        const compositionRows: (string | number | null)[][] = [];
+        for (const p of products) compositionRows.push(...compositionToRows(tenantId, p, now));
+
+        for (let i = 0; i < products.length; i += DELETE_CHUNK) {
+            const skus = products.slice(i, i + DELETE_CHUNK).map((p) => p.sku);
+            statements.push(
+                this.db
+                    .prepare(
+                        `DELETE FROM product_composition WHERE tenant_id = ? AND sku IN (${skus.map(() => '?').join(', ')})`
+                    )
+                    .bind(tenantId, ...skus)
+            );
+        }
+        for (let i = 0; i < compositionRows.length; i += COMPOSITION_CHUNK) {
+            const chunk = compositionRows.slice(i, i + COMPOSITION_CHUNK);
+            statements.push(
+                this.db
+                    .prepare(
+                        `INSERT INTO product_composition (${COMPOSITION_COLUMNS.join(', ')}) VALUES ` +
+                            chunk.map(() => COMPOSITION_ROW_PLACEHOLDERS).join(', ')
+                    )
+                    .bind(...chunk.flat())
+            );
+        }
+
         // Jedna transakce pro celý zápis — konzistentní katalog nebo žádná změna.
         const results = await this.db.batch(statements);
+        // Počítají se jen řádky produktů, ne rozpadu — volající chce vědět,
+        // kolik produktů se zapsalo.
+        return results
+            .slice(0, Math.ceil(products.length / UPSERT_CHUNK))
+            .reduce((sum, r) => sum + (r.meta?.changes ?? 0), 0);
+    }
+
+    async updateStock(tenantId: string, updates: StockUpdate[], syncedAt: string): Promise<number> {
+        if (updates.length === 0) return 0;
+        /**
+         * `price_czk` se přepíše jen když export cenu má (COALESCE) —
+         * chybějící cena v exportu nesmí vynulovat známou cenu.
+         */
+        const stmt = this.db.prepare(
+            `UPDATE products
+                SET stock_quantity = ?, in_stock = ?, price_czk = COALESCE(?, price_czk),
+                    visible = ?, stock_synced_at = ?
+              WHERE tenant_id = ? AND sku = ?`
+        );
+        const statements = updates.map((u) =>
+            stmt.bind(
+                u.stockQuantity,
+                u.stockQuantity > 0 ? 1 : 0,
+                u.priceCzk,
+                u.visible ? 1 : 0,
+                syncedAt,
+                tenantId,
+                u.sku
+            )
+        );
+        const results = await this.db.batch(statements);
         return results.reduce((sum, r) => sum + (r.meta?.changes ?? 0), 0);
+    }
+
+    async listStockState(tenantId: string): Promise<StockState[]> {
+        const res = await this.db
+            .prepare('SELECT sku, stock_quantity, visible FROM products WHERE tenant_id = ? ORDER BY sku')
+            .bind(tenantId)
+            .all<{ sku: string; stock_quantity: number | null; visible: number | null }>();
+        return (res.results ?? []).map((r) => ({
+            sku: String(r.sku),
+            stockQuantity: r.stock_quantity === null ? null : Number(r.stock_quantity),
+            visible: r.visible === null ? true : Number(r.visible) === 1,
+        }));
     }
 
     async deleteBySkus(tenantId: string, skus: string[]): Promise<number> {
@@ -262,9 +418,17 @@ export class D1ProductStore implements ProductStore {
                     .prepare(`DELETE FROM products WHERE tenant_id = ? AND sku IN (${q})`)
                     .bind(tenantId, ...chunk)
             );
+            statements.push(
+                this.db
+                    .prepare(`DELETE FROM product_composition WHERE tenant_id = ? AND sku IN (${q})`)
+                    .bind(tenantId, ...chunk)
+            );
         }
         const results = await this.db.batch(statements);
-        return results.reduce((sum, r) => sum + (r.meta?.changes ?? 0), 0);
+        // Liché příkazy jsou rozpad — do počtu smazaných produktů nepatří.
+        return results
+            .filter((_, i) => i % 2 === 0)
+            .reduce((sum, r) => sum + (r.meta?.changes ?? 0), 0);
     }
 
     async recordSyncRun(tenantId: string, run: SyncRunRecord): Promise<void> {
@@ -304,11 +468,12 @@ export class D1ProductStore implements ProductStore {
         const counts = await this.db
             .prepare(
                 `SELECT COUNT(*) AS total,
-                        SUM(CASE WHEN ${USABLE_CONDITION} THEN 1 ELSE 0 END) AS usable
+                        SUM(CASE WHEN ${USABLE_CONDITION} THEN 1 ELSE 0 END) AS usable,
+                        MAX(stock_synced_at) AS stock_synced_at
                  FROM products WHERE tenant_id = ?`
             )
             .bind(tenantId)
-            .first<{ total: number; usable: number | null }>();
+            .first<{ total: number; usable: number | null; stock_synced_at: string | null }>();
 
         // Poslední OSTRÝ běh — dry-run o stavu katalogu nic neříká.
         const last = await this.db
@@ -323,6 +488,7 @@ export class D1ProductStore implements ProductStore {
         return {
             productCount: counts?.total ?? 0,
             usableCount: counts?.usable ?? 0,
+            stockSyncedAt: counts?.stock_synced_at ?? null,
             lastSync: last ? rowToSyncRun(last) : null,
         };
     }
@@ -358,7 +524,68 @@ function rowToProduct(row: Record<string, unknown>): StoredProduct {
                 : Number(row.ingredients_unknown) === 1,
         hasVariants: Number(row.has_variants ?? 0) === 1,
         compositionParts: parseCompositionPartsJson(row.composition_parts),
+        guid: row.guid === null || row.guid === undefined ? null : String(row.guid),
+        parentCode:
+            row.parent_code === null || row.parent_code === undefined ? null : String(row.parent_code),
+        variantName:
+            row.variant_name === null || row.variant_name === undefined ? null : String(row.variant_name),
+        visible: row.visible === undefined || row.visible === null ? true : Number(row.visible) === 1,
+        stockSyncedAt:
+            row.stock_synced_at === null || row.stock_synced_at === undefined
+                ? null
+                : String(row.stock_synced_at),
     };
+}
+
+/**
+ * Rozpad produktu → řádky `product_composition`.
+ *
+ * BARF_GROUP: z `compositionParts` (procenta ze složení). Bez nich jeden
+ * řádek 100 % podle kategorie s `certainty = 'CATEGORY'` — je vidět, že
+ * rozpad je jen předpoklad z kategorie, ne zjištěné složení.
+ *
+ * INGREDIENT: z `ingredientBreakdown`, jinak z `ingredientIds`
+ * (poznané z názvu/popisu, podíl neznámý → `pct = NULL`).
+ */
+function compositionToRows(
+    tenantId: string,
+    p: StoredProduct,
+    now: string
+): (string | number | null)[][] {
+    const rows: (string | number | null)[][] = [];
+    let ordinal = 0;
+
+    if (p.compositionParts.length > 0) {
+        for (const part of p.compositionParts) {
+            rows.push([
+                tenantId, p.sku, ordinal++, 'BARF_GROUP', part.group, null,
+                part.pct, 'EXACT', 'EXPORT_DESCRIPTION', part.sourceCs, now,
+            ]);
+        }
+    } else {
+        rows.push([
+            tenantId, p.sku, ordinal++, 'BARF_GROUP', p.group, null,
+            100, 'CATEGORY', 'CATEGORY', p.categoryPath, now,
+        ]);
+    }
+
+    const ingredients: IngredientBreakdownRow[] =
+        p.ingredientBreakdown && p.ingredientBreakdown.length > 0
+            ? p.ingredientBreakdown
+            : (p.ingredientIds ?? []).map((id) => ({
+                  ingredientId: id,
+                  pct: null,
+                  certainty: 'DETECTED' as const,
+                  source: 'NAME' as const,
+                  sourceCs: null,
+              }));
+    for (const ing of ingredients) {
+        rows.push([
+            tenantId, p.sku, ordinal++, 'INGREDIENT', null, ing.ingredientId,
+            ing.pct, ing.certainty, ing.source, ing.sourceCs, now,
+        ]);
+    }
+    return rows;
 }
 
 function productToBinds(
@@ -388,6 +615,11 @@ function productToBinds(
         p.weightConflict ? JSON.stringify(p.weightConflict) : null,
         p.sourceFeedAt,
         now,
+        p.guid ?? null,
+        p.parentCode ?? null,
+        p.variantName ?? null,
+        p.visible === false ? 0 : 1,
+        p.stockSyncedAt ?? null,
     ];
 }
 

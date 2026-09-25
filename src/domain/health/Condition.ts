@@ -141,6 +141,11 @@ export interface ResolvedConstraints {
     blockedBy: string[];
     /** Aspoň jedna podmínka vyžaduje veterináře. */
     requiresVet: boolean;
+    /**
+     * Jen mleté kosti — celé kosti a maso s celou kostí se nedoporučí
+     * (pes s problémem se zuby / polykáním, `applyDogProfileFlags`).
+     */
+    groundBoneOnly?: boolean;
 }
 
 export interface CompositionLimit {

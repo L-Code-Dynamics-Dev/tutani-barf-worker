@@ -15,6 +15,7 @@
  * (viz komentář u pole).
  */
 
+import type { ActivityOption } from '../domain/tenant.js';
 import type {
     ActivityLevel,
     BodyCondition,
@@ -37,6 +38,8 @@ export type ValidationCode =
     | 'NOT_A_STRING'
     | 'NOT_AN_ARRAY'
     | 'UNKNOWN_ENUM_VALUE'     // hodnota není v povoleném výčtu
+    | 'UNKNOWN_ACTIVITY'       // `aktivitaDetail` není v aktivitách tenanta
+    | 'ACTIVITY_MISMATCH'      // `aktivita` nesedí s úrovní zvolené `aktivitaDetail`
     | 'MISSING_IDEAL_WEIGHT'   // nadváha bez ideální hmotnosti
     | 'IDEAL_WEIGHT_NOT_LOWER' // ideální hmotnost není nižší než aktuální
     | 'TOO_MANY_ITEMS'         // seznam diagnóz/alergií mimo rozumnou mez
@@ -113,7 +116,12 @@ const ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,49}$/;
  * `defaultPeriodDays` přichází z konfigurace tenanta (R4), ne
  * z konstanty v kódu.
  */
-export function validateDoseRequest(body: unknown, defaultPeriodDays: number): ValidationResult {
+export function validateDoseRequest(
+    body: unknown,
+    defaultPeriodDays: number,
+    allowedPeriodDays?: readonly number[],
+    activityOptions?: readonly ActivityOption[]
+): ValidationResult {
     const issues: ValidationIssue[] = [];
 
     if (!isPlainObject(body)) {
@@ -145,7 +153,31 @@ export function validateDoseRequest(body: unknown, defaultPeriodDays: number): V
 
     // ---- ENUMY ----
     const sex = enumValue<Sex>(rawDog.pohlavi, 'pes.pohlavi', SEXES, issues);
-    const activity = enumValue<ActivityLevel>(rawDog.aktivita, 'pes.aktivita', ACTIVITIES, issues);
+    /**
+     * Konkrétní aktivita (`pes.aktivitaDetail`) má přednost: úroveň z ní
+     * určí SERVER podle konfigurace tenanta, klient ji nemůže podvrhnout.
+     * Pošle-li klient i `aktivita`, musí sedět — rozpor = chyba, ne tichá
+     * volba jedné z nich.
+     */
+    let activity: ActivityLevel | null;
+    let activityDetailId: string | undefined;
+    if (rawDog.aktivitaDetail !== undefined && rawDog.aktivitaDetail !== null) {
+        const opt = typeof rawDog.aktivitaDetail === 'string'
+            ? (activityOptions ?? []).find((o) => o.id === rawDog.aktivitaDetail)
+            : undefined;
+        if (!opt) {
+            issues.push({ field: 'pes.aktivitaDetail', code: 'UNKNOWN_ACTIVITY' });
+            activity = null;
+        } else {
+            activity = opt.level;
+            activityDetailId = opt.id;
+            if (rawDog.aktivita !== undefined && rawDog.aktivita !== null && rawDog.aktivita !== opt.level) {
+                issues.push({ field: 'pes.aktivita', code: 'ACTIVITY_MISMATCH' });
+            }
+        }
+    } else {
+        activity = enumValue<ActivityLevel>(rawDog.aktivita, 'pes.aktivita', ACTIVITIES, issues);
+    }
     const bodyCondition = enumValue<BodyCondition>(
         rawDog.kondice,
         'pes.kondice',
@@ -173,6 +205,20 @@ export function validateDoseRequest(body: unknown, defaultPeriodDays: number): V
             neutered = rawDog.kastrovany;
         }
     }
+
+    // ---- ZUBY A TRÁVENÍ (volitelné přepínače, chybí = false) ----
+    const flag = (key: string): boolean => {
+        const v = rawDog[key];
+        if (v === undefined || v === null) return false;
+        if (typeof v !== 'boolean') {
+            issues.push({ field: `pes.${key}`, code: 'NOT_A_BOOLEAN' });
+            return false;
+        }
+        return v;
+    };
+    const dentalProblem = flag('problemSeZuby');
+    const largeBreedPuppy = flag('velkePlemenoStene');
+    const switchingFromKibble = flag('prechodZGranuli');
 
     // ---- JMÉNO (jen zobrazení) ----
     let name: string | undefined;
@@ -210,6 +256,9 @@ export function validateDoseRequest(body: unknown, defaultPeriodDays: number): V
                     min: PERIOD_MIN_DAYS,
                     max: PERIOD_MAX_DAYS,
                 });
+            } else if (allowedPeriodDays && allowedPeriodDays.length > 0 && !allowedPeriodDays.includes(v)) {
+                // Jen volby, které tenant nabízí (Tutani: 7 / 14 / 30 dní).
+                issues.push({ field: 'obdobiDni', code: 'UNKNOWN_ENUM_VALUE', allowed: allowedPeriodDays });
             } else {
                 periodDays = v;
             }
@@ -253,10 +302,14 @@ export function validateDoseRequest(body: unknown, defaultPeriodDays: number): V
         sex: sex!,
         neutered,
         activity: activity!,
+        ...(activityDetailId !== undefined ? { activityDetailId } : {}),
         bodyCondition: bodyCondition!,
         physiologicalState: physiologicalState!,
         conditionIds,
         allergyIngredientIds,
+        dentalProblem,
+        largeBreedPuppy,
+        switchingFromKibble,
     };
 
     return { ok: true, value: { dog, periodDays } };

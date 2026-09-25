@@ -1,3 +1,4 @@
+import type { ActivityLevel } from './dog/DogProfile.js';
 /**
  * Tenant model — hranice mezi samostatným Workerem a budoucím Nexem.
  *
@@ -50,8 +51,41 @@ export interface TenantConfiguration {
     ruleSetIds: string[];
     /** Default období, na které se počítá nákup (dny). */
     defaultPeriodDays: number;
+    /**
+     * Období, ze kterých zákazník VOLÍ (dny). API jiné hodnoty odmítne —
+     * frontend nabízí jen tyhle a ručně upravený požadavek nesmí vyrobit
+     * třeba 90denní nákup mraženého masa. Chybí-li, platí jen meze 1–90.
+     */
+    allowedPeriodDays?: readonly number[];
+    /**
+     * Recept a PDF jídelníček (Lucky 2026-09-24). Postup přípravy je
+     * obecná hygiena syrové stravy BEZ čísel — text schvaluje klient.
+     * Chybí-li, odpověď `recept` neobsahuje postup, jen gramy.
+     */
+    recipe?: {
+        stepsCs: readonly string[];
+        /** Kontakt do PDF (veřejný kontakt e-shopu). */
+        contactCs?: string;
+        /** Název pro hlavičku PDF. */
+        brandCs?: string;
+    };
     /** Mapování kategorie e-shopu na BARF skupinu. Data, ne kód. */
     categoryMap: CategoryMapping[];
+    /**
+     * Konkrétní aktivity, ze kterých majitel vybírá (Lucky 2026-09-25).
+     * Každá je přiřazená k jedné úrovni z tabulky dávek (`level`) — dávka
+     * se dál počítá JEN podle úrovně, žádné nové procento nevzniká.
+     * Chybí-li, UI nabízí přímo 4 úrovně.
+     */
+    activityOptions?: readonly ActivityOption[];
+}
+
+export interface ActivityOption {
+    /** Stabilní id do API (`pes.aktivitaDetail`), nemění se s textem. */
+    id: string;
+    labelCs: string;
+    hintCs: string;
+    level: ActivityLevel;
 }
 
 export interface CategoryMapping {

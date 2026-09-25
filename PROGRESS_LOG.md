@@ -2,6 +2,186 @@
 
 Nejnovější záznam nahoře.
 
+
+
+## 2026-09-25 13:45 — umístění na e-shop (varianta A), 9 konkrétních aktivit, loga homepage
+
+- **Umístění schváleno (Lucky): varianta A** = upoutávka na homepage nad „Vítejte" → stránka
+  `/barf-kalkulacka/`, v hlavním menu NA PRVNÍM MÍSTĚ (červeně). Hotové bloky + návod
+  v `frontend/shoptet/` (1 upoutávka, 2 stránka, 3 zavaděč do zápatí jen pro `#tutani-barf`,
+  4 loga). Náhledy na živém webu: `~/Desktop/Tutani-umisteni-kalkulacky/`. NIC NEULOŽENO do adminu.
+- **Aktivity (Lucky: „základní sada")**: `tenant.activityOptions` (9 voleb: gaučák … tažný pes),
+  každá přiřazená k úrovni LOW/MEDIUM/HIGH/WORKING z tabulky dávek — žádné nové procento.
+  Přiřazení schválil Lucky 25. 9. — klient ho potvrzovat nebude. API `pes.aktivitaDetail` → úroveň určí server,
+  rozpor s `aktivita` = `ACTIVITY_MISMATCH`, neznámá = `UNKNOWN_ACTIVITY`. `/v1/knowledge` vrací
+  `aktivity`, frontend z nich kreslí volby (fallback 4 úrovně), na mobilu 2 sloupce.
+  `tests/unit/aktivity.test.ts` (8).
+- **Loga homepage**: dosud rozmístěná přes &nbsp; → nesouměrné řady; nový blok flex (Tutani uprostřed,
+  6 značek v řadě, mobil menší 2×3).
+- **Nález:** „Barf Hrubý pan Ušák" = mletý králík se 70 % kostí; `groundBoneOnly` testuje jen název
+  → vyřadil by ho chybně. Neopraveno.
+- NECOMMITNUTO, NENASAZENO.
+
+## 2026-09-25 02:30 — +12 nemocí a karta „04 Zuby a trávení" (fáze 1, bez čísel)
+
+- **Nemoci** (`tutani-health.json`, zdroj `VET-FAZE-2`): 10 blokujících (dávku nevydáme,
+  odkaz na veterináře) — oslabená imunita, urátové / struvitové / oxalátové kameny, IBD,
+  cukrovka, hyperlipidémie, srdce, EPI, štítná žláza; 2 jen varování — artróza, atopie.
+  Žádná čísla ani změny složení (test to hlídá). Nemocí je teď 18, stavů 32, pravidel 59.
+  Obezitu nepřidávám — řeší ji kondice „nadváha" + ideální hmotnost.
+- **Karta 04 Zuby a trávení**: `pes.problemSeZuby` → `groundBoneOnly` → `matchProducts`
+  vyřadí produkt s kostí, který podle názvu není mletý (fail-closed);
+  `pes.velkePlemenoStene` (jen do 24 měs.) → varování + requiresVet;
+  `pes.prechodZGranuli` → INFO. `src/rules/applyDogProfileFlags.ts` (čistá funkce),
+  napojeno v `computeDose`. Frontend karta + náhled. 357/357 testů, tsc čistý.
+- **NÁLEZ:** „Barf Pašíkovy kosti" = masitá žebra, „Kosti jako kráva" = řezané kosti,
+  klouby, morkové kosti → CELÉ kosti. Popisek složky BONE v `barf-core.json` je ale
+  „mleté kosti" → zavádějící. Navrhnout klientovi přejmenovat na „kosti" (neměněno).
+- NECOMMITNUTO, NENASAZENO.
+
+## 2026-09-25 01:45 — připomínky klienta k vizuálu (L. Švihel, e-mail 24. 9.)
+
+- **Logo Tutani** v hero nad nadpisem: `VYCHOZI_LOGO` = jejich CDN
+  (`cdn.myshoptet.com/usr/obchod.tutani.cz/.../tutani-logo-do-hlavicky-normal@2x.png`),
+  přepsatelné `data-logo` (jen https, prázdné = vypnout), při chybě načtení se odstraní.
+- **Fotka psa = zlatý retrívr**: Wikimedia Commons „Golden Retriever Chewing A Stick" (CC0).
+  WebP 800×800 v `frontend/assets/pes-zlaty-retrivr.webp` k nahrání na hosting při nasazení;
+  náhled zatím míří na https URL Wikimedie (`data-foto`).
+- **„20 let s BARF"**: štítek byl jen v grafické předloze (vymyšlený placeholder), v našem
+  konfigurátoru není — na jeho místě je jméno, váha a věk psa z formuláře.
+- **Alergie +5**: krůtí, kachní, králičí, jehněčí, zvěřina (`tutani-health.json`, zdroj
+  `CLIENT-TUTANI`, jen vylučovací pravidla bez čísel). Detekce surovin je znala už dřív.
+  Nové testy v `alergieKontrakt.test.ts` → 331/331, tsc čistý.
+- NECOMMITNUTO, NENASAZENO (stejně jako zbytek pracovního stromu z 24. 9.).
+
+## 2026-09-24 (05:05) — recept „co dát do misky" + PDF jídelníček
+
+- `src/engine/recipe/buildRecipe.ts`: rozdělí gramy složek mezi produkty
+  z NÁKUPU podle `coversGrams` a pak do porcí. Zaokrouhluje metodou
+  největšího zbytku, takže součty sedí na gram (14 testů). Nepokrytou
+  složku přizná a nic za ni nedosadí.
+- `/v1/davka` nově vrací pole `recept` (denně, porce, balení a „na kolik
+  dní vystačí", co chybí, postup). Postup je v `tenant.recipe.stepsCs`
+  (NÁVRH L-Code bez čísel, potvrdí klient).
+- `POST /v1/jidelnicek.pdf`: stejný vstup a stejný výpočet (`computeDose`),
+  výstup A4 PDF (pdf-lib 1.17.1 + @pdf-lib/fontkit 1.1.1, připnuto).
+  Pro stav BLOCKED nebo INCOMPLETE vrací 409 JSON, PDF se nevydá.
+  Fonty Barlow Condensed + Source Sans 3 (OFL, `assets/fonts`), ořezané
+  na latinku CZ/SK, generuje je `scripts/build-pdf-fonts.py`.
+- Měření: PDF za 60–90 ms (první volání 330 ms), Worker 862 KiB po gzip.
+  **Vyžaduje Workers Paid**, bezplatný tarif má limit 10 ms CPU.
+- Frontend: karta „Co dát do misky", rozbalovací „Jak misku připravit"
+  a tlačítko „Stáhnout jídelníček (PDF)".
+- Ověřeno: 321/321 testů, tsc, node --check, PDF vizuálně (2 strany),
+  screenshot desktop.
+- OTEVŘENÉ, obal doručení: Přepravka E2 (productId 5259, vratná) a
+  Thermobox (5256, TUT179), obojí 1 Kč, sklad záporný (prodej do minusu
+  povolen). Na webu nemají detail produktu, takže chybí `priceId`.
+  Bez něj je do košíku vložit nejde. Nutno dodat z adminu, případně
+  potvrdit, jestli si obal vybírá zákazník.
+
+## 2026-09-24 (04:25) — vizuál konfigurátoru podle klientské předlohy
+
+- `frontend/konfigurator.css` a render v `konfigurator.js` přepsány podle
+  předlohy „Tutani BARF Engine" (sklo, Barlow Condensed/Source Sans 3,
+  tlapky, kroky 01–03, pruh složení, porce, „Proč právě X g?", 7/14/30,
+  toast). Předloha počítala dávku i nákup v prohlížeči nad vymyšleným
+  katalogem, byla to jen ukázka pro klienta. Převzat POUZE vzhled
+  (R3), všechna čísla jsou z Workeru.
+- Košík: `jeVlozeno`, CSRF i AJAX hlavička beze změny (diff proti
+  ověřené verzi = shoda). Po úspěchu zelené tlačítko, toast, po 1,4 s
+  přesměrování do /kosik/, aby se obnovila hlavička Shoptetu.
+- **Oprava chyby:** frontend četl `davka.zHmotnostiKg`, Worker posílá
+  `zakladHmotnostiKg`, takže na produkci by stálo „? kg".
+- Kontejner má volitelné `data-foto` (jen https), `data-telefon` a
+  `data-kontakt` (výchozí: Mirka, veřejný kontakt z hlavičky e-shopu).
+- `nahled.html`: mock ve tvaru skutečného API (ids, group, packGrams,
+  odpověď košíku jako Shoptet).
+- Ověřeno: `node --check`, 301/301 testů, tsc; screenshot 1440 px a 390 px
+  (bez vodorovného posunu). Zatím NENASAZENO a NECOMMITNUTO.
+- Záměr (Lucky): konfigurátor jako hlavní trhák homepage obchod.tutani.cz.
+  Vlastní rozvoz dělá majitel, takže větší objednávka znamená méně jízd.
+
+## 2026-09-24 (04:00) — produktová DB v D1: XML export, varianty, sklad, rotace, košík
+
+Zadání Lucky: produktová databáze v D1 včetně rozpadu každého produktu,
+`priceId` a `productId`; výběr vždy podle AKTUÁLNÍ skladovosti, rovnocenné
+náhrady (klokan dojde → krůtí), rozložení prodeje po sortimentu a pokrytí
+balíčku na X dní. Košík přes `/action/Cart/addCartItem/`, VŽDY
+`priceId` (= variant id) + `productId`.
+
+### Nálezy (všechny ověřené na živých datech / skutečném SQL)
+1. **Ostrý zápis do D1 by spadl** — `upsertMany` měl natvrdo 18 `?` na 21
+   sloupců (`18 values for 21 columns`). Testy jely proti falešnému storu.
+   Nový test nad `node:sqlite` + všemi migracemi; na starém kódu ověřeně padá.
+2. **KRITICKÉ: fail-closed filtr alergií v produkci nefungoval** —
+   `loadCatalog` nepředával `ingredientsUnknown`, `matchProducts` chybějící
+   hodnotu čte jako „suroviny známe". Opraveno + test přes API (bez opravy padá).
+3. **Gramáž ze scraperu = přepravní hmotnost** (`dataLayer.weight`). U 46 ze
+   47 rozporů měl pravdu export (`PACKAGE_AMOUNT`). Nově gramáž z exportu.
+4. **Varianty se nikdy nenačetly** — Shoptet u variantního produktu nevyplní
+   `product.code`, parser stránku zahodil. Tvrzení „0 variant" z 9. 9. byl
+   artefakt. Nově `parseProductPageAll` + párování `priceId` v řádku tabulky.
+5. **`priceId` ≠ `productId`** u produktů bez variant (ZP9: 868 vs 973).
+   XML `productsComplete.xml` nese `productId` (`SHOPITEM id`) pro všechny
+   a `priceId` (`VARIANT id`) jen pro varianty → `priceId` běžných produktů
+   dál z webu. Rozpor web × XML: XML vyhrává, jde do reportu.
+6. Past v XML: `RELATED_PRODUCTS` obsahují cizí `<CODE>` — naivní parser dal
+   TUT10 kód TUT20/1. Opraveno, víc kódů v položce = přeskočit a nahlásit.
+7. `frontend/konfigurator.js` posílal jen `priceId` a nekontroloval
+   `res.ok` (nevložená položka se počítala jako vložená). Chyběl CSRF
+   token (`__csrf__` = `shoptet.csrf.token`).
+
+### Napsáno
+```
+migrations/0003_export_variants_composition.sql     guid, parent_code, variant_name, visible,
+                                                     stock_synced_at + tabulka product_composition
+src/adapters/shoptet-export/parseProductsCompleteXml.ts   XML export, whitelist (bez PURCHASE_PRICE)
+src/adapters/shoptet-export/mergeExport.ts          export × scraper, id pro košík
+src/adapters/shoptet-export/syncStock.ts            sklad každých 10 min (cron */10)
+src/adapters/tutani-catalog/parseProductPage.ts     + parseVariantRows, parseProductPageAll
+src/engine/product-matching/matchProducts.ts        alokace podle skladu, náhrady, rotace
+```
+- XLSX export nahrazen XML (stejná data 718 = 718, 0 rozdílů; navíc id; 130–340 ms).
+- Sync: když je `SHOPTET_EXPORT_URL` nastavený a export selže → FAILED, nic
+  se nezapíše. Pojistka: jeden běh neodebere víc než 20 % katalogu (audit #8).
+- Výběr: nikdy víc balení než skladem; když jeden produkt nestačí, doplní se
+  rovnocenný (čistý ≥ 90 % složky před směsí); pásmo +15 % Kč/kg, vážený
+  los podle zásoby se seedem `tenant|den|období|profil psa` → reprodukovatelné.
+  Změřeno na 1000 psech: 3 produkty v pásmu 345/335/320, +50 % dražší 0.
+- Doporučit jde jen produkt s `priceId` I `productId` (SQL i engine).
+- `/v1/health` hlásí stáří skladu, > 60 min = DEGRADED.
+
+### Ověřeno
+- `npx tsc --noEmit` — 0 chyb; `npm test` — **293/293** (228 → 293)
+- Dry-run proti živému e-shopu s XML exportem (nic nezapsáno): 262 produktů,
+  **262/262 má obě id**, 0 rozporů web × XML, 5 variant, gramáž z exportu 172×.
+- Rozpory gramáže pro klienta: **815** (admin 100 g × název 250 g),
+  **TUT225** Hovězí mleté 3kg (admin 1 kg × název 3 kg).
+- `node --check frontend/konfigurator.js` OK.
+- Hash exportu není v repu, logu ani auditu (test to hlídá).
+
+### Košík ověřen NAŽIVO (anonymní košík, bez objednávky)
+| test | výsledek |
+|---|---|
+| ZP21 `productId` 931 + `priceId` 1042 + `__csrf__` | ✅ v košíku 1 ks, 50 Kč |
+| varianta 1066/500 `productId` 1066 + `priceId` 1751, 2 ks | ✅ „Pivovarské kvasnice: 500 g", 2 ks, 118 Kč |
+| totéž BEZ `__csrf__` | ❌ HTTP 403 → **původní frontend nemohl nikdy fungovat** |
+| 5 ks při skladu 1, bez AJAX hlavičky | ⚠️ 302 (navenek úspěch), NIC nevloženo |
+| 5 ks při skladu 1, `X-Requested-With` | JSON `code: 500`, „Dostupných je pouze 1 položek." |
+
+→ Frontend volá AJAX variantu; úspěch = `code === 200` A naše `priceId`
+v `payload.cartItems` s `quantity ≥ pocet`. Jinak zákazník uvidí přesnou
+zprávu Shoptetu. Kontrola ověřena na skutečných odpovědích (5/5 případů).
+
+### NEHOTOVO / čeká
+- Nic není commitnuté ani nasazené. Frontend není nahraný.
+- Nasazení: `database_id` do `wrangler.jsonc`, `migrate:remote`,
+  `wrangler secret put SHOPTET_EXPORT_URL` (XML URL s hashem), deploy.
+- Frontend nahrát do šablony Shoptetu a projít jednou celý tok v prohlížeči.
+- `tsconfig.node.json` má 6 chyb v `scripts/` a starších testech (existovaly před touto prací).
+- 2 starší commity (133fa5b, 0cb9151) pořád nepushnuté; repo je PUBLIC.
+
 ## 2026-09-12 (15:04) — FÁZE 1: napojení nutriční vrstvy do výpočtu (D-1)
 
 Implementována Fáze 1 z `docs/ARCHITECTURE_AUDIT.md` — propojka mezi

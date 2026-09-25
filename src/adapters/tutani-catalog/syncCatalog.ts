@@ -21,7 +21,9 @@
 
 import type { BarfGroup, TenantConfiguration } from '../../domain/tenant.js';
 import type { ProductStore, StoredProduct, SyncRunRecord } from '../../infrastructure/D1ProductStore.js';
-import { parseProductPage, resolveBarfGroup, type ScrapedProduct } from './parseProductPage.js';
+import { parseProductPageAll, resolveBarfGroup, type ScrapedProduct } from './parseProductPage.js';
+import { parseProductsCompleteXml, type ExportParseResult } from '../shoptet-export/parseProductsCompleteXml.js';
+import { mergeWithExport } from '../shoptet-export/mergeExport.js';
 import { medianPricePerKg, resolveWeightConflict } from './resolveWeightConflict.js';
 import { detectIngredients } from './detectIngredients.js';
 import { parseUniversalFeed, universalFeedUrl, type FeedDescriptions } from './universalFeed.js';
@@ -43,6 +45,20 @@ export interface SyncOptions {
     fetchImpl?: typeof fetch;
     /** Injektovatelný čas — kvůli deterministickým testům. */
     now?: () => Date;
+    /**
+     * URL admin XML exportu `productsComplete.xml` (s hashem — Worker secret
+     * `SHOPTET_EXPORT_URL`). Když je nastavené, export je zdroj `productId`,
+     * `priceId` variant, gramáže, skladu, viditelnosti a složení. Selhání exportu pak běh ZASTAVÍ — bez něj by se gramáž
+     * vrátila k přepravní hmotnosti ze scraperu (chyba z 2026-09-24).
+     * Nikdy se neloguje — obsahuje přístupový hash.
+     */
+    exportUrl?: string | null;
+    /**
+     * Maximální podíl katalogu, který smí jeden běh odebrat (0–1).
+     * Nález auditu 2026-09-09 (#8): e-shop, který na chvíli vrátí polovinu
+     * sitemap, by jinak smazal polovinu katalogu. Default 0,2.
+     */
+    maxRemovalRatio?: number;
 }
 
 /** Jedna změna v diffu. Uchovává jen to, co se reálně změnilo. */
@@ -68,12 +84,17 @@ export interface SyncResult {
     products: StoredProduct[];
     /** URL, které se nepodařilo načíst — nesmí zmizet v tichu. */
     failedUrls: string[];
+    /** Skladem v exportu, ale na webu nenalezené (bez `priceId`). */
+    exportOnlyInStock?: { code: string; name: string; stockQuantity: number }[];
 }
 
 const DEFAULT_CONCURRENCY = 4;
 const DEFAULT_DELAY_MS = 150;
 const DEFAULT_RETRIES = 3;
 const FETCH_TIMEOUT_MS = 25_000;
+const DEFAULT_MAX_REMOVAL_RATIO = 0.2;
+/** Pod tolik SKU se procentní pojistka neuplatní (malý katalog v testech). */
+const REMOVAL_ABSOLUTE_FLOOR = 5;
 
 /**
  * Identifikace scraperu. E-shop klienta má v logu vidět, kdo chodí —
@@ -105,6 +126,8 @@ const TRACKED_FIELDS: (keyof StoredProduct)[] = [
     'productId',
     'isCooked',
     'categoryPath',
+    'visible',
+    'packGramsSource',
 ];
 
 export async function syncCatalog(
@@ -200,6 +223,28 @@ export async function syncCatalog(
         log('sync.feed_failed', { error: errMsg(e) });
     }
 
+    /**
+     * ---- 1c. ADMIN EXPORT (volitelný, ale když je nastavený, je POVINNÝ) ----
+     */
+    let exportResult: ExportParseResult | null = null;
+    if (options.exportUrl) {
+        try {
+            const xml = await fetchExportWithRetry(options.exportUrl, doFetch, retries);
+            if (xml === null) throw new Error('export se nepodařilo stáhnout');
+            exportResult = parseProductsCompleteXml(xml);
+            log('sync.export_loaded', {
+                products: exportResult.products.length,
+                skipped: exportResult.skipped.length,
+            });
+        } catch (e) {
+            const run = emptyRun('FAILED', `admin export selhal: ${errMsg(e)} — katalog zůstal nezměněn`);
+            run.urlsTotal = urls.length;
+            log('sync.export_failed', { error: errMsg(e) });
+            await safeRecord(store, tenant.tenantId, run, log);
+            return { run, diff: [], unusable: [], products: [], failedUrls: [] };
+        }
+    }
+
     // ---- 2. STAŽENÍ A PARSOVÁNÍ ----
     const scraped: ScrapedProduct[] = [];
     const failedUrls: string[] = [];
@@ -211,14 +256,15 @@ export async function syncCatalog(
             batch.map(async (url) => {
                 const html = await fetchWithRetry(url, doFetch, retries);
                 if (html === null) return { url, kind: 'FAILED' as const };
-                const parsed = parseProductPage(html, url);
-                return parsed
-                    ? { url, kind: 'OK' as const, product: parsed }
+                // Varianty = víc položek z jedné stránky (nález 2026-09-24).
+                const parsed = parseProductPageAll(html, url);
+                return parsed.length > 0
+                    ? { url, kind: 'OK' as const, products: parsed }
                     : { url, kind: 'NOT_PRODUCT' as const };
             })
         );
         for (const r of results) {
-            if (r.kind === 'OK') scraped.push(r.product);
+            if (r.kind === 'OK') scraped.push(...r.products);
             else if (r.kind === 'NOT_PRODUCT') notProductPages++;
             else failedUrls.push(r.url);
         }
@@ -249,6 +295,18 @@ export async function syncCatalog(
         return { run, diff: [], unusable: [], products: [], failedUrls };
     }
 
+    // ---- 2b. SPOJENÍ S EXPORTEM ----
+    const merge = mergeWithExport(scraped, exportResult?.products ?? null);
+    const merged = merge.products;
+    if (exportResult) {
+        log('sync.export_merged', {
+            matched: merged.filter((p) => p.stockSource === 'EXPORT').length,
+            unmatchedScraped: merge.unmatchedScraped.length,
+            exportOnlyInStock: merge.exportOnlyInStock.length,
+            idMismatches: merge.idMismatches.length,
+        });
+    }
+
     // ---- 3. GRAMÁŽ A ZAŘAZENÍ ----
     const groupOf = (p: ScrapedProduct): BarfGroup =>
         resolveBarfGroup(p.categoryPath, tenant.categoryMap, p.name);
@@ -257,13 +315,13 @@ export async function syncCatalog(
     // referenční hodnota pro rozhodování rozporů v gramáži.
     const medians = new Map<BarfGroup, number | null>();
     const allGroups: BarfGroup[] = ['MUSCLE', 'BONE', 'LIVER', 'ORGAN', 'PLANT', 'SUPPLEMENT', 'OTHER'];
-    for (const g of allGroups) medians.set(g, medianPricePerKg(scraped, groupOf, g));
+    for (const g of allGroups) medians.set(g, medianPricePerKg(merged, groupOf, g));
 
     const sourceFeedAt = now().toISOString();
     const products: StoredProduct[] = [];
     const unusable: UnusableProduct[] = [];
 
-    for (const p of scraped) {
+    for (const p of merged) {
         const group = groupOf(p);
         const decision = resolveWeightConflict(p, medians.get(group) ?? null);
 
@@ -305,6 +363,14 @@ export async function syncCatalog(
         if (p.priceWithVat === null && packGrams !== null) {
             unusable.push({ sku: p.sku, name: p.name, reasonCs: 'produkt nemá cenu' });
         }
+        // Košík potřebuje OBĚ id (Lucky 2026-09-24).
+        if (!p.priceId || !p.productId) {
+            unusable.push({
+                sku: p.sku,
+                name: p.name,
+                reasonCs: `nejde vložit do košíku — chybí ${!p.priceId ? 'priceId' : 'productId'}`,
+            });
+        }
 
         /**
          * Suroviny se odvodí JEDNOU — `detectIngredients` prochází
@@ -315,10 +381,12 @@ export async function syncCatalog(
          * určení surovin stoupne ze 61 % na 70 % (změřeno 2026-09-09).
          */
         const popisFeed = feedPopisy.get(p.url);
-        const suroviny = detectIngredients(
-            p.name,
-            [p.compositionText, popisFeed].filter(Boolean).join(' ')
-        );
+        // Popis z exportu jen když se liší od feedu — stejný text dvakrát
+        // by u parseCompositionParts zdvojil procenta a rozpad zahodil.
+        const popisExport =
+            p.exportDescription && p.exportDescription !== popisFeed ? p.exportDescription : null;
+        const textSlozeni = [p.compositionText, popisFeed ?? popisExport].filter(Boolean).join(' ');
+        const suroviny = detectIngredients(p.name, [textSlozeni, popisExport].filter(Boolean).join(' '));
 
         products.push({
             sku: p.sku,
@@ -347,9 +415,7 @@ export async function syncCatalog(
              * „70 % ořez, 30 % droby" jinak celý objem padne do jedné
              * skupiny a zdravotní limit na játra ho mine.
              */
-            compositionParts: parseCompositionParts(
-                [p.compositionText, popisFeed].filter(Boolean).join(' ')
-            ),
+            compositionParts: parseCompositionParts(textSlozeni),
             productId: p.productId,
             inStock: (p.stockQuantity ?? 0) > 0,
             stockQuantity: p.stockQuantity,
@@ -381,7 +447,27 @@ export async function syncCatalog(
             isCooked: false,
             weightConflict,
             sourceFeedAt,
+            guid: p.guid,
+            parentCode: p.parentCode,
+            variantName: p.variantName ?? null,
+            visible: p.visible,
+            stockSyncedAt: p.stockSource === 'EXPORT' ? sourceFeedAt : null,
         });
+    }
+
+    /**
+     * Jeden produkt může být nepoužitelný z víc důvodů (bez gramáže I bez
+     * priceId). V reportu je JEDNOU se všemi důvody — jinak by počet
+     * `unusable` v auditu nesouhlasil s počtem produktů.
+     */
+    {
+        const bySku = new Map<string, UnusableProduct>();
+        for (const u of unusable) {
+            const prev = bySku.get(u.sku);
+            if (prev) prev.reasonCs = `${prev.reasonCs}; ${u.reasonCs}`;
+            else bySku.set(u.sku, { ...u });
+        }
+        unusable.splice(0, unusable.length, ...bySku.values());
     }
 
     // ---- 4. DIFF PROTI SOUČASNÉMU STAVU ----
@@ -421,6 +507,17 @@ export async function syncCatalog(
             unusable: unusable.length,
             sample: diff.slice(0, DIFF_SAMPLE_SIZE),
             failedUrls: failedUrls.slice(0, 20),
+            ...(exportResult
+                ? {
+                      export: {
+                          products: exportResult.products.length,
+                          skipped: exportResult.skipped.slice(0, 20),
+                          unmatchedScraped: merge.unmatchedScraped.slice(0, 40),
+                          idMismatches: merge.idMismatches.slice(0, 40),
+                          exportOnlyInStock: merge.exportOnlyInStock.slice(0, 60),
+                      },
+                  }
+                : {}),
         },
         errorText: null,
     };
@@ -430,7 +527,7 @@ export async function syncCatalog(
         run.finishedAt = now().toISOString();
         log('sync.dry_run_finished', { added, changed, removed, unusable: unusable.length });
         await safeRecord(store, tenant.tenantId, run, log);
-        return { run, diff, unusable, products, failedUrls };
+        return { run, diff, unusable, products, failedUrls, exportOnlyInStock: merge.exportOnlyInStock };
     }
 
     try {
@@ -444,14 +541,21 @@ export async function syncCatalog(
          */
         const removedSkus = diff.filter((d) => d.kind === 'REMOVED').map((d) => d.sku);
         const fullRun = failedUrls.length === 0 && options.limitUrls === undefined;
+        const maxRemoval = Math.max(
+            REMOVAL_ABSOLUTE_FLOOR,
+            Math.floor(allSkus.length * (options.maxRemovalRatio ?? DEFAULT_MAX_REMOVAL_RATIO))
+        );
+        const tooMany = removedSkus.length > maxRemoval;
         let deleted = 0;
-        if (fullRun && removedSkus.length > 0) {
+        if (fullRun && !tooMany && removedSkus.length > 0) {
             deleted = await store.deleteBySkus(tenant.tenantId, removedSkus);
         } else if (removedSkus.length > 0) {
             run.removed = 0;
+            if (tooMany) run.status = 'PARTIAL';
             log('sync.removal_skipped', {
                 candidates: removedSkus.length,
-                reason: fullRun ? 'limitUrls' : 'partial_run',
+                maxRemoval,
+                reason: tooMany ? 'removal_ratio_exceeded' : fullRun ? 'limitUrls' : 'partial_run',
             });
         }
 
@@ -465,7 +569,38 @@ export async function syncCatalog(
     }
 
     await safeRecord(store, tenant.tenantId, run, log);
-    return { run, diff, unusable, products, failedUrls };
+    return { run, diff, unusable, products, failedUrls, exportOnlyInStock: merge.exportOnlyInStock };
+}
+
+/**
+ * Stažení XML exportu s retry.
+ *
+ * URL se NIKDY neloguje — obsahuje přístupový hash k exportu s nákupními
+ * cenami. Log nese jen počet pokusů a stav.
+ */
+export async function fetchExportWithRetry(
+    url: string,
+    doFetch: typeof fetch,
+    tries: number
+): Promise<string | null> {
+    let lastStatus: number | null = null;
+    for (let attempt = 1; attempt <= tries; attempt++) {
+        try {
+            const res = await doFetch(url, {
+                headers: { 'User-Agent': USER_AGENT },
+                signal: AbortSignal.timeout(FETCH_TIMEOUT_MS * 2),
+            });
+            lastStatus = res.status;
+            if (res.ok) return await res.text();
+            // 404 u exportu = neplatný hash/pattern. Retry nepomůže.
+            if (res.status === 404 || res.status === 403) break;
+        } catch {
+            // Síťová chyba / timeout — retry.
+        }
+        if (attempt < tries) await sleep(800 * attempt);
+    }
+    console.warn(JSON.stringify({ level: 'warn', event: 'export.fetch_failed', tries, lastStatus }));
+    return null;
 }
 
 /**

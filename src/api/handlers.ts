@@ -13,6 +13,7 @@
  * ŽÁDNÉ LLM (R1). Vysvětlení „proč vyšlo 540 g" je `audit` z enginu.
  */
 
+import type { ActivityOption } from '../domain/tenant.js';
 import type { TenantConfiguration } from '../domain/tenant.js';
 import type { ResolvedConstraints } from '../domain/health/Condition.js';
 import type { DogProfile } from '../domain/dog/DogProfile.js';
@@ -34,6 +35,9 @@ import {
 } from '../engine/nutrient-coverage/calculateNutrientCoverage.js';
 import { calculateEnergy, type EnergyInput } from '../domain/nutrition/energy.js';
 import { resolveLifeStage } from '../domain/dog/DogProfile.js';
+import { buildRecipe, type Recipe } from '../engine/recipe/buildRecipe.js';
+import { applyDogProfileFlags } from '../rules/applyDogProfileFlags.js';
+import { renderRecipePdf, type DoseResponseForPdf } from '../infrastructure/pdf/renderRecipePdf.js';
 
 /**
  * DISCLAIMER JE V ODPOVĚDI WORKERU, NE V ŠABLONĚ (§7 ARCHITEKTURA.md).
@@ -155,13 +159,74 @@ const MAX_BODY_BYTES = 8 * 1024;
  * naopak: doporučovat produkty bez spočítané potřeby nemá smysl
  * a výpočet nesmí být ovlivněný tím, co je na skladě.
  */
-export async function handleDose(request: Request, deps: Deps): Promise<Response> {
-    const raw = await readJsonBody(request);
-    if (!raw.ok) return apiError(raw.code, 400, raw.issues);
+type DoseOutcome =
+    | { kind: 'error'; response: Response }
+    | { kind: 'body'; httpStatus: number; body: ReturnType<typeof buildResponse> | Record<string, unknown> };
 
-    const validation = validateDoseRequest(raw.value, deps.tenant.defaultPeriodDays);
+export async function handleDose(request: Request, deps: Deps): Promise<Response> {
+    const out = await computeDose(request, deps);
+    return out.kind === 'error' ? out.response : jsonResponse(out.body, out.httpStatus);
+}
+
+/**
+ * `POST /v1/jidelnicek.pdf` — stejný vstup jako `/v1/davka`, výstup PDF.
+ *
+ * Počítá se STEJNOU cestou (`computeDose`) — PDF nemá vlastní výpočet.
+ * PDF se vydá JEN pro dávku OK s receptem; blokovaný nebo neúplný stav
+ * vrátí 409 s JSON odpovědí (jídelníček by tam byl nebezpečný).
+ */
+export async function handleRecipePdf(request: Request, deps: Deps): Promise<Response> {
+    const out = await computeDose(request, deps);
+    if (out.kind === 'error') return out.response;
+    const body = out.body as unknown as DoseResponseForPdf;
+    if (out.httpStatus !== 200 || body.status !== 'OK' || !body.recept) {
+        return jsonResponse({ ...(out.body as object), code: 'PDF_NOT_AVAILABLE' }, 409);
+    }
+    try {
+        const now = (deps.now ?? (() => new Date()))();
+        const pdf = await renderRecipePdf(
+            body,
+            { brandCs: deps.tenant.recipe?.brandCs ?? deps.tenant.tenantId, contactCs: deps.tenant.recipe?.contactCs },
+            now
+        );
+        return new Response(pdf, {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': `attachment; filename="${pdfFileName(body.pes?.jmeno ?? null)}"`,
+                'Cache-Control': 'no-store',
+            },
+        });
+    } catch (e) {
+        logError('recipe.pdf_failed', e, { tenantId: deps.tenant.tenantId });
+        return apiError('INTERNAL_ERROR', 500);
+    }
+}
+
+/** ASCII název souboru (hlavička Content-Disposition), např. `jidelnicek-rex.pdf`. */
+export function pdfFileName(jmeno: string | null): string {
+    const slug = (jmeno ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 30);
+    return `jidelnicek${slug ? '-' + slug : ''}.pdf`;
+}
+
+async function computeDose(request: Request, deps: Deps): Promise<DoseOutcome> {
+    const raw = await readJsonBody(request);
+    if (!raw.ok) return { kind: 'error', response: apiError(raw.code, 400, raw.issues) };
+
+    const validation = validateDoseRequest(
+        raw.value,
+        deps.tenant.defaultPeriodDays,
+        deps.tenant.allowedPeriodDays,
+        deps.tenant.activityOptions
+    );
     if (!validation.ok) {
-        return apiError('VALIDATION_FAILED', 422, validation.issues);
+        return { kind: 'error', response: apiError('VALIDATION_FAILED', 422, validation.issues) };
     }
     const { dog, periodDays } = validation.value;
 
@@ -171,15 +236,17 @@ export async function handleDose(request: Request, deps: Deps): Promise<Response
     // BLOCKED, ne jako tichý fallback na prázdná omezení.
     let constraints: ResolvedConstraints;
     try {
-        constraints = await deps.rules.resolve(dog, deps.tenant);
+        constraints = applyDogProfileFlags(await deps.rules.resolve(dog, deps.tenant), dog);
     } catch (e) {
         logError('rules.resolve_failed', e, { tenantId: deps.tenant.tenantId });
-        return jsonResponse(
-            {
+        return {
+            kind: 'body',
+            httpStatus: 503,
+            body: {
                 v: 1,
                 status: 'BLOCKED',
                 reason: 'RULE_ENGINE_FAILED',
-                pes: dogEcho(dog),
+                pes: dogEcho(dog, deps.tenant.activityOptions),
                 slozeni: [],
                 produkty: [],
                 nepokryto: [],
@@ -196,8 +263,7 @@ export async function handleDose(request: Request, deps: Deps): Promise<Response
                 audit: [],
                 disclaimer: DISCLAIMER_CS,
             },
-            503
-        );
+        };
     }
 
     // ---- VÝPOČET DÁVKY ----
@@ -206,7 +272,7 @@ export async function handleDose(request: Request, deps: Deps): Promise<Response
     // BLOCKED i INCOMPLETE se vrací s HTTP 200: požadavek byl v pořádku,
     // jen výsledkem je „dávku nevydáváme". Chybný vstup je 422, tohle ne.
     if (dose.status !== 'OK') {
-        return jsonResponse(buildResponse(dog, dose, null, periodDays, constraints, deps), 200);
+        return { kind: 'body', httpStatus: 200, body: buildResponse(dog, dose, null, periodDays, constraints, deps) };
     }
 
     // ---- PRODUKTY ----
@@ -215,7 +281,9 @@ export async function handleDose(request: Request, deps: Deps): Promise<Response
     let match: MatchResult | null = null;
     try {
         const catalog = await loadCatalog(deps.store, deps.tenant.tenantId);
-        match = matchProducts(dose.composition, catalog, constraints, periodDays);
+        match = matchProducts(dose.composition, catalog, constraints, periodDays, {
+            seed: rotationSeed(deps.tenant.tenantId, dog, (deps.now ?? (() => new Date()))()),
+        });
     } catch (e) {
         // Katalog nedostupný: dávka je platná a vydá se, jen bez
         // konkrétních balení. Lepší než nic — a je to přiznané.
@@ -223,7 +291,7 @@ export async function handleDose(request: Request, deps: Deps): Promise<Response
         match = null;
     }
 
-    return jsonResponse(buildResponse(dog, dose, match, periodDays, constraints, deps), 200);
+    return { kind: 'body', httpStatus: 200, body: buildResponse(dog, dose, match, periodDays, constraints, deps) };
 }
 
 /**
@@ -236,7 +304,9 @@ export async function handleDose(request: Request, deps: Deps): Promise<Response
 export async function handleKnowledge(deps: Deps): Promise<Response> {
     try {
         const catalog = await deps.rules.catalog(deps.tenant);
-        return jsonResponse({ v: 1, ...catalog }, 200, { 'Cache-Control': 'public, max-age=300' });
+        // Aktivity jsou konfigurace tenanta (ne pravidla), UI z nich kreslí volby.
+        const aktivity = (deps.tenant.activityOptions ?? []).map((o) => ({ id: o.id, nazev: o.labelCs, popis: o.hintCs, uroven: o.level }));
+        return jsonResponse({ v: 1, ...catalog, aktivity }, 200, { 'Cache-Control': 'public, max-age=300' });
     } catch (e) {
         logError('knowledge.load_failed', e, { tenantId: deps.tenant.tenantId });
         return apiError('INTERNAL_ERROR', 503);
@@ -266,7 +336,19 @@ export async function handleHealth(deps: Deps): Promise<Response> {
          * dvakrát ne). Monitoring se nemá dozvídat z počtů, ale ze stavu.
          */
         const stale = ageHours === null || ageHours > 48;
-        const status = health.usableCount === 0 || stale ? 'DEGRADED' : 'OK';
+
+        /**
+         * Čerstvost SKLADU (10min sync z exportu). Víc než 60 min = šest
+         * vynechaných běhů → výběr produktů pracuje se starou zásobou
+         * a monitoring to má vidět. `null` = sync skladu není zapnutý
+         * (chybí `SHOPTET_EXPORT_URL`) — to není porucha, ale stav.
+         */
+        const stockSyncedAt = health.stockSyncedAt ?? null;
+        const stockAgeMinutes =
+            stockSyncedAt === null ? null : Math.round((now.getTime() - Date.parse(stockSyncedAt)) / 60_000);
+        const stockStale = stockAgeMinutes !== null && stockAgeMinutes > 60;
+
+        const status = health.usableCount === 0 || stale || stockStale ? 'DEGRADED' : 'OK';
 
         return jsonResponse(
             {
@@ -276,6 +358,7 @@ export async function handleHealth(deps: Deps): Promise<Response> {
                 knowledgeEngineReady: deps.rules.ready,
                 products: health.productCount,
                 usableProducts: health.usableCount,
+                stock: { syncedAt: stockSyncedAt, ageMinutes: stockAgeMinutes, stale: stockStale },
                 lastSync:
                     last === null
                         ? null
@@ -328,7 +411,50 @@ async function loadCatalog(store: ProductStore, tenantId: string): Promise<Catal
             priceId: p.priceId,
             ingredientIds: p.ingredientIds,
             isCooked: p.isCooked,
+            /**
+             * KRITICKÁ OPRAVA 2026-09-24: `ingredientsUnknown` se sem
+             * NEPŘEDÁVALO. `matchProducts` chybějící hodnotu čte jako
+             * „suroviny známe", takže fail-closed filtr alergií (audit
+             * 2026-09-09) v produkci nikdy nezabral — psovi s alergií by
+             * se doporučil produkt s neznámým složením. Test
+             * `api.test.ts` → „fail-closed přes API" to teď hlídá.
+             */
+            ingredientsUnknown: p.ingredientsUnknown,
+            // Momentální zásoba a rozpad — pro alokaci podle skladu
+            // a rovnocenné náhrady (Lucky 2026-09-24).
+            stockQuantity: p.stockQuantity,
+            compositionParts: (p.compositionParts ?? []).map((c) => ({ group: c.group, pct: c.pct })),
         }));
+}
+
+/**
+ * Seed rotace produktů: tenant + profil psa + DEN (Europe/Prague).
+ *
+ * Stejný pes ve stejný den dostane stejný nákup — obnovení stránky ani
+ * reklamace nevidí jiný výsledek. Jiný pes nebo další den = jiné pořadí
+ * v rámci cenového pásma, takže se prodej rozkládá po sortimentu.
+ * Sklad se přitom mění průběžně: vyprodaný produkt z výběru vypadne
+ * i během dne (filtr zásoby běží před losem).
+ *
+ * OBDOBÍ (7 / 14 / 30 dní) v seedu ZÁMĚRNĚ NENÍ: když zákazník přepne
+ * „Zásoba na" z týdne na měsíc, má se změnit POČET balení, ne maso.
+ * Jiný produkt smí vyjít jen tehdy, když na delší období nestačí sklad.
+ */
+export function rotationSeed(tenantId: string, dog: unknown, now: Date): string {
+    const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Prague' }).format(now);
+    return `${tenantId}|${day}|${stableStringify(dog)}`;
+}
+
+/** JSON se seřazenými klíči — pořadí polí ve vstupu nesmí měnit seed. */
+function stableStringify(v: unknown): string {
+    if (v === null || typeof v !== 'object') return JSON.stringify(v) ?? 'null';
+    if (Array.isArray(v)) return `[${v.map(stableStringify).join(',')}]`;
+    const o = v as Record<string, unknown>;
+    return `{${Object.keys(o)
+        .sort()
+        .filter((k) => o[k] !== undefined)
+        .map((k) => `${JSON.stringify(k)}:${stableStringify(o[k])}`)
+        .join(',')}}`;
 }
 
 /**
@@ -371,13 +497,28 @@ function buildResponse(
 
     const nutrice = calculateNutrition(dog, dose, match, periodDays, deps);
 
+    /**
+     * Recept z produktů v nákupu — jen když je dávka OK a nákup existuje.
+     * Selhání receptu nesmí shodit dávku ani nákup: recept je nadstavba.
+     */
+    let recept: Recipe | null = null;
+    if (dose.status === 'OK' && match !== null && dose.portions && match.products.length > 0) {
+        try {
+            recept = buildRecipe(dose.composition, match, dose.portions.count, {
+                stepsCs: deps.tenant.recipe?.stepsCs ?? [],
+            });
+        } catch (e) {
+            logError('recipe.build_failed', e, { tenantId: deps.tenant.tenantId });
+        }
+    }
+
     return {
         v: 1,
         status: dose.status,
         reason: dose.reason,
         knowledgeEngineReady: deps.rules.ready,
         nutrientEngineReady: nutrice !== null,
-        pes: dogEcho(dog),
+        pes: dogEcho(dog, deps.tenant.activityOptions),
         davka:
             dose.status === 'OK'
                 ? {
@@ -413,12 +554,18 @@ function buildResponse(
             cenaCelkem: p.totalPriceCzk,
             productId: p.productId,
             priceId: p.priceId,
+            /** Zásoba v okamžiku výpočtu; `null` = neznámá. */
+            skladem: p.stockQuantity,
+            /** Produkt doplňuje složku, protože předchozí neměl dost kusů. */
+            doplneni: p.fillsShortage,
         })),
         nepokryto: (match?.uncovered ?? []).map((u) => ({
             group: u.group,
             nazev: u.labelCs,
             gramy: u.gramsPerDay,
             duvod: u.reason,
+            /** U INSUFFICIENT_STOCK: kolik gramů na celé období chybí. */
+            chybiGramu: u.missingGrams ?? null,
         })),
         /**
          * NUTRIČNÍ POKRYTÍ (nález auditu 2026-09-12, D-1) — `null`, dokud
@@ -445,11 +592,38 @@ function buildResponse(
         /** Katalog byl nedostupný — dávka platí, balení chybí. */
         katalogNedostupny: dose.status === 'OK' && match === null,
         obdobiDni: periodDays,
+        /**
+         * Recept: co přesně dát do misky z produktů v nákupu. `null` =
+         * není z čeho (BLOCKED/INCOMPLETE, bez nákupu).
+         */
+        recept: recept === null ? null : {
+            denne: recept.daily.map(toRecipeIngredient),
+            denneCelkemG: recept.dailyTotalGrams,
+            porce: recept.portions.map((p) => ({
+                nazev: p.labelCs,
+                celkemG: p.totalGrams,
+                suroviny: p.ingredients.map(toRecipeIngredient),
+            })),
+            baleni: recept.packs.map((p) => ({
+                sku: p.sku,
+                nazev: p.name,
+                gramyBaleni: p.packGrams,
+                pocet: p.packs,
+                gramyDen: p.gramsPerDay,
+                dniNaBaleni: p.daysPerPack,
+            })),
+            chybi: recept.missing.map((m) => ({ group: m.group, nazev: m.labelCs, gramyDen: m.gramsPerDay })),
+            postup: recept.stepsCs,
+        },
         upozorneni: warnings,
         audit: dose.audit.map((a) => ({ krok: a.step, pravidlo: a.ruleId, vysledek: a.resultCs })),
         /** Nedá se odstranit úpravou frontendu — je součástí odpovědi. */
         disclaimer: DISCLAIMER_CS,
     };
+}
+
+function toRecipeIngredient(i: Recipe['daily'][number]) {
+    return { sku: i.sku, nazev: i.name, group: i.group, skupina: i.groupLabelCs, gramy: i.grams };
 }
 
 /**
@@ -491,12 +665,17 @@ function calculateNutrition(
     });
 }
 
-function dogEcho(dog: DogProfile) {
+function dogEcho(dog: DogProfile, activityOptions?: readonly ActivityOption[]) {
+    // Název konkrétní aktivity pro PDF a UI („psí sporty"), jen zobrazení.
+    const aktivita = dog.activityDetailId
+        ? (activityOptions ?? []).find((o) => o.id === dog.activityDetailId)?.labelCs ?? null
+        : null;
     return {
         jmeno: dog.name ?? null,
         hmotnostKg: dog.weightKg,
         idealniHmotnostKg: dog.idealWeightKg ?? null,
         vekMesicu: dog.ageMonths,
+        aktivita,
     };
 }
 

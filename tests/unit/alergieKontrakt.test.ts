@@ -123,3 +123,29 @@ describe('bezpečnost bez ohledu na zadání', () => {
         expect(r.excluded[0].reasonCs).toContain('vařen');
     });
 });
+
+describe('alergie doplněné na přání klienta (L. Švihel, 24. 9. 2026)', () => {
+    const NOVE: Array<[string, string]> = [
+        ['alergie-kruti', 'kruti'],
+        ['alergie-kachna', 'kachna'],
+        ['alergie-kralik', 'kralik'],
+        ['alergie-jehneci', 'jehneci'],
+        ['alergie-zverina', 'zverina'],
+    ];
+
+    it.each(NOVE)('%s vyloučí právě surovinu %s', (alergie, surovina) => {
+        const c = resolveConstraints([], [alergie], KB);
+        expect(navic(c.excludedIngredientIds)).toEqual([surovina]);
+        expect(c.unknownAllergyIngredientIds).toHaveLength(0);
+    });
+
+    it.each(NOVE)('%s: produkt se surovinou %s se nedoporučí, jiné maso ano', (alergie, surovina) => {
+        const c = resolveConstraints([], [alergie], KB);
+        const r = matchProducts(MUSCLE, [
+            prod({ sku: 'ALERGEN', ingredientIds: [surovina] }),
+            prod({ sku: 'OK', ingredientIds: ['kun'] }),
+        ], c, 30);
+        expect(r.products.map((p) => p.sku)).toEqual(['OK']);
+        expect(r.excluded.find((e) => e.sku === 'ALERGEN')).toBeTruthy();
+    });
+});

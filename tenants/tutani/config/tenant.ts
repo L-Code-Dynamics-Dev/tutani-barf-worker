@@ -29,8 +29,50 @@ export const TUTANI_TENANT: TenantConfiguration = {
 
     ruleSetIds: ['barf-core@1', 'tutani-health@1'],
 
+    /**
+     * Konkrétní aktivity (Lucky 2026-09-25, „základní sada"). Přiřazení
+     * k úrovni schválil Lucky 25. 9. (klient potvrzovat nebude). Dávka se počítá
+     * jen podle `level` z jeho tabulky (barf-core adult-low/medium/high/
+     * working) — žádné nové procento. Pořadí = pořadí v UI.
+     */
+    activityOptions: [
+        { id: 'gaucak', labelCs: 'gaučák', hintCs: 'hlavně doma, byt', level: 'LOW' },
+        { id: 'kratke-prochazky', labelCs: 'krátké procházky', hintCs: 'venčení kolem domu', level: 'LOW' },
+        { id: 'hodina-venku', labelCs: 'hodina venku', hintCs: 'denní procházky', level: 'MEDIUM' },
+        { id: 'vylety-zahrada', labelCs: 'dlouhé výlety', hintCs: 'víkendové túry, zahrada', level: 'MEDIUM' },
+        { id: 'beh-kolo', labelCs: 'běhání, kolo', hintCs: 'canicross, bikejöring', level: 'HIGH' },
+        { id: 'psi-sporty', labelCs: 'psí sporty', hintCs: 'agility, obedience, frisbee', level: 'HIGH' },
+        { id: 'lovecky-pastevecky', labelCs: 'lovecký / pastevecký', hintCs: 'myslivost, práce se stádem', level: 'WORKING' },
+        { id: 'sluzebni', labelCs: 'služební', hintCs: 'policie, záchranáři, stráž', level: 'WORKING' },
+        { id: 'tazny', labelCs: 'tažný pes', hintCs: 'mushing, závody se spřežením', level: 'WORKING' },
+    ],
+
     /** Mražené maso — měsíční zásoba se do mrazáku běžně vejde. */
     defaultPeriodDays: 30,
+
+    /**
+     * Zákazník volí ze 7, 14 nebo 30 dní (Lucky 2026-09-24) — stejné
+     * volby jako přepínač „Zásoba na" ve frontendu.
+     */
+    allowedPeriodDays: [7, 14, 30],
+
+    /**
+     * Postup do receptu a PDF. NÁVRH L-Code 2026-09-24, čeká na
+     * potvrzení klientem. Záměrně bez čísel (hodiny, teploty): ta by
+     * musel dodat klient nebo výrobce. BARF se nevaří, proto „příprava".
+     */
+    recipe: {
+        brandCs: 'Tutani · Opravdové žrádlo',
+        contactCs: 'Mirka +420 605 178 771 · obchod.tutani.cz',
+        stepsCs: [
+            'Balení na další den přendejte z mrazáku do lednice. Rozmrazujte v lednici, ne při pokojové teplotě.',
+            'Každou porci odvažte na kuchyňské váze podle tabulky. Odhad od oka rozhodí poměr složek.',
+            'Suroviny dejte do misky a promíchejte, aby pes nevybíral jen to, co mu chutná víc.',
+            'Rozmražené maso znovu nezamrazujte. Otevřené balení uchovávejte v lednici v uzavřené nádobě.',
+            'Po krmení misku umyjte horkou vodou, stejně jako prkénko a nože po syrovém mase.',
+            'Při přechodu z granulí přidávejte novou stravu postupně a sledujte trávení psa.',
+        ],
+    },
 
     /**
      * Mapování kategorie e-shopu → složka BARF dávky.

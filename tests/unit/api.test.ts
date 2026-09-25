@@ -23,6 +23,8 @@ import {
     handleDose,
     handleHealth,
     handleKnowledge,
+    handleRecipePdf,
+    pdfFileName,
     NOOP_RULE_ENGINE,
     type Deps,
     type RuleEngine,
@@ -106,7 +108,9 @@ function product(over: Partial<StoredProduct> = {}): StoredProduct {
         packGrams: 3000,
         packGramsSource: 'DATALAYER',
         priceCzk: 109,
-        priceId: null,
+        // Košík potřebuje OBĚ id (Lucky 2026-09-24) — bez priceId by se
+        // produkt nedoporučil. 973 = reálné priceId k productId 868 (ZP9).
+        priceId: '973',
         productId: '868',
         inStock: true,
         stockQuantity: 19,
@@ -559,6 +563,89 @@ describe('POST /v1/davka — selhání pravidel a katalogu', () => {
     });
 });
 
+describe('POST /v1/davka — košík a bezpečnost (2026-09-24)', () => {
+    it('produkt bez priceId nebo productId se nedoporučí — nešel by do košíku', async () => {
+        const store = new FakeStore([
+            product({ sku: 'BEZ_PRICE', group: 'MUSCLE', priceId: null }),
+            product({ sku: 'BEZ_PRODUCT', group: 'MUSCLE', productId: null }),
+        ]);
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules: fakeRules() }, store)));
+        expect(b.produkty).toEqual([]);
+    });
+
+    it('každý doporučený produkt nese priceId I productId', async () => {
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules: fakeRules() })));
+        const produkty = b.produkty as { priceId: string | null; productId: string | null }[];
+        expect(produkty.length).toBeGreaterThan(0);
+        expect(produkty.every((p) => !!p.priceId && !!p.productId)).toBe(true);
+    });
+
+    it('FAIL-CLOSED přes API: u alergie se produkt s neznámým složením nedoporučí (regrese loadCatalog)', async () => {
+        const store = new FakeStore([
+            product({ sku: 'NEZNAME', group: 'MUSCLE', ingredientIds: [], ingredientsUnknown: true }),
+        ]);
+        const rules = fakeRules({ ownerExcludedIngredientIds: new Set(['kure']), excludedIngredientIds: new Set(['kure']) });
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules }, store)));
+        expect((b.produkty as { sku: string }[]).map((p) => p.sku)).not.toContain('NEZNAME');
+    });
+
+    it('nikdy víc balení, než je skladem — zbytek se doplní jiným produktem', async () => {
+        // 405 g/den × 30 = 12 150 g = 5 balení po 3 kg; A má 2, B 10.
+        const store = new FakeStore([
+            ...fullCatalog().filter((p) => p.group !== 'MUSCLE'),
+            product({ sku: 'A', group: 'MUSCLE', stockQuantity: 2 }),
+            product({ sku: 'B', group: 'MUSCLE', stockQuantity: 10, priceCzk: 111 }),
+        ]);
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules: fakeRules() }, store)));
+        const muscle = (b.produkty as { sku: string; group: string; pocet: number; skladem: number }[]).filter(
+            (p) => p.group === 'MUSCLE'
+        );
+        for (const p of muscle) expect(p.pocet).toBeLessThanOrEqual(p.skladem);
+        expect(muscle.reduce((a, p) => a + p.pocet, 0)).toBeGreaterThanOrEqual(5);
+    });
+});
+
+describe('POST /v1/davka — období 7 / 14 / 30 dní (Lucky 2026-09-24)', () => {
+    it.each([7, 14, 30])('období %i dní projde', async (d) => {
+        const res = await handleDose(doseRequest({ ...REX, obdobiDni: d }), deps({ rules: fakeRules() }));
+        expect(res.status).toBe(200);
+        expect((await body(res)).obdobiDni).toBe(d);
+    });
+
+    it.each([1, 21, 60, 90])('období %i dní se odmítne s nabídkou povolených', async (d) => {
+        const res = await handleDose(doseRequest({ ...REX, obdobiDni: d }), deps({ rules: fakeRules() }));
+        expect(res.status).toBe(422);
+        const issues = (await body(res)).issues as { field: string; code: string; allowed?: number[] }[];
+        expect(issues).toContainEqual({ field: 'obdobiDni', code: 'UNKNOWN_ENUM_VALUE', allowed: [7, 14, 30] });
+    });
+
+    it('přepnutí období změní POČET balení, ne maso (při dostatku skladu)', async () => {
+        const catalog = [
+            ...fullCatalog().filter((p) => p.group !== 'MUSCLE'),
+            product({ sku: 'HOVEZI', group: 'MUSCLE', priceCzk: 300, packGrams: 3000, stockQuantity: 100 }),
+            product({ sku: 'KRUTI', group: 'MUSCLE', priceCzk: 310, packGrams: 3000, stockQuantity: 100 }),
+            product({ sku: 'KRALIK', group: 'MUSCLE', priceCzk: 320, packGrams: 3000, stockQuantity: 100 }),
+        ];
+        const now = () => new Date('2026-09-24T10:00:00.000Z');
+        // Víc psů = víc seedů; u každého musí být maso stejné pro 7/14/30.
+        for (const kg of [10, 18, 24, 32, 40]) {
+            const skus: string[] = [];
+            const pocty: number[] = [];
+            for (const d of [7, 14, 30]) {
+                const req = { ...REX, pes: { ...REX.pes, hmotnostKg: kg }, obdobiDni: d };
+                const b = await body(await handleDose(doseRequest(req), deps({ rules: fakeRules(), now }, new FakeStore(catalog))));
+                const m = (b.produkty as { sku: string; group: string; pocet: number }[]).filter((p) => p.group === 'MUSCLE');
+                expect(m).toHaveLength(1);
+                skus.push(m[0].sku);
+                pocty.push(m[0].pocet);
+            }
+            expect(new Set(skus).size).toBe(1);
+            expect(pocty[0]).toBeLessThanOrEqual(pocty[1]);
+            expect(pocty[1]).toBeLessThanOrEqual(pocty[2]);
+        }
+    });
+});
+
 describe('GET /v1/knowledge', () => {
     it('vrátí seznam diagnóz a alergenů, aby je frontend neměl natvrdo', async () => {
         const res = await handleKnowledge(deps({ rules: fakeRules() }));
@@ -659,5 +746,74 @@ describe('GET /v1/health', () => {
         expect(res.status).toBe(503);
         const b = await body(res);
         expect(b.status).toBe('FAILED');
+    });
+});
+
+
+describe('recept a PDF jídelníček (Lucky 2026-09-24)', () => {
+    it('/v1/davka vrací recept: součet surovin = denní dávka, porce sedí na engine', async () => {
+        const b = await body(await handleDose(doseRequest(REX), deps()));
+        expect(b.status).toBe('OK');
+        const r = b.recept;
+        expect(r).not.toBeNull();
+        expect(r.denneCelkemG).toBe(b.slozeni.reduce((a: number, s: any) => a + Math.round(s.gramy), 0));
+        expect(r.porce).toHaveLength(b.davka.porce.pocet);
+        expect(r.porce.reduce((a: number, p: any) => a + p.celkemG, 0)).toBe(r.denneCelkemG);
+        // Každá surovina v receptu je produkt z nákupu.
+        const vNakupu = new Set(b.produkty.map((p: any) => p.sku));
+        for (const d of r.denne) expect(vNakupu.has(d.sku)).toBe(true);
+        expect(r.postup.length).toBeGreaterThan(0);
+    });
+
+    it('bez nákupu (katalog nedostupný) je recept null, dávka zůstává', async () => {
+        const store = new FakeStore(fullCatalog());
+        store.failReads = true;
+        const b = await body(await handleDose(doseRequest(REX), deps({}, store)));
+        expect(b.status).toBe('OK');
+        expect(b.recept).toBeNull();
+    });
+
+    it('PDF: platné PDF s hlavičkou ke stažení a jménem psa v souboru', async () => {
+        const res = await handleRecipePdf(doseRequest({ ...REX, pes: { ...REX.pes, jmeno: 'Žeryk 🐶' } }), deps());
+        expect(res.status).toBe(200);
+        expect(res.headers.get('Content-Type')).toBe('application/pdf');
+        expect(res.headers.get('Content-Disposition')).toBe('attachment; filename="jidelnicek-zeryk.pdf"');
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        expect(new TextDecoder().decode(bytes.slice(0, 5))).toBe('%PDF-');
+        expect(bytes.length).toBeGreaterThan(5_000);
+        if (process.env.PDF_OUT) (await import('node:fs')).writeFileSync(process.env.PDF_OUT, bytes);
+    });
+
+    it('konkrétní aktivita: úroveň určí server, název jde do odpovědi i do PDF', async () => {
+        const pes = { ...REX.pes, aktivita: undefined, aktivitaDetail: 'psi-sporty' };
+        const b = await body(await handleDose(doseRequest({ ...REX, pes }), deps()));
+        expect(b.status).toBe('OK');
+        expect(b.pes.aktivita).toBe('psí sporty');
+        const res = await handleRecipePdf(doseRequest({ ...REX, pes }), deps());
+        expect(res.status).toBe(200);
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        if (process.env.PDF_OUT_AKTIVITA) (await import('node:fs')).writeFileSync(process.env.PDF_OUT_AKTIVITA, bytes);
+    });
+
+    it('PDF se NEVYDÁ pro blokovaný stav — 409 s JSON, ne jídelníček', async () => {
+        const res = await handleRecipePdf(
+            doseRequest(REX),
+            deps({ rules: fakeRules({ blocked: true, blockedBy: ['ckd-advanced'], requiresVet: true }) })
+        );
+        expect(res.status).toBe(409);
+        const b = await body(res);
+        expect(b.code).toBe('PDF_NOT_AVAILABLE');
+        expect(b.status).toBe('BLOCKED');
+    });
+
+    it('PDF: chybný vstup vrací stejnou validační chybu jako /v1/davka', async () => {
+        const res = await handleRecipePdf(doseRequest({ pes: { hmotnostKg: -3 } }), deps());
+        expect(res.status).toBe(422);
+    });
+
+    it('název souboru je bezpečný ASCII', () => {
+        expect(pdfFileName('Bára "x"; rm')).toBe('jidelnicek-bara-x-rm.pdf');
+        expect(pdfFileName(null)).toBe('jidelnicek.pdf');
+        expect(pdfFileName('🐶')).toBe('jidelnicek.pdf');
     });
 });
