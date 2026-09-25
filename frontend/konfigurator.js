@@ -798,6 +798,7 @@
 
             if (knowledge.diagnozy.length) {
                 var seznam = el('div', 'tb-seznam-check');
+                var vazne = el('div', 'tb-seznam-check tb-seznam-check--vazne');
                 knowledge.diagnozy.forEach(function (m) {
                     /**
                      * Stav, který dávku zablokuje, se označí předem — zákazník
@@ -809,11 +810,25 @@
                     var popis = m.blokuje
                         ? 'U tohoto stavu dávku nepočítáme — je potřeba individuální plán od veterináře.'
                         : m.popis || null;
-                    seznam.appendChild(radekCheck(m.nazev, popis, stav.diagnozy.indexOf(m.id) !== -1, function (zap) {
+                    var radek = radekCheck(m.nazev, popis, stav.diagnozy.indexOf(m.id) !== -1, function (zap) {
                         stav.diagnozy = prepniVSeznamu(stav.diagnozy, m.id, zap);
                         naplanujPrepocet();
-                    }, { varovani: !!m.blokuje }));
+                    }, { varovani: !!m.blokuje });
+                    (m.blokuje ? vazne : seznam).appendChild(radek);
                 });
+                /**
+                 * Stavy, kde dávku nevydáme, jsou schované v rozbalovátku
+                 * (Lucky 2026-09-25) — ale v nabídce zůstávají: kdyby chyběly,
+                 * majitel psa s cukrovkou by nic nezaškrtl a dostal dávku.
+                 * Když je některý zaškrtnutý, rozbalovátko zůstane otevřené.
+                 */
+                if (vazne.childNodes.length) {
+                    var rozbal = el('details', 'tb-rozbal');
+                    if (knowledge.diagnozy.some(function (m) { return m.blokuje && stav.diagnozy.indexOf(m.id) !== -1; })) rozbal.open = true;
+                    rozbal.appendChild(el('summary', 'tb-rozbal-hlava', 'Jiné vážné onemocnění (' + vazne.childNodes.length + ') — tady rozhoduje veterinář'));
+                    rozbal.appendChild(vazne);
+                    seznam.appendChild(rozbal);
+                }
                 k3.appendChild(polePole('Zdravotní potíže', seznam));
             }
 

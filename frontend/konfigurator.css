@@ -1040,3 +1040,11 @@
 #tutani-barf .tb-radek-check,
 #tutani-barf .tb-cip:not([aria-pressed="true"]),
 #tutani-barf .tb-input { border: 1px solid #E3D5C6; background: #FFFCF9; }
+
+/* Rozbalovátko „Jiné vážné onemocnění" (2026-09-25) */
+#tutani-barf .tb-rozbal{border:1px solid #EADFD3;border-radius:12px;background:#fff;margin-top:4px}
+#tutani-barf .tb-rozbal-hlava{cursor:pointer;list-style:none;padding:14px 44px 14px 16px;font-weight:600;font-size:15px;color:#7a2a1d;position:relative;user-select:none}
+#tutani-barf .tb-rozbal-hlava::-webkit-details-marker{display:none}
+#tutani-barf .tb-rozbal-hlava::after{content:"";position:absolute;right:18px;top:50%;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+#tutani-barf .tb-rozbal[open] .tb-rozbal-hlava::after{transform:translateY(-30%) rotate(-135deg)}
+#tutani-barf .tb-rozbal .tb-seznam-check--vazne{padding:0 10px 10px}
