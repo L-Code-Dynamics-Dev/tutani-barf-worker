@@ -1539,7 +1539,12 @@
                         blokuje: m.blokuje === true || m.severity === 'CRITICAL',
                     };
                 }
-                knowledge.diagnozy = (d.diagnozy || d.diagnoses || []).map(sjednot);
+                // Nahoře nemoci, u kterých dávku spočítáme; ty, kde ji nevydáme,
+                // až dole (Lucky 2026-09-25). V obou skupinách abecedně.
+                knowledge.diagnozy = (d.diagnozy || d.diagnoses || []).map(sjednot).sort(function (a, b) {
+                    if (a.blokuje !== b.blokuje) return a.blokuje ? 1 : -1;
+                    return String(a.nazev).localeCompare(String(b.nazev), 'cs');
+                });
                 knowledge.alergie = (d.alergie || d.allergens || []).map(sjednot);
                 knowledge.aktivity = d.aktivity || [];
                 // Výchozí volba = první konkrétní aktivita se stejnou úrovní,
