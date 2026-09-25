@@ -4,6 +4,18 @@ Nejnovější záznam nahoře.
 
 
 
+## 2026-09-25 (noc) — kalkulačka čitelná pro Google a AI bez JS (bez změny kalkulačky)
+
+**Zadání (Lucky):** stránka nesmí být prázdný kontejner; obsah, vstupy, výsledek, produkty a FAQ v serverovém HTML; žádný cloaking; kalkulačku nepřepisovat.
+**Analýza:** Shoptet posílal jen `<h1>` + prázdný `#tutani-barf`; konfigurator.js při překreslení volá `root.textContent = ''` → statický obsah UVNITŘ kontejneru by smazal. Proto blok POD kontejner.
+**Změna (minimální):**
+- `scripts/seo-obsah.mjs` generuje `frontend/shoptet/5-seo-obsah.html` z metodiky (barf-core.json), živého /v1/knowledge + /v1/davka a D1 produktů (stejná podmínka jako USABLE_CONDITION). Nic ručně psaného → nerozejde se s kalkulačkou. Pojistka: výstup s undefined/null/NaN se nevygeneruje.
+- Obsah stránky id=1042 (`/admin/stranka-detail/?id=1042`): kontejner beze změny + blok mezi `L-CODE BARF SEO START/END` (skript `tut-seo.js` ho nahradí, nepřidá podruhé). Zálohy `backups/stranka-barf-kalkulacka-pred-seo-*.html`.
+- `konfigurator.css`: styly `.tb-seo` (max 900 px, produkty v `<details>` kvůli mobilu). `konfigurator.js` NEZMĚNĚN.
+- Opraveny překlepy v názvech nemocí (nemocná játra, zkrat jaterní cévy, mědi v játrech, časté u dalmatinů) — Worker f4d60a55.
+**Ověřeno naostro:** bez JS (curl Googlebot) 1 473 slov, H2 + 8×H3, tabulka dávek, 122 odkazů na produkty (122/122 HTTP 200), JSON-LD WebApplication + FAQPage platné. S JS (Playwright mobil + desktop): dávka, pravidlo, produkty, cena, text výsledku, výška kalkulačky i šířka stránky SHODNÉ s před úpravou, 0 JS chyb.
+**Údržba:** při změně katalogu/metodiky: D1 dotaz → `node scripts/seo-obsah.mjs produkty.json > frontend/shoptet/5-seo-obsah.html` → `tut-seo.js` (DRY=1, pak DRY=0).
+
 ## 2026-09-25 (večer) — senior dostane dávku při každé aktivitě
 
 **Problém:** metodika od klienta měla pro seniora (8+ let) jen „nízká aktivita". Senior se střední (= výchozí volba formuláře), vysokou nebo pracovní aktivitou dostal INCOMPLETE / NO_MATCHING_DOSE_RULE → žádná dávka, žádné produkty.

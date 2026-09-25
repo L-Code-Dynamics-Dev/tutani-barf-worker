@@ -64,7 +64,7 @@
       "severity": "HIGH",
       "source": "MERCK",
       "appliesWhen": "LIVER_OVER_10PCT",
-      "textCs": "Dlouhodobě vysoký podíl jater může vést k toxicitě vitaminem A a nadbytku měďi.",
+      "textCs": "Dlouhodobě vysoký podíl jater může vést k toxicitě vitaminem A a nadbytku mědi.",
       "mitigationCs": "Játra držte na doporučených 5 % dávky. Více jater není zdravější."
     },
     {
@@ -142,7 +142,7 @@
       "claimCs": "Více jater je zdravější.",
       "status": "MYTUS",
       "source": "MERCK",
-      "explainCs": "Riziko toxicity vitaminem A a nadbytku měďi."
+      "explainCs": "Riziko toxicity vitaminem A a nadbytku mědi."
     },
     {
       "claimCs": "Poměr 80/10/10 automaticky splňuje potřeby psa.",

@@ -138,12 +138,12 @@ export const TUTANI_TENANT: TenantConfiguration = {
 
         /**
          * JATÝRKA / JÁTRA dřív než obecné vnitřnosti — mají v metodice
-         * vlastní podíl 5 % a u diagnóz s omezením měďi se limitují
+         * vlastní podíl 5 % a u diagnóz s omezením mědi se limitují
          * zvlášť.
          *
          * Nález 2026-09-09: `TUT22 Barf Kachní jatýrka 500g` je
          * v kategorii „Barf - Kachní vnitřnosti", takže padal na ORGAN.
-         * U hepatopatie s ukládáním měďi by se tak měď dostala přesně
+         * U hepatopatie s ukládáním mědi by se tak měď dostala přesně
          * tam, odkud ji vyřazujeme.
          */
         { match: 'jatýrk', barfGroup: 'LIVER' },

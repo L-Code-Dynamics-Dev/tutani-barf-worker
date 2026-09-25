@@ -316,13 +316,13 @@ export function resolveBarfGroup(
      * 0. JÁTRA podle názvu mají přednost i před kategorií.
      *
      * Játra jsou v metodice samostatná složka (5 %) oddělená od
-     * ostatních orgánů (5 %) a u hepatopatie s ukládáním měďi se
+     * ostatních orgánů (5 %) a u hepatopatie s ukládáním mědi se
      * limitují zvlášť (max 1 %). Když je e-shop zařadí pod obecné
      * „vnitřnosti", zdravotní limit by je minul.
      *
      * Nález 2026-09-09: `TUT22 Barf Kachní jatýrka 500g` je
      * v kategorii „Barf - Kachní vnitřnosti" → padalo na ORGAN, takže
-     * u omezení měďi by se měď dostala přesně tam, odkud ji
+     * u omezení mědi by se měď dostala přesně tam, odkud ji
      * vyřazujeme.
      *
      * Výjimka platí JEN pro játra a jen když kategorie neříká něco

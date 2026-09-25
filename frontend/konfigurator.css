@@ -1056,3 +1056,76 @@
 #tutani-barf .tb-obal--chyba .tb-obal-chyba{display:block}
 #tutani-barf .tb-obal--chyba .tb-volba{border-color:#b3261e}
 #tutani-barf .tb-obal-info{font-size:14px;color:#5f5a55;line-height:1.45}
+
+/* ---------------------------------------------------------------------------
+ * Statický obsah pod kalkulačkou (.tb-seo) — generuje scripts/seo-obsah.mjs.
+ * Je MIMO #tutani-barf (JS ho nepřekresluje), proto vlastní proměnné se
+ * stejnými barvami. Textový sloupec max. 900 px, ne přes celou šířku.
+ * ------------------------------------------------------------------------- */
+.tb-seo {
+    --tb-text: #231815;
+    --tb-text-2: #5B4D44;
+    --tb-cervena: #C8232B;
+    --tb-ram: #EADFD3;
+    --tb-pozadi: #FBF6F1;
+    max-width: 900px;
+    margin: 40px auto 24px;
+    padding: 0 24px;
+    color: var(--tb-text);
+    font-family: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+.tb-seo h2,
+.tb-seo h3,
+.tb-seo h4 {
+    font-family: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+    color: var(--tb-text);
+    line-height: 1.15;
+    letter-spacing: 0;
+    text-transform: none;
+}
+.tb-seo h2 { font-size: 30px; font-weight: 800; margin: 0 0 12px; }
+.tb-seo h3 { font-size: 23px; font-weight: 700; margin: 32px 0 10px; padding-top: 20px; border-top: 1px solid var(--tb-ram); }
+.tb-seo h4 { font-size: 18px; font-weight: 700; margin: 18px 0 4px; }
+.tb-seo p { margin: 0 0 12px; color: var(--tb-text-2); }
+.tb-seo ul { margin: 0 0 12px; padding-left: 20px; color: var(--tb-text-2); }
+.tb-seo li { margin: 3px 0; }
+.tb-seo strong { color: var(--tb-text); }
+.tb-seo a { color: var(--tb-cervena); text-decoration: underline; text-underline-offset: 2px; }
+.tb-seo a:hover { text-decoration-thickness: 2px; }
+
+.tb-seo .tb-seo-tabulka { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 15px; }
+.tb-seo .tb-seo-tabulka th,
+.tb-seo .tb-seo-tabulka td { padding: 8px 10px; border-bottom: 1px solid var(--tb-ram); text-align: left; vertical-align: top; }
+/* Šablona Shoptetu dává th světlý text — přebít. */
+.tb-seo .tb-seo-tabulka th { font-weight: 700; color: var(--tb-text) !important; background: var(--tb-pozadi) !important; }
+.tb-seo .tb-seo-tabulka td:nth-child(2),
+.tb-seo .tb-seo-tabulka td:nth-child(3) { white-space: nowrap; }
+
+.tb-seo .tb-seo-skupina { border: 1px solid var(--tb-ram); border-radius: 12px; margin: 8px 0; background: #fff; }
+.tb-seo .tb-seo-skupina summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 12px 16px;
+    font-weight: 700;
+    color: var(--tb-text);
+    min-height: 44px;
+    box-sizing: border-box;
+}
+.tb-seo .tb-seo-skupina summary::-webkit-details-marker { display: none; }
+.tb-seo .tb-seo-skupina summary::after { content: '+'; float: right; font-weight: 700; color: var(--tb-cervena); }
+.tb-seo .tb-seo-skupina[open] summary::after { content: '−'; }
+.tb-seo .tb-seo-skupina summary span { font-weight: 400; color: var(--tb-text-2); }
+.tb-seo .tb-seo-produkty { columns: 2; column-gap: 28px; padding: 0 16px 12px 34px; margin: 0; }
+.tb-seo .tb-seo-produkty li { break-inside: avoid; }
+
+@media (max-width: 640px) {
+    .tb-seo { padding: 0 14px; margin-top: 28px; }
+    .tb-seo h2 { font-size: 25px; }
+    .tb-seo h3 { font-size: 21px; }
+    .tb-seo .tb-seo-tabulka { font-size: 14px; }
+    .tb-seo .tb-seo-tabulka th,
+    .tb-seo .tb-seo-tabulka td { padding: 7px 6px; }
+    .tb-seo .tb-seo-produkty { columns: 1; }
+}
