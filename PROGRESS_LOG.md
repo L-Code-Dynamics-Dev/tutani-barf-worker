@@ -4,6 +4,13 @@ Nejnovější záznam nahoře.
 
 
 
+## 2026-09-25 14:45 — nemoci, obal, homepage
+- Nemoci bez výpočtu dávky (12) v rozbalovátku „Jiné vážné onemocnění“ na konci seznamu; při zaškrtnuté zůstává otevřené.
+- Povinný obal doručení (Přepravka E2 8088 / Thermobox 8085) v košíkové části; bez volby se nevloží nic. Ověřeno naživo: E2 v košíku.
+- Zákazník už nevidí technické „Katalog neuvádí fatPct…“; u slinivky/ledvin/mědi to vysvětluje upozornění nemoci, detail zůstává v unappliedRules.
+- Homepage /admin/titulni-strana/: upoutávka na kalkulačku nahoře + srovnaná loga. Záloha původního textu: backups/tutani-homepage-zaloha-1790339159052.html.
+- Otevřené: groundBoneOnly filtr (Hrubý pan Ušák), „Instantní rýžová kaše“ v nákupu, push větve.
+
 ## 2026-09-25 13:45 — umístění na e-shop (varianta A), 9 konkrétních aktivit, loga homepage
 
 - **Umístění schváleno (Lucky): varianta A** = upoutávka na homepage nad „Vítejte" → stránka
