@@ -977,3 +977,8 @@
 @media (max-width: 480px) {
     #tutani-barf .tb-prepinac--aktivity { grid-template-columns: 1fr 1fr; }
 }
+
+/* „Přejít do košíku" (Lucky 2026-09-25): vždy pod hlavním tlačítkem, po vložení zezelená. */
+#tutani-barf .tb-tlacitko--kosik { margin-top: 10px; text-decoration: none; justify-content: center; }
+#tutani-barf .tb-tlacitko--kosik-pripraven { background: var(--tb-zelena); color: #fff; border-color: var(--tb-zelena); box-shadow: 0 12px 28px rgba(63, 122, 46, .35); }
+#tutani-barf .tb-tlacitko--kosik-pripraven:hover { background: var(--tb-zelena); filter: brightness(1.08); }

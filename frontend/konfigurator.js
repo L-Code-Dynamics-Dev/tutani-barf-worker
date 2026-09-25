@@ -245,11 +245,14 @@
                     popisek.textContent = '✓ V košíku';
                     ukazToast(vlozenoKusu + ' ' + sklonuj(vlozenoKusu, 'balení', 'balení', 'balení') +
                         ' pro ' + jmenoZobrazene() + ' je v košíku');
-                    // Hlavička Shoptetu (počet a cena košíku) se obnoví
-                    // až po načtení stránky — proto přesměrování do košíku.
-                    setTimeout(function () {
-                        window.location.href = '/kosik/';
-                    }, 1400);
+                    // Bez automatického přesměrování (Lucky 2026-09-25): zákazník
+                    // může zůstat (PDF, jiné období) a do košíku jde tlačítkem.
+                    // Hlavička Shoptetu (počet/cena) se obnoví až načtením košíku.
+                    var jdi = document.getElementById('tb-prejit-do-kosiku');
+                    if (jdi) {
+                        jdi.classList.add('tb-tlacitko--kosik-pripraven');
+                        jdi.focus();
+                    }
                 } else {
                     popisek.textContent = puvodni;
                     tlacitko.disabled = false;
@@ -1211,6 +1214,11 @@
                 vlozVseDoKosiku(btn, popisek);
             });
             panel.appendChild(btn);
+
+            var doKosiku = el('a', 'tb-tlacitko tb-tlacitko--druhe tb-tlacitko--kosik', 'Přejít do košíku →');
+            doKosiku.id = 'tb-prejit-do-kosiku';
+            doKosiku.href = '/kosik/';
+            panel.appendChild(doKosiku);
         }
 
         root.appendChild(panel);
