@@ -12,10 +12,11 @@
         margin: 0;
         padding: 24px 16px 60px;
         background: #fff;
+        overflow-x: hidden;
         color: #1f2328;
     }
     .nahled-hlavicka {
-        max-width: 1100px;
+        max-width: 1200px;
         margin: 0 auto 24px;
     }
     .nahled-hlavicka h1 {
@@ -28,7 +29,7 @@
         font-size: 14px;
     }
     .nahled-pozn {
-        max-width: 1100px;
+        max-width: 1200px;
         margin: 0 auto 20px;
         padding: 10px 14px;
         background: #fffbe6;
@@ -41,10 +42,7 @@
 </head>
 <body>
 
-<div class="nahled-hlavicka">
-    <h1>Výpočet krmné dávky</h1>
-    <p>Vyplňte údaje o psovi a hned uvidíte, kolik a čeho potřebuje.</p>
-</div>
+
 
 <div class="nahled-pozn" id="pozn">
     Náhled běží na <strong>ukázkových datech</strong> — výpočet i produkty jsou
@@ -52,7 +50,7 @@
     vzhledu a ovládání.
 </div>
 
-<div id="tutani-barf"></div>
+<div id="tutani-barf" data-foto="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Golden_Retriever_Chewing_A_Stick.jpg/960px-Golden_Retriever_Chewing_A_Stick.jpg"></div>
 
 <script>
 /**
@@ -71,6 +69,17 @@
 
     var KNOWLEDGE = {
         v: 1,
+        aktivity: [
+            { id: 'gaucak', nazev: 'gaučák', popis: 'hlavně doma, byt', uroven: 'LOW' },
+            { id: 'kratke-prochazky', nazev: 'krátké procházky', popis: 'venčení kolem domu', uroven: 'LOW' },
+            { id: 'hodina-venku', nazev: 'hodina venku', popis: 'denní procházky', uroven: 'MEDIUM' },
+            { id: 'vylety-zahrada', nazev: 'dlouhé výlety', popis: 'víkendové túry, zahrada', uroven: 'MEDIUM' },
+            { id: 'beh-kolo', nazev: 'běhání, kolo', popis: 'canicross, bikejöring', uroven: 'HIGH' },
+            { id: 'psi-sporty', nazev: 'psí sporty', popis: 'agility, obedience, frisbee', uroven: 'HIGH' },
+            { id: 'lovecky-pastevecky', nazev: 'lovecký / pastevecký', popis: 'myslivost, práce se stádem', uroven: 'WORKING' },
+            { id: 'sluzebni', nazev: 'služební', popis: 'policie, záchranáři, stráž', uroven: 'WORKING' },
+            { id: 'tazny', nazev: 'tažný pes', popis: 'mushing, závody se spřežením', uroven: 'WORKING' },
+        ],
         diagnozy: [
             { id: 'ckd-early', nazev: 'nemocné ledviny, počáteční stadium',
               popis: 'Ledviny nezvládají vylučovat fosfor. Snížíme podíl mletých kostí, které jsou jeho hlavním zdrojem.' },
@@ -79,13 +88,32 @@
               popis: 'Vybíráme libové suroviny a vynecháváme tučné.' },
             { id: 'onemocneni-jater', nazev: 'nemocná jaterní funkce',
               popis: 'Snížíme podíl jater v dávce.' },
-            { id: 'portosystemovy-shunt', nazev: 'zkratka jaterní cévy', blokuje: true }
+            { id: 'portosystemovy-shunt', nazev: 'zkratka jaterní cévy', blokuje: true },
+            { id: "oslabena-imunita", nazev: "oslabená imunita (chemoterapie, léky na imunitu)", blokuje: true },
+            { id: "uratove-kameny", nazev: "urátové kameny v močovém měchýři (častý u dalmatinů)", blokuje: true },
+            { id: "struvitove-kameny", nazev: "struvitové kameny v močovém měchýři", blokuje: true },
+            { id: "oxalatove-kameny", nazev: "oxalátové kameny v močovém měchýři", blokuje: true },
+            { id: "ibd", nazev: "chronické střevní potíže, časté průjmy", blokuje: true },
+            { id: "cukrovka", nazev: "cukrovka", blokuje: true },
+            { id: "hyperlipidemie", nazev: "zvýšené tuky v krvi (časté u kníračů)", blokuje: true },
+            { id: "onemocneni-srdce", nazev: "nemocné srdce", blokuje: true },
+            { id: "epi", nazev: "nedostatečnost slinivky (pes nestráví potravu bez enzymů)", blokuje: true },
+            { id: "stitna-zlaza", nazev: "nemocná štítná žláza", blokuje: true },
+            { id: "artroza", nazev: "bolavé klouby, artróza",
+              popis: "Dávku spočítáme běžně. U artrózy je nejdůležitější udržet štíhlou postavu, protože každé kilo navíc zatěžuje klouby. Doplňky pro klouby (například rybí olej) proberte s veterinářem." },
+            { id: "atopicka-dermatitida", nazev: "svědivá kůže, atopie",
+              popis: "Dávku spočítáme běžně. Pokud kůži zhoršuje určité maso, označte ho níže mezi alergiemi a konfigurátor ho vynechá. Eliminační dietu k odhalení spouštěče vede veterinář." }
         ],
         alergie: [
             { id: 'kure', nazev: 'kuřecí' },
             { id: 'hovezi', nazev: 'hovězí' },
             { id: 'vepr', nazev: 'vepřové' },
-            { id: 'ryba', nazev: 'ryby' }
+            { id: 'ryba', nazev: 'ryby' },
+            { id: 'kruti', nazev: 'krůtí' },
+            { id: 'kachna', nazev: 'kachní' },
+            { id: 'kralik', nazev: 'králičí' },
+            { id: 'jehneci', nazev: 'jehněčí' },
+            { id: 'zverina', nazev: 'zvěřina' }
         ]
     };
 
@@ -120,12 +148,16 @@
         var celkem = Math.round(zVahy * 1000 * pct / 100);
 
                 var dg = pes.diagnozy || [];
-        if (dg.indexOf('ckd-advanced') !== -1 || dg.indexOf('portosystemovy-shunt') !== -1) {
+        var BLOKUJICI = ["ckd-advanced", "portosystemovy-shunt", "oslabena-imunita", "uratove-kameny", "struvitove-kameny", "oxalatove-kameny", "ibd", "cukrovka", "hyperlipidemie", "onemocneni-srdce", "epi", "stitna-zlaza"];
+        var VAROVANI_TEXT = {"oslabena-imunita": "Dávku jsme nevydali. U psa s oslabenou imunitou je syrová strava riziková kvůli bakteriím v syrovém mase. Způsob krmení prosím proberte s veterinářem.", "uratove-kameny": "Dávku jsme nevydali. U urátových kamenů je potřeba výrazně omezit vnitřnosti a jídelníček sestavit s veterinářem podle rozboru moči.", "struvitove-kameny": "Dávku jsme nevydali. U struvitových kamenů se krmení řídí rozborem moči. Jídelníček prosím sestavte s veterinářem.", "oxalatove-kameny": "Dávku jsme nevydali. U oxalátových kamenů musí jídelníček sestavit veterinář podle rozboru moči.", "ibd": "Dávku jsme nevydali. U chronických střevních potíží se strava mění postupně pod dohledem veterináře. Plnou dávku proto nevydáváme.", "cukrovka": "Dávku jsme nevydali. U cukrovky musí změnu stravy řídit veterinář, protože mění potřebu inzulinu.", "hyperlipidemie": "Dávku jsme nevydali. Při zvýšených tucích v krvi je potřeba přísně nízkotučná strava. Jídelníček prosím sestavte s veterinářem.", "onemocneni-srdce": "Dávku jsme nevydali. U onemocnění srdce musí jídelníček odpovídat léčbě. Proberte ho prosím s veterinářem.", "epi": "Dávku jsme nevydali. U nedostatečnosti slinivky se krmení nastavuje společně s enzymy. Proberte ho prosím s veterinářem.", "stitna-zlaza": "Dávku jsme nevydali. U onemocnění štítné žlázy musí krmení odpovídat léčbě. Proberte ho prosím s veterinářem.", "artroza": "U artrózy pomáhá hlavně štíhlá postava. Doplňky pro klouby prosím proberte s veterinářem.", "atopicka-dermatitida": "Pokud svědění souvisí s krmením, označte podezřelé maso mezi alergiemi. Eliminační dietu prosím veďte s veterinářem."};
+        var blok = dg.filter(function (x) { return BLOKUJICI.indexOf(x) !== -1; });
+        if (blok.length) {
+            var text = VAROVANI_TEXT[blok[0]] || 'Dávku jsme nevydali. U tohoto onemocnění se jídelníček staví individuálně podle výsledků krve.';
             return {
                 status: 'BLOCKED',
                 upozorneni: [{
                     severity: 'CRITICAL',
-                    text: 'Dávku jsme nevydali. U tohoto onemocnění se jídelníček staví individuálně podle výsledků krve.',
+                    text: text,
                     requiresVet: true
                 }],
                 disclaimer: 'Výsledek je orientační doporučení. Doporučujeme konzultaci s veterinářem.'
@@ -146,21 +178,54 @@
             ? { nazev: 'Barf Mletý Salmo Salar 3kg', cena: 114, balení: 3000, url: '#' }
             : { nazev: 'Barf Mleté kuře 3kg', cena: 109, balení: 3000, url: '#' };
 
-        function polozka(nazev, cena, baleni, gramyDen, url) {
+        var idPolozky = 0;
+        function polozka(nazev, cena, baleni, gramyDen, group, url) {
             var potreba = gramyDen * dni;
             var pocet = Math.max(1, Math.ceil(potreba / baleni));
-            return { nazev: nazev, pocet: pocet, cenaCelkem: pocet * cena, url: url || '#', priceId: null };
+            idPolozky++;
+            return { nazev: nazev, group: group, packGrams: baleni, pocet: pocet, cenaCelkem: pocet * cena,
+                     url: url || '#', productId: String(900 + idPolozky), priceId: String(1900 + idPolozky),
+                     skladem: 20, doplneni: false };
         }
 
         var produkty = [
-            polozka(maso.nazev, maso.cena, maso.balení, slozeni[0].gramy, maso.url),
-            polozka('Barf Pašíkovy kosti 1kg', 49, 1000, slozeni[1].gramy),
-            polozka('Barf Pašíkova játra mletá 1kg', 69, 1000, slozeni[2].gramy),
-            polozka('Barf Plíce jako kráva mleté 1kg', 49, 1000, slozeni[3].gramy),
-            polozka('Barf Mrkev 500g', 39, 500, slozeni[4].gramy)
+            polozka(maso.nazev, maso.cena, maso.balení, slozeni[0].gramy, 'MUSCLE', maso.url),
+            polozka('Barf Pašíkovy kosti 1kg', 49, 1000, slozeni[1].gramy, 'BONE'),
+            polozka('Barf Pašíkova játra mletá 1kg', 69, 1000, slozeni[2].gramy, 'LIVER'),
+            polozka('Barf Plíce jako kráva mleté 1kg', 49, 1000, slozeni[3].gramy, 'ORGAN'),
+            polozka('Barf Mrkev 500g', 39, 500, slozeni[4].gramy, 'PLANT')
         ];
 
+        // Recept jen pro náhled: jedna surovina na složku, porce rovným dílem.
+        var nazvyPorci = { 2: ['ráno', 'večer'], 3: ['ráno', 'poledne', 'večer'], 4: ['ráno', 'dopoledne', 'odpoledne', 'večer'] }[porce];
+        var recept = {
+            denneCelkemG: slozeni.reduce(function (a, x) { return a + x.gramy; }, 0),
+            porce: nazvyPorci.map(function (n, k) {
+                var sur = slozeni.map(function (x, i) {
+                    var g = Math.floor(x.gramy / porce) + (k < x.gramy % porce ? 1 : 0);
+                    return { nazev: produkty[i].nazev, group: x.group, skupina: x.nazev, gramy: g };
+                });
+                return { nazev: n, celkemG: sur.reduce(function (a, x) { return a + x.gramy; }, 0), suroviny: sur };
+            }),
+            baleni: [],
+            chybi: [],
+            postup: [
+                'Balení na další den přendejte z mrazáku do lednice. Rozmrazujte v lednici, ne při pokojové teplotě.',
+                'Každou porci odvažte na kuchyňské váze podle tabulky. Odhad od oka rozhodí poměr složek.',
+                'Suroviny dejte do misky a promíchejte, aby pes nevybíral jen to, co mu chutná víc.'
+            ]
+        };
+
         var upozorneni = [];
+        ['artroza', 'atopicka-dermatitida'].forEach(function (x) {
+            if (dg.indexOf(x) !== -1) upozorneni.push({ severity: 'CAUTION', text: VAROVANI_TEXT[x], requiresVet: true });
+        });
+        if (pes.problemSeZuby) upozorneni.push({ severity: 'CAUTION', requiresVet: false,
+            text: 'Kvůli zubům nebo polykání vybíráme jen mleté kosti. Celé kosti a maso s celou kostí do nákupu nedáváme — pes by je nemusel rozkousat a hrozilo by udušení.' });
+        if (pes.velkePlemenoStene) upozorneni.push({ severity: 'SERIOUS', requiresVet: true,
+            text: 'Štěně velkého plemene roste rychle a jeho kosti jsou citlivé na poměr vápníku a fosforu v krmení. Dávku berte jako orientační a jídelníček prosím nechte zkontrolovat veterinářem.' });
+        if (pes.prechodZGranuli) upozorneni.push({ severity: 'INFO', requiresVet: false,
+            text: 'Při přechodu z granulí měňte stravu postupně a sledujte trávení. Začněte jedním druhem masa a další přidávejte, až si na něj pes zvykne.' });
         if (dg.indexOf('ckd-early') !== -1) {
             upozorneni.push({
                 severity: 'SERIOUS',
@@ -189,7 +254,8 @@
             davka: {
                 pctMin: pct, pctMax: pct, pctPouzito: pct,
                 zHmotnosti: pes.kondice === 'OVER' ? 'IDEAL' : 'ACTUAL',
-                zHmotnostiKg: zVahy,
+                zakladHmotnostiKg: zVahy,
+                pravidloPopis: popis,
                 celkemGDen: celkem,
                 porce: { pocet: porce, gramyNaPorci: Math.round(celkem / porce) }
             },
@@ -197,6 +263,7 @@
             produkty: produkty,
             nepokryto: [],
             cena: { celkemCzk: produkty.reduce(function (a, p) { return a + p.cenaCelkem; }, 0), naDni: dni },
+            recept: recept,
             upozorneni: upozorneni,
             audit: [
                 { krok: 'DOSE_RULE', vysledek: popis + ' → ' + String(pct).replace('.', ',') + ' %' },
@@ -222,10 +289,19 @@
                 status: 200, headers: { 'Content-Type': 'application/json' }
             }));
         }
+        if (u.indexOf('/v1/jidelnicek.pdf') !== -1) {
+            document.getElementById('pozn').innerHTML =
+                '<strong>Náhled:</strong> na e-shopu se tady stáhne PDF jídelníček vygenerovaný Workerem.';
+            return Promise.resolve(new Response('{}', { status: 409, headers: { 'Content-Type': 'application/json' } }));
+        }
         if (u.indexOf('/action/Cart/') !== -1) {
+            // Tvar odpovědi jako u Shoptetu (ověřeno naživo 2026-09-24).
+            var t = new URLSearchParams((opts && opts.body) || '');
             document.getElementById('pozn').innerHTML =
                 '<strong>Náhled:</strong> tady by se produkty vložily do košíku a zákazník by šel k pokladně.';
-            return Promise.resolve(new Response('{}', { status: 200 }));
+            return Promise.resolve(new Response(JSON.stringify({ code: 200, payload: { cartItems: [
+                { priceId: Number(t.get('priceId')), quantity: Number(t.get('amount')) }
+            ] } }), { status: 200, headers: { 'Content-Type': 'application/json' } }));
         }
         return puvodniFetch.apply(window, arguments);
     };

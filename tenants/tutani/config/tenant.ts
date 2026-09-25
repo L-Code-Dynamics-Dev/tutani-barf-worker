@@ -29,8 +29,75 @@ export const TUTANI_TENANT: TenantConfiguration = {
 
     ruleSetIds: ['barf-core@1', 'tutani-health@1'],
 
+    /**
+     * Konkrétní aktivity (Lucky 2026-09-25, „základní sada"). Přiřazení
+     * k úrovni schválil Lucky 25. 9. (klient potvrzovat nebude). Dávka se počítá
+     * jen podle `level` z jeho tabulky (barf-core adult-low/medium/high/
+     * working) — žádné nové procento. Pořadí = pořadí v UI.
+     */
+    /**
+     * Povinný obal doručení (lišta e-shopu „DŮLEŽITÉ VYBRAT OBAL DORUČENÍ").
+     * Id ověřena z detailu produktu 2026-09-25 (/obaly-2/…), cena 0 Kč.
+     * Popis ze stránky /doprava/: „v přepravce (E2), nebo v nevratném termoboxu".
+     */
+    /**
+     * Zelenina = jen zelenina a ovoce (Lucky 2026-09-25: „nepočítat tam
+     * obiloviny"). Kategorie „Barf - Přílohy" míchá zeleninu s rýží,
+     * pohankou, vločkami a doplňky (křemelina, Herbal, Balancer…).
+     * Nový zeleninový produkt bez slova ze `requireAny` se NEnabídne,
+     * dokud se slovo nedoplní sem.
+     */
+    groupNameRules: {
+        PLANT: {
+            requireAny: ['zelenin', 'mrkev', 'mrkv', 'řep', 'repa', 'dýn', 'dyn', 'špenát', 'spenat', 'ovoc', 'jabl', 'brokol', 'cuket', 'celer', 'petržel', 'hrušk', 'banán', 'borůvk'],
+            forbidAny: ['rýž', 'ryz', 'pohank', 'obil', 'vloč', 'vloc', 'jáhl', 'jahl', 'kuskus', 'ovsen', 'extrud', 'křemelin', 'kremelin', 'herbal', 'digestive', 'balancer', 'semínk', 'semink', 'alfalf', 'mořsk', 'morsk', 'kelp'],
+            reasonCs: 'nejde o čistou zeleninu nebo ovoce (obilná příloha nebo doplněk) — do zeleninové části dávky se nepočítá',
+        },
+    },
+
+    packagingOptions: [
+        { productId: '5259', priceId: '8088', labelCs: 'Přepravka E2', hintCs: 'vratná plastová přepravka na maso', priceCzk: 0 },
+        { productId: '5256', priceId: '8085', labelCs: 'Thermobox', hintCs: 'nevratný termobox, zůstane vám', priceCzk: 0 },
+    ],
+
+    activityOptions: [
+        { id: 'gaucak', labelCs: 'gaučák', hintCs: 'hlavně doma, byt', level: 'LOW' },
+        { id: 'kratke-prochazky', labelCs: 'krátké procházky', hintCs: 'venčení kolem domu', level: 'LOW' },
+        { id: 'hodina-venku', labelCs: 'hodina venku', hintCs: 'denní procházky', level: 'MEDIUM' },
+        { id: 'vylety-zahrada', labelCs: 'dlouhé výlety', hintCs: 'víkendové túry, zahrada', level: 'MEDIUM' },
+        { id: 'beh-kolo', labelCs: 'běhání, kolo', hintCs: 'canicross, bikejöring', level: 'HIGH' },
+        { id: 'psi-sporty', labelCs: 'psí sporty', hintCs: 'agility, obedience, frisbee', level: 'HIGH' },
+        { id: 'lovecky-pastevecky', labelCs: 'lovecký / pastevecký', hintCs: 'myslivost, práce se stádem', level: 'WORKING' },
+        { id: 'sluzebni', labelCs: 'služební', hintCs: 'policie, záchranáři, stráž', level: 'WORKING' },
+        { id: 'tazny', labelCs: 'tažný pes', hintCs: 'mushing, závody se spřežením', level: 'WORKING' },
+    ],
+
     /** Mražené maso — měsíční zásoba se do mrazáku běžně vejde. */
     defaultPeriodDays: 30,
+
+    /**
+     * Zákazník volí ze 7, 14 nebo 30 dní (Lucky 2026-09-24) — stejné
+     * volby jako přepínač „Zásoba na" ve frontendu.
+     */
+    allowedPeriodDays: [7, 14, 30],
+
+    /**
+     * Postup do receptu a PDF. NÁVRH L-Code 2026-09-24, čeká na
+     * potvrzení klientem. Záměrně bez čísel (hodiny, teploty): ta by
+     * musel dodat klient nebo výrobce. BARF se nevaří, proto „příprava".
+     */
+    recipe: {
+        brandCs: 'Tutani · Opravdové žrádlo',
+        contactCs: 'Mirka +420 605 178 771 · obchod.tutani.cz',
+        stepsCs: [
+            'Balení na další den přendejte z mrazáku do lednice. Rozmrazujte v lednici, ne při pokojové teplotě.',
+            'Každou porci odvažte na kuchyňské váze podle tabulky. Odhad od oka rozhodí poměr složek.',
+            'Suroviny dejte do misky a promíchejte, aby pes nevybíral jen to, co mu chutná víc.',
+            'Rozmražené maso znovu nezamrazujte. Otevřené balení uchovávejte v lednici v uzavřené nádobě.',
+            'Po krmení misku umyjte horkou vodou, stejně jako prkénko a nože po syrovém mase.',
+            'Při přechodu z granulí přidávejte novou stravu postupně a sledujte trávení psa.',
+        ],
+    },
 
     /**
      * Mapování kategorie e-shopu → složka BARF dávky.
@@ -71,12 +138,12 @@ export const TUTANI_TENANT: TenantConfiguration = {
 
         /**
          * JATÝRKA / JÁTRA dřív než obecné vnitřnosti — mají v metodice
-         * vlastní podíl 5 % a u diagnóz s omezením měďi se limitují
+         * vlastní podíl 5 % a u diagnóz s omezením mědi se limitují
          * zvlášť.
          *
          * Nález 2026-09-09: `TUT22 Barf Kachní jatýrka 500g` je
          * v kategorii „Barf - Kachní vnitřnosti", takže padal na ORGAN.
-         * U hepatopatie s ukládáním měďi by se tak měď dostala přesně
+         * U hepatopatie s ukládáním mědi by se tak měď dostala přesně
          * tam, odkud ji vyřazujeme.
          */
         { match: 'jatýrk', barfGroup: 'LIVER' },

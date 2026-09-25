@@ -1,0 +1,6 @@
+<!-- L-CODE BARF KALKULAČKA START — HTML kódy → Zápatí. Načte kalkulačku jen na stránce s kontejnerem tutani-barf.
+     Verze = obsah upload/lcode/verze.txt (čte se vždy čerstvě) → nová verze platí hned po nahrání.
+     Když verze.txt nejde načíst, použije se hodinová verze (kalkulačka se načte vždy). -->
+<style>#menu a[href$="/barf-kalkulacka/"]{color:#c4161c!important}</style>
+<script>(function(d){var r=d.getElementById('tutani-barf');if(!r)return;var b='https://cdn.myshoptet.com/usr/obchod.tutani.cz/user/documents/upload/lcode/',h='h'+Math.floor(Date.now()/36e5),hotovo=0;function nacti(v){if(hotovo++)return;v='?v='+encodeURIComponent(v);var l=d.createElement('link');l.rel='stylesheet';l.href=b+'konfigurator.css'+v;d.head.appendChild(l);var s=d.createElement('script');s.src=b+'konfigurator.js'+v;s.defer=true;d.body.appendChild(s)}var t=setTimeout(function(){nacti(h)},1500);try{fetch(b+'verze.txt?t='+Date.now(),{cache:'no-store'}).then(function(x){return x.ok?x.text():''}).then(function(v){clearTimeout(t);v=(v||'').trim();nacti(/^[\w.-]{1,40}$/.test(v)?v:h)}).catch(function(){clearTimeout(t);nacti(h)})}catch(e){clearTimeout(t);nacti(h)}})(document)</script>
+<!-- L-CODE BARF KALKULAČKA END -->

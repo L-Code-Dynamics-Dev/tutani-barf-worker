@@ -13,10 +13,28 @@
  * (řazení má poslední rozhodčí podle SKU). To je nutné, aby zákazník
  * po obnovení stránky neviděl jiné doporučení a aby šel výsledek
  * reprodukovat při reklamaci.
+ *
+ * SKLAD A ROTACE (Lucky 2026-09-24): „Měli bychom absolutně vždycky umět
+ * pracovat s aktuální skladovostí a momentální zásobou … aby se pořád
+ * netočilo pár produktů a ostatní se neprodávaly."
+ *
+ *   1. Nikdy se nedoporučí víc balení, než je skladem. Když jeden
+ *      produkt nestačí, dávka se DOPLNÍ rovnocenným produktem ze stejné
+ *      složky (klokan dojde → krůtí svalovina). Balíček na X dní se tak
+ *      pokryje, dokud to sklad dovolí; zbytek se přizná jako
+ *      `INSUFFICIENT_STOCK`.
+ *   2. „Rovnocenný" = stejná BARF složka a stejná třída složení: čistý
+ *      produkt (≥ 90 % dané složky) se nenahrazuje směsí (70 % svalovina
+ *      + 30 % droby), dokud je čistých dost. Filtry alergií, nemocí
+ *      a bezpečnosti platí pro náhradu stejně jako pro první volbu.
+ *   3. Místo „vždy nejlevnější" se vybírá z PÁSMA přijatelných produktů
+ *      (přiměřené balení, cena za kg do +15 % od nejlevnějšího) s vahou
+ *      podle zásoby — co je víc skladem, vychází častěji, nic nevypadne.
+ *      Pořadí určuje `seed` (profil psa + den), takže je reprodukovatelné.
  */
 
 import Decimal from 'decimal.js';
-import type { BarfGroup } from '../../domain/tenant.js';
+import type { BarfGroup, GroupNameRule } from '../../domain/tenant.js';
 import type { ResolvedConstraints } from '../../domain/health/Condition.js';
 import type { CompositionItem } from '../feeding-calculator/calculateDose.js';
 
@@ -47,7 +65,36 @@ export interface CatalogProduct {
      * se čte jako `false` (suroviny známe).
      */
     ingredientsUnknown?: boolean;
+    /**
+     * Momentální zásoba v kusech (balení). `null`/chybí = neznámá —
+     * produkt se pak omezuje jen příznakem `inStock` (zpětná kompatibilita).
+     */
+    stockQuantity?: number | null;
+    /** Rozpad na BARF složky v % — určuje, co je rovnocenná náhrada. */
+    compositionParts?: { group: BarfGroup; pct: number }[];
 }
+
+/** Volby výběru. Vše volitelné — bez nich se chová deterministicky se seedem ''. */
+export interface MatchOptions {
+    /**
+     * Seed rotace. API ho skládá z profilu psa a data: stejný pes ve
+     * stejný den = stejný nákup (reklamace, obnovení stránky), jiný pes
+     * nebo jiný den = jiné pořadí v rámci pásma.
+     */
+    seed?: string;
+    /** Šířka cenového pásma nad nejlevnějším (0,15 = +15 % Kč/kg). */
+    priceBandRatio?: number;
+    /** Kolik různých produktů smí pokrýt jednu složku. */
+    maxProductsPerGroup?: number;
+    /** Pravidla tenanta, co smí podle názvu plnit složku (viz `GroupNameRule`). */
+    groupNameRules?: Partial<Record<BarfGroup, GroupNameRule>>;
+}
+
+
+export const DEFAULT_PRICE_BAND_RATIO = 0.15;
+const DEFAULT_MAX_PRODUCTS_PER_GROUP = 4;
+/** Od kolika % dané složky je produkt „čistý" (rovnocenná náhrada). */
+const PURE_THRESHOLD_PCT = 90;
 
 export interface MatchedProduct {
     sku: string;
@@ -63,12 +110,20 @@ export interface MatchedProduct {
     priceId: string | null;
     /** Kolik gramů z potřeby tenhle produkt pokrývá. */
     coversGrams: number;
+    /** Zásoba v okamžiku výpočtu (`null` = neznámá). */
+    stockQuantity: number | null;
+    /**
+     * `true` = produkt doplňuje složku, protože předchozí volba neměla
+     * dost kusů skladem. Frontend může zobrazit „doplněno X".
+     */
+    fillsShortage: boolean;
 }
 
 export type UncoveredReason =
     | 'NO_PRODUCT_IN_GROUP'      // katalog složku vůbec nemá
     | 'ALL_FILTERED_OUT'         // vše vyřazeno alergií/bezpečností
-    | 'OUT_OF_STOCK';            // je, ale není skladem
+    | 'OUT_OF_STOCK'             // je, ale není skladem
+    | 'INSUFFICIENT_STOCK';      // skladem je, ale na celé období nestačí
 
 export interface UncoveredGroup {
     group: BarfGroup;
@@ -77,6 +132,8 @@ export interface UncoveredGroup {
     reason: UncoveredReason;
     /** Kolik produktů padlo na kterém filtru — pro report klientovi. */
     filteredOut: number;
+    /** U `INSUFFICIENT_STOCK`: kolik gramů na celé období chybí. */
+    missingGrams?: number;
 }
 
 export interface ExcludedProduct {
@@ -104,7 +161,8 @@ export function matchProducts(
     composition: CompositionItem[],
     catalog: CatalogProduct[],
     constraints: ResolvedConstraints,
-    periodDays: number
+    periodDays: number,
+    options: MatchOptions = {}
 ): MatchResult {
     const products: MatchedProduct[] = [];
     const uncovered: UncoveredGroup[] = [];
@@ -132,7 +190,7 @@ export function matchProducts(
         let hadStockIssueOnly = true;
 
         for (const p of inGroup) {
-            const reason = filterReason(p, item.group, constraints);
+            const reason = filterReason(p, item.group, constraints) ?? groupNameReason(p, options.groupNameRules?.[item.group]);
             if (reason === null) {
                 usable.push(p);
                 hadStockIssueOnly = false;
@@ -158,26 +216,52 @@ export function matchProducts(
         // a zákazník musí mít na celé období, ne o den méně.
         const needGrams = new Decimal(item.grams).mul(periodDays);
 
-        // ---- VÝBĚR ----
+        // ---- VÝBĚR A ALOKACE PODLE SKLADU ----
         // Potřeba vstupuje do výběru, aby se nedoporučilo balení
         // o mnoho větší, než zákazník na období spotřebuje.
-        const chosen = pickBest(usable, constraints, needGrams.toNumber());
-        const packs = Math.max(1, Math.ceil(needGrams.div(chosen.packGrams).toNumber()));
-        const totalPrice = new Decimal(chosen.priceCzk).mul(packs);
+        const ordered = rankCandidates(usable, item.group, constraints, needGrams.toNumber(), options);
+        const maxProducts = options.maxProductsPerGroup ?? DEFAULT_MAX_PRODUCTS_PER_GROUP;
 
-        products.push({
-            sku: chosen.sku,
-            name: chosen.name,
-            url: chosen.url,
-            group: chosen.group,
-            packGrams: chosen.packGrams,
-            packs,
-            unitPriceCzk: chosen.priceCzk,
-            totalPriceCzk: round2(totalPrice),
-            productId: chosen.productId,
-            priceId: chosen.priceId,
-            coversGrams: needGrams.toNumber(),
-        });
+        let remaining = needGrams.toNumber();
+        let used = 0;
+        for (const chosen of ordered) {
+            if (remaining <= 0 || used >= maxProducts) break;
+            const packsNeeded = Math.max(1, Math.ceil(remaining / chosen.packGrams));
+            const stock = knownStock(chosen);
+            const packs = stock === null ? packsNeeded : Math.min(packsNeeded, stock);
+            if (packs <= 0) continue;
+
+            const covers = Math.min(packs * chosen.packGrams, remaining);
+            products.push({
+                sku: chosen.sku,
+                name: chosen.name,
+                url: chosen.url,
+                group: chosen.group,
+                packGrams: chosen.packGrams,
+                packs,
+                unitPriceCzk: chosen.priceCzk,
+                totalPriceCzk: round2(new Decimal(chosen.priceCzk).mul(packs)),
+                productId: chosen.productId,
+                priceId: chosen.priceId,
+                coversGrams: covers,
+                stockQuantity: stock,
+                fillsShortage: used > 0,
+            });
+            remaining -= packs * chosen.packGrams;
+            used++;
+        }
+
+        if (remaining > 0) {
+            // Sklad celé období nepokryje — PŘIZNAT, ne dopočítat (R7).
+            uncovered.push({
+                group: item.group,
+                labelCs: item.labelCs,
+                gramsPerDay: round2(new Decimal(remaining).div(periodDays)),
+                reason: 'INSUFFICIENT_STOCK',
+                filteredOut: 0,
+                missingGrams: Math.round(remaining),
+            });
+        }
     }
 
     const total = products.reduce((a, p) => a.plus(p.totalPriceCzk), new Decimal(0));
@@ -211,6 +295,18 @@ function filterReason(
      * tom, do jaké skupiny produkt zařadil `resolveBarfGroup` z názvu
      * — a mražené maso s kostí se do MUSCLE dostává běžně.
      */
+    /**
+     * Problém se zuby / polykáním: jen MLETÉ kosti. Produkt s kostí
+     * (skupina BONE nebo kost ve složení), který podle názvu není mletý,
+     * se nedoporučí — fail-closed, neznámou formu nebereme za bezpečnou.
+     */
+    if (constraints.groundBoneOnly === true) {
+        const hasBone = group === 'BONE' || (p.compositionParts ?? []).some((x) => x.group === 'BONE' && x.pct > 0);
+        if (hasBone && !/ml[eé]t|mlet|drcen/i.test(p.name)) {
+            return 'celá kost — pes s problémem se zuby nebo polykáním ji nemusí rozkousat, doporučujeme jen mleté kosti';
+        }
+    }
+
     if (p.isCooked) {
         return group === 'BONE'
             ? 'vařené kosti se nikdy nedoporučují — hrozí střepy a poranění zažívacího traktu'
@@ -268,7 +364,17 @@ function filterReason(
     const attrReason = applyProductAttrFilters(p, constraints);
     if (attrReason !== null) return attrReason;
 
+    /**
+     * KOŠÍK (Lucky 2026-09-24): vkládá se přes `/action/Cart/addCartItem/`
+     * a KAŽDÁ položka musí nést `priceId` (id varianty) I `productId`.
+     * Produkt bez nich by šel doporučit, ale ne koupit — zákazník by
+     * dostal nákup, který se do košíku nevloží celý.
+     */
+    if (!p.priceId || !p.productId) return 'nejde vložit do košíku — chybí priceId nebo productId';
+
     if (!p.inStock) return 'není skladem';
+    // Momentální zásoba má přednost před příznakem z nočního syncu.
+    if (knownStock(p) === 0) return 'není skladem';
 
     return null;
 }
@@ -289,65 +395,158 @@ function applyProductAttrFilters(
     return null;
 }
 
+function groupNameReason(p: CatalogProduct, rule: GroupNameRule | undefined): string | null {
+    if (!rule) return null;
+    const n = p.name.toLocaleLowerCase('cs');
+    const has = (w: string) => n.includes(w.toLocaleLowerCase('cs'));
+    if (rule.forbidAny.some(has) || !rule.requireAny.some(has)) return rule.reasonCs;
+    return null;
+}
+
 /**
- * Vybere nejvhodnější produkt ze skupiny.
+ * Seřadí kandidáty jedné složky do pořadí, v jakém se z nich plní potřeba.
  *
- * Kritéria v pořadí:
- *  1. preferovaná surovina ze zdravotního pravidla (např. nízkotučné)
- *  2. balení, které se nepřebije o víc než `MAX_OVERSHOOT` — jinak
- *     zákazník platí za zásobu, kterou si neobjednal
- *  3. nižší cena za kilogram — nemá platit víc za totéž
- *  4. SKU jako poslední rozhodčí → deterministický výsledek
+ * VRSTVY (dřívější vrstva se vyčerpá celá, než přijde na řadu další):
+ *   A. preferovaná surovina ze zdravotního pravidla (např. nízkotučné)
+ *   B. čistý produkt dané složky (≥ 90 %) před směsí — náhrada musí být
+ *      rovnocenná, ne „něco ze stejné kategorie"
  *
- * PROČ BOD 2 (zjištěno ukázkou toku 2026-09-09): u malé denní potřeby
- * vyhrálo velké balení, protože mělo nejlepší cenu za kg. Konkrétně
- * 54 g kostí/den na 30 dní = 1,6 kg, ale doporučilo se balení 3 kg —
- * zásoba na 55 dní. U mraženého masa navíc naráží na kapacitu mrazáku.
+ * UVNITŘ VRSTVY:
+ *   1. PÁSMO = přiměřené balení (nepřebije potřebu víc než 2×, viz
+ *      `MAX_OVERSHOOT`) a cena za kg do `priceBandRatio` nad nejlevnějším
+ *      přiměřeným. Mimo pásmo nic nevypadne — jen jde až za pásmo.
+ *   2. V pásmu nejdřív produkty, které SAMY pokryjí celé období
+ *      (dost kusů skladem) — zákazník nemá dostat tři sáčky, když
+ *      stačí jeden. Dělí se jen, když to sklad jinak nedovolí.
+ *   3. Pořadí v pásmu: vážený los (Efraimidis–Spirakis) se seedem.
+ *      Váha = kolikrát zásoba pokryje potřebu (0,25–8) — co leží
+ *      na skladě, vychází častěji; nic nemá nulovou šanci.
+ *   4. Mimo pásmo postaru: přiměřenost, cena za kg, SKU.
  *
- * Kritérium je poměrové, ne absolutní: velké balení není zakázané,
- * jen nesmí potřebu překročit víc než dvojnásobně. Když menší balení
- * neexistuje, velké se použije (a je to lepší než nedoporučit nic).
- *
- * ZÁMĚRNĚ se nevybírá „největší balení" ani „nejdražší": cena za kg
- * a přiměřenost jsou jediná kritéria, která jde obhájit před
- * zákazníkem.
+ * PROČ NE „VŽDY NEJLEVNĚJŠÍ" (Lucky 2026-09-24): pro všechny psy by
+ * vyšel pořád stejný produkt na složku a zbytek skladu by stál.
+ * Pásmo +15 % drží doporučení cenově obhajitelné před zákazníkem.
  */
 const MAX_OVERSHOOT = 2.0;
 
-function pickBest(
+function rankCandidates(
     candidates: CatalogProduct[],
+    group: BarfGroup,
     constraints: ResolvedConstraints,
-    neededGrams: number
-): CatalogProduct {
+    neededGrams: number,
+    options: MatchOptions
+): CatalogProduct[] {
+    const band = options.priceBandRatio ?? DEFAULT_PRICE_BAND_RATIO;
+    const seed = options.seed ?? '';
+
     const preferred = (p: CatalogProduct) =>
-        p.ingredientIds.some((i) => constraints.preferredIngredientIds.has(i)) ? 0 : 1;
+        p.ingredientIds.some((i) => constraints.preferredIngredientIds.has(i));
+    const pure = (p: CatalogProduct) => purityPct(p, group) >= PURE_THRESHOLD_PCT;
+    const layerOf = (p: CatalogProduct) => (preferred(p) ? 0 : 2) + (pure(p) ? 0 : 1);
 
+    const layers = new Map<number, CatalogProduct[]>();
+    for (const p of candidates) {
+        const l = layerOf(p);
+        const arr = layers.get(l) ?? [];
+        arr.push(p);
+        layers.set(l, arr);
+    }
+
+    const out: CatalogProduct[] = [];
+    for (const l of [...layers.keys()].sort((a, b) => a - b)) {
+        out.push(...rankLayer(layers.get(l)!, group, neededGrams, band, seed));
+    }
+    return out;
+}
+
+function rankLayer(
+    layer: CatalogProduct[],
+    group: BarfGroup,
+    neededGrams: number,
+    band: number,
+    seed: string
+): CatalogProduct[] {
     const pricePerKg = (p: CatalogProduct) => (p.priceCzk / p.packGrams) * 1000;
+    const packsFor = (p: CatalogProduct) => Math.max(1, Math.ceil(neededGrams / p.packGrams));
+    const fits = (p: CatalogProduct) => (packsFor(p) * p.packGrams) / neededGrams <= MAX_OVERSHOOT;
 
-    /** Kolikrát celá balení překročí potřebu. */
-    const overshoot = (p: CatalogProduct) => {
-        const packs = Math.max(1, Math.ceil(neededGrams / p.packGrams));
-        return (packs * p.packGrams) / neededGrams;
+    /**
+     * Pásmo se počítá z přiměřených balení. Když přiměřené NENÍ ŽÁDNÉ
+     * (malý pes na 7 dní a nejmenší balení 3 kg), počítá se ze všech —
+     * jinak by se rotace vypnula a vyšel by „nejlevnější", zatímco na
+     * 30 dní (kde už balení přiměřené je) by vyšlo jiné maso. Zákazník
+     * by při přepnutí období viděl výměnu masa bez důvodu (odchyceno
+     * testem 2026-09-24).
+     */
+    const fitting = layer.filter(fits);
+    const pool = fitting.length > 0 ? fitting : layer;
+    const cheapest = pool.length > 0 ? Math.min(...pool.map(pricePerKg)) : null;
+    const inPool = new Set(pool);
+    const inBand = (p: CatalogProduct) =>
+        cheapest !== null && inPool.has(p) && pricePerKg(p) <= cheapest * (1 + band) + 0.005;
+
+    const bandSet = layer.filter(inBand);
+    const rest = layer.filter((p) => !inBand(p));
+
+    const coversAlone = (p: CatalogProduct) => {
+        const s = knownStock(p);
+        return s === null || s >= packsFor(p);
     };
+    const weight = (p: CatalogProduct) => {
+        const s = knownStock(p);
+        if (s === null) return 1;
+        return Math.min(8, Math.max(0.25, (s * p.packGrams) / neededGrams));
+    };
+    // Efraimidis–Spirakis: klíč u^(1/w), vyšší vyhrává. Deterministické
+    // díky hashi místo Math.random.
+    const lotteryKey = (p: CatalogProduct) => Math.pow(hash01(`${seed}|${group}|${p.sku}`), 1 / weight(p));
+    const byLottery = (a: CatalogProduct, b: CatalogProduct) =>
+        lotteryKey(b) - lotteryKey(a) || a.sku.localeCompare(b.sku);
 
-    const sorted = [...candidates].sort((a, b) => {
-        const prefDiff = preferred(a) - preferred(b);
-        if (prefDiff !== 0) return prefDiff;
+    const bandFull = bandSet.filter(coversAlone).sort(byLottery);
+    const bandPartial = bandSet.filter((p) => !coversAlone(p)).sort(byLottery);
 
-        // Přiměřená balení mají přednost před nepřiměřenými, ale mezi
-        // sebou se řadí až cenou — jinak by vyhrálo nejmenší balení
-        // za každou cenu.
-        const aFits = overshoot(a) <= MAX_OVERSHOOT ? 0 : 1;
-        const bFits = overshoot(b) <= MAX_OVERSHOOT ? 0 : 1;
-        if (aFits !== bFits) return aFits - bFits;
-
+    const restSorted = [...rest].sort((a, b) => {
+        const fitDiff = (fits(a) ? 0 : 1) - (fits(b) ? 0 : 1);
+        if (fitDiff !== 0) return fitDiff;
         const priceDiff = pricePerKg(a) - pricePerKg(b);
         if (Math.abs(priceDiff) > 0.005) return priceDiff;
-
         return a.sku.localeCompare(b.sku);
     });
 
-    return sorted[0];
+    return [...bandFull, ...bandPartial, ...restSorted];
+}
+
+/** Podíl dané složky v produktu (%). Bez rozpadu = celý produkt (100 %). */
+function purityPct(p: CatalogProduct, group: BarfGroup): number {
+    const parts = p.compositionParts;
+    if (!parts || parts.length === 0) return 100;
+    return parts.filter((c) => c.group === group).reduce((a, c) => a + c.pct, 0);
+}
+
+/** Zásoba v celých kusech; `null` = neznámá. Záporná (Shoptet to umí) = 0. */
+function knownStock(p: CatalogProduct): number | null {
+    const s = p.stockQuantity;
+    if (s === null || s === undefined || !Number.isFinite(s)) return null;
+    return Math.max(0, Math.floor(s));
+}
+
+/**
+ * Deterministické číslo z (0, 1] z řetězce — FNV-1a 32 bit.
+ * Nejde o kryptografii: jen rovnoměrné a reprodukovatelné pořadí.
+ */
+function hash01(s: string): number {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 0x01000193);
+    }
+    // Dodatečné promíchání bitů — FNV má u krátkých podobných řetězců
+    // (SKU lišící se posledním znakem) slabší rozptyl v horních bitech.
+    h ^= h >>> 16;
+    h = Math.imul(h, 0x85ebca6b);
+    h ^= h >>> 13;
+    return ((h >>> 0) + 1) / 4294967297;
 }
 
 function round2(d: Decimal): number {

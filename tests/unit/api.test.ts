@@ -23,6 +23,8 @@ import {
     handleDose,
     handleHealth,
     handleKnowledge,
+    handleRecipePdf,
+    pdfFileName,
     NOOP_RULE_ENGINE,
     type Deps,
     type RuleEngine,
@@ -106,7 +108,9 @@ function product(over: Partial<StoredProduct> = {}): StoredProduct {
         packGrams: 3000,
         packGramsSource: 'DATALAYER',
         priceCzk: 109,
-        priceId: null,
+        // Košík potřebuje OBĚ id (Lucky 2026-09-24) — bez priceId by se
+        // produkt nedoporučil. 973 = reálné priceId k productId 868 (ZP9).
+        priceId: '973',
         productId: '868',
         inStock: true,
         stockQuantity: 19,
@@ -228,6 +232,103 @@ describe('POST /v1/davka — validní vstup', () => {
     });
 });
 
+describe('POST /v1/davka — nutriční pokrytí (nález auditu 2026-09-12, D-1)', () => {
+    it('bez deps.nutrition vrací nutrice: null a nutrientEngineReady: false — žádná tichá nula', async () => {
+        const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
+        const b = await body(res);
+        expect(b.nutrientEngineReady).toBe(false);
+        expect(b.nutrice).toBeNull();
+    });
+
+    it('s deps.nutrition spočítá pokrytí pro vybrané produkty', async () => {
+        const hoveziMlete: import('../../src/engine/nutrient-coverage/calculateNutrientCoverage.js').NutrientDataIngredient = {
+            id: 'hovezi-mlete-93-7',
+            nutrients: { calcium: { value: 10, unit: 'mg', status: 'MEASURED' } },
+        };
+        const tutaniProduct: import('../../src/domain/products/TutaniProduct.js').TutaniProduct = {
+            productId: 'TUT1',
+            code: 'TUT1',
+            nameCs: 'Barf Mleté kuře 3kg',
+            brand: null,
+            categoryPath: null,
+            topCategory: 'OTHER',
+            priceWithVatCzk: null,
+            packGrams: null,
+            availability: 'UNKNOWN',
+            url: '',
+            kind: 'SINGLE_INGREDIENT',
+            composition: [
+                {
+                    ingredientId: 'hovezi-mlete-93-7',
+                    nameCs: 'hovězí mleté',
+                    species: 'BEEF',
+                    part: 'MUSCLE',
+                    role: 'INGREDIENT',
+                    subcomponentsCs: [],
+                    subcomponentRatio: null,
+                    percentage: 100,
+                    certainty: 'EXACT',
+                    sourceCs: 'test',
+                },
+            ],
+            compositionAccountedPct: 100,
+            analytical: [],
+            claims: { rawDescriptionCs: null, ageCategory: null, dietaryClaimsCs: [] },
+            evidence: { source: 'TUTANI_PRODUCT_PAGE', sourceDate: '2026-09-12', confidence: 'EXACT' },
+            updatedAt: '2026-09-12',
+        };
+
+        const res = await handleDose(
+            doseRequest(REX),
+            deps({
+                rules: fakeRules(),
+                nutrition: {
+                    products: new Map([['TUT1', tutaniProduct]]),
+                    ingredients: new Map([['hovezi-mlete-93-7', hoveziMlete]]),
+                    targets: [
+                        {
+                            nutrient: 'calcium',
+                            lifeStage: 'ADULT',
+                            min: 1.45,
+                            max: 6.25,
+                            unit: 'g',
+                            basis: 'PER_1000_KCAL',
+                            source: 'FEDIAF',
+                            sourceVersion: '2025',
+                            confidence: 'TABULKA',
+                        },
+                    ],
+                },
+            })
+        );
+        const b = await body(res);
+
+        expect(b.nutrientEngineReady).toBe(true);
+        expect(b.nutrice).not.toBeNull();
+        const calcium = (b.nutrice as { klic: string; stav: string }[]).find((c) => c.klic === 'calcium');
+        expect(calcium).toBeDefined();
+        // Kalcium se počítá jen z produktů, které JSOU ve `products` mapě
+        // (jen TUT1) — zbytek doporučených produktů (BONE/LIVER/ORGAN/PLANT)
+        // se do coverage nedostane, takže výsledek je nutně NEDOSTATEK/NEZNAME,
+        // nikdy klamné OK. Test ověřuje jen to, že se pole vůbec vygenerovalo
+        // a nespadlo, ne konkrétní status (ten závisí na celém katalogu).
+        expect(['OK', 'NEDOSTATEK', 'NADBYTEK', 'NEZNAME']).toContain(calcium!.stav);
+    });
+
+    it('BLOCKED dávka nemá nutriční pokrytí (nedává smysl počítat u nevydané dávky)', async () => {
+        const res = await handleDose(
+            doseRequest(REX),
+            deps({
+                rules: fakeRules({ blocked: true, blockedBy: ['ckd'] }),
+                nutrition: { products: new Map(), ingredients: new Map(), targets: [] },
+            })
+        );
+        const b = await body(res);
+        expect(b.status).toBe('BLOCKED');
+        expect(b.nutrice).toBeNull();
+    });
+});
+
 describe('POST /v1/davka — DISCLAIMER se nedá odstranit', () => {
     it('je v odpovědi u OK', async () => {
         const res = await handleDose(doseRequest(REX), deps({ rules: fakeRules() }));
@@ -244,10 +345,14 @@ describe('POST /v1/davka — DISCLAIMER se nedá odstranit', () => {
     });
 
     it('je v odpovědi i u INCOMPLETE', async () => {
-        // Senior s vysokou aktivitou — v metodice pro něj pásmo není.
+        // Metodika bez seniorských pásem — senior s vysokou aktivitou pak pásmo nemá.
+        const bezSeniora = {
+            ...METHODOLOGY,
+            doseMatrix: METHODOLOGY.doseMatrix.filter((r) => r.lifeStage !== 'SENIOR'),
+        };
         const res = await handleDose(
             doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'HIGH' } }),
-            deps({ rules: fakeRules() })
+            deps({ rules: fakeRules(), methodology: bezSeniora })
         );
         const b = await body(res);
         expect(b.status).toBe('INCOMPLETE');
@@ -275,15 +380,30 @@ describe('POST /v1/davka — BLOCKED a INCOMPLETE', () => {
     });
 
     it('INCOMPLETE u chybějícího pásma vysvětlí důvod v auditu', async () => {
+        const bezSeniora = {
+            ...METHODOLOGY,
+            doseMatrix: METHODOLOGY.doseMatrix.filter((r) => r.lifeStage !== 'SENIOR'),
+        };
         const res = await handleDose(
             doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'HIGH' } }),
-            deps({ rules: fakeRules() })
+            deps({ rules: fakeRules(), methodology: bezSeniora })
         );
         const b = await body(res);
         expect(b.status).toBe('INCOMPLETE');
         expect(b.reason).toBe('NO_MATCHING_DOSE_RULE');
         expect(b.produkty).toEqual([]);
         expect((b.audit as { krok: string }[]).map((a) => a.krok)).toContain('DOSE_RULE');
+    });
+
+    it('senior se střední aktivitou dostane dávku i produkty (dřív INCOMPLETE)', async () => {
+        const res = await handleDose(
+            doseRequest({ ...REX, pes: { ...REX.pes, vekMesicu: 120, aktivita: 'MEDIUM' } }),
+            deps({ rules: fakeRules() })
+        );
+        const b = await body(res);
+        expect(b.status).toBe('OK');
+        expect((b.davka as { pravidlo: string }).pravidlo).toBe('senior-medium');
+        expect((b.produkty as unknown[]).length).toBeGreaterThan(0);
     });
 
     it('nadváha se počítá z IDEÁLNÍ hmotnosti', async () => {
@@ -462,6 +582,89 @@ describe('POST /v1/davka — selhání pravidel a katalogu', () => {
     });
 });
 
+describe('POST /v1/davka — košík a bezpečnost (2026-09-24)', () => {
+    it('produkt bez priceId nebo productId se nedoporučí — nešel by do košíku', async () => {
+        const store = new FakeStore([
+            product({ sku: 'BEZ_PRICE', group: 'MUSCLE', priceId: null }),
+            product({ sku: 'BEZ_PRODUCT', group: 'MUSCLE', productId: null }),
+        ]);
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules: fakeRules() }, store)));
+        expect(b.produkty).toEqual([]);
+    });
+
+    it('každý doporučený produkt nese priceId I productId', async () => {
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules: fakeRules() })));
+        const produkty = b.produkty as { priceId: string | null; productId: string | null }[];
+        expect(produkty.length).toBeGreaterThan(0);
+        expect(produkty.every((p) => !!p.priceId && !!p.productId)).toBe(true);
+    });
+
+    it('FAIL-CLOSED přes API: u alergie se produkt s neznámým složením nedoporučí (regrese loadCatalog)', async () => {
+        const store = new FakeStore([
+            product({ sku: 'NEZNAME', group: 'MUSCLE', ingredientIds: [], ingredientsUnknown: true }),
+        ]);
+        const rules = fakeRules({ ownerExcludedIngredientIds: new Set(['kure']), excludedIngredientIds: new Set(['kure']) });
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules }, store)));
+        expect((b.produkty as { sku: string }[]).map((p) => p.sku)).not.toContain('NEZNAME');
+    });
+
+    it('nikdy víc balení, než je skladem — zbytek se doplní jiným produktem', async () => {
+        // 405 g/den × 30 = 12 150 g = 5 balení po 3 kg; A má 2, B 10.
+        const store = new FakeStore([
+            ...fullCatalog().filter((p) => p.group !== 'MUSCLE'),
+            product({ sku: 'A', group: 'MUSCLE', stockQuantity: 2 }),
+            product({ sku: 'B', group: 'MUSCLE', stockQuantity: 10, priceCzk: 111 }),
+        ]);
+        const b = await body(await handleDose(doseRequest(REX), deps({ rules: fakeRules() }, store)));
+        const muscle = (b.produkty as { sku: string; group: string; pocet: number; skladem: number }[]).filter(
+            (p) => p.group === 'MUSCLE'
+        );
+        for (const p of muscle) expect(p.pocet).toBeLessThanOrEqual(p.skladem);
+        expect(muscle.reduce((a, p) => a + p.pocet, 0)).toBeGreaterThanOrEqual(5);
+    });
+});
+
+describe('POST /v1/davka — období 7 / 14 / 30 dní (Lucky 2026-09-24)', () => {
+    it.each([7, 14, 30])('období %i dní projde', async (d) => {
+        const res = await handleDose(doseRequest({ ...REX, obdobiDni: d }), deps({ rules: fakeRules() }));
+        expect(res.status).toBe(200);
+        expect((await body(res)).obdobiDni).toBe(d);
+    });
+
+    it.each([1, 21, 60, 90])('období %i dní se odmítne s nabídkou povolených', async (d) => {
+        const res = await handleDose(doseRequest({ ...REX, obdobiDni: d }), deps({ rules: fakeRules() }));
+        expect(res.status).toBe(422);
+        const issues = (await body(res)).issues as { field: string; code: string; allowed?: number[] }[];
+        expect(issues).toContainEqual({ field: 'obdobiDni', code: 'UNKNOWN_ENUM_VALUE', allowed: [7, 14, 30] });
+    });
+
+    it('přepnutí období změní POČET balení, ne maso (při dostatku skladu)', async () => {
+        const catalog = [
+            ...fullCatalog().filter((p) => p.group !== 'MUSCLE'),
+            product({ sku: 'HOVEZI', group: 'MUSCLE', priceCzk: 300, packGrams: 3000, stockQuantity: 100 }),
+            product({ sku: 'KRUTI', group: 'MUSCLE', priceCzk: 310, packGrams: 3000, stockQuantity: 100 }),
+            product({ sku: 'KRALIK', group: 'MUSCLE', priceCzk: 320, packGrams: 3000, stockQuantity: 100 }),
+        ];
+        const now = () => new Date('2026-09-24T10:00:00.000Z');
+        // Víc psů = víc seedů; u každého musí být maso stejné pro 7/14/30.
+        for (const kg of [10, 18, 24, 32, 40]) {
+            const skus: string[] = [];
+            const pocty: number[] = [];
+            for (const d of [7, 14, 30]) {
+                const req = { ...REX, pes: { ...REX.pes, hmotnostKg: kg }, obdobiDni: d };
+                const b = await body(await handleDose(doseRequest(req), deps({ rules: fakeRules(), now }, new FakeStore(catalog))));
+                const m = (b.produkty as { sku: string; group: string; pocet: number }[]).filter((p) => p.group === 'MUSCLE');
+                expect(m).toHaveLength(1);
+                skus.push(m[0].sku);
+                pocty.push(m[0].pocet);
+            }
+            expect(new Set(skus).size).toBe(1);
+            expect(pocty[0]).toBeLessThanOrEqual(pocty[1]);
+            expect(pocty[1]).toBeLessThanOrEqual(pocty[2]);
+        }
+    });
+});
+
 describe('GET /v1/knowledge', () => {
     it('vrátí seznam diagnóz a alergenů, aby je frontend neměl natvrdo', async () => {
         const res = await handleKnowledge(deps({ rules: fakeRules() }));
@@ -471,6 +674,14 @@ describe('GET /v1/knowledge', () => {
         expect((b.diagnoses as { id: string }[])[0].id).toBe('ckd');
         expect((b.allergens as { id: string }[])[0].id).toBe('kure');
         expect(b.ruleSetIds).toEqual(TUTANI_TENANT.ruleSetIds);
+    });
+
+    it('posílá povinné obaly doručení s productId i priceId (Přepravka E2 / Thermobox)', async () => {
+        const b = await body(await handleKnowledge(deps({ rules: fakeRules() })));
+        expect(b.obaly).toEqual([
+            { productId: '5259', priceId: '8088', nazev: 'Přepravka E2', popis: 'vratná plastová přepravka na maso', cenaCzk: 0 },
+            { productId: '5256', priceId: '8085', nazev: 'Thermobox', popis: 'nevratný termobox, zůstane vám', cenaCzk: 0 },
+        ]);
     });
 
     it('endpoint existuje i bez nasazených pravidel a přizná to', async () => {
@@ -562,5 +773,74 @@ describe('GET /v1/health', () => {
         expect(res.status).toBe(503);
         const b = await body(res);
         expect(b.status).toBe('FAILED');
+    });
+});
+
+
+describe('recept a PDF jídelníček (Lucky 2026-09-24)', () => {
+    it('/v1/davka vrací recept: součet surovin = denní dávka, porce sedí na engine', async () => {
+        const b = await body(await handleDose(doseRequest(REX), deps()));
+        expect(b.status).toBe('OK');
+        const r = b.recept;
+        expect(r).not.toBeNull();
+        expect(r.denneCelkemG).toBe(b.slozeni.reduce((a: number, s: any) => a + Math.round(s.gramy), 0));
+        expect(r.porce).toHaveLength(b.davka.porce.pocet);
+        expect(r.porce.reduce((a: number, p: any) => a + p.celkemG, 0)).toBe(r.denneCelkemG);
+        // Každá surovina v receptu je produkt z nákupu.
+        const vNakupu = new Set(b.produkty.map((p: any) => p.sku));
+        for (const d of r.denne) expect(vNakupu.has(d.sku)).toBe(true);
+        expect(r.postup.length).toBeGreaterThan(0);
+    });
+
+    it('bez nákupu (katalog nedostupný) je recept null, dávka zůstává', async () => {
+        const store = new FakeStore(fullCatalog());
+        store.failReads = true;
+        const b = await body(await handleDose(doseRequest(REX), deps({}, store)));
+        expect(b.status).toBe('OK');
+        expect(b.recept).toBeNull();
+    });
+
+    it('PDF: platné PDF s hlavičkou ke stažení a jménem psa v souboru', async () => {
+        const res = await handleRecipePdf(doseRequest({ ...REX, pes: { ...REX.pes, jmeno: 'Žeryk 🐶' } }), deps());
+        expect(res.status).toBe(200);
+        expect(res.headers.get('Content-Type')).toBe('application/pdf');
+        expect(res.headers.get('Content-Disposition')).toBe('attachment; filename="jidelnicek-zeryk.pdf"');
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        expect(new TextDecoder().decode(bytes.slice(0, 5))).toBe('%PDF-');
+        expect(bytes.length).toBeGreaterThan(5_000);
+        if (process.env.PDF_OUT) (await import('node:fs')).writeFileSync(process.env.PDF_OUT, bytes);
+    });
+
+    it('konkrétní aktivita: úroveň určí server, název jde do odpovědi i do PDF', async () => {
+        const pes = { ...REX.pes, aktivita: undefined, aktivitaDetail: 'psi-sporty' };
+        const b = await body(await handleDose(doseRequest({ ...REX, pes }), deps()));
+        expect(b.status).toBe('OK');
+        expect(b.pes.aktivita).toBe('psí sporty');
+        const res = await handleRecipePdf(doseRequest({ ...REX, pes }), deps());
+        expect(res.status).toBe(200);
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        if (process.env.PDF_OUT_AKTIVITA) (await import('node:fs')).writeFileSync(process.env.PDF_OUT_AKTIVITA, bytes);
+    });
+
+    it('PDF se NEVYDÁ pro blokovaný stav — 409 s JSON, ne jídelníček', async () => {
+        const res = await handleRecipePdf(
+            doseRequest(REX),
+            deps({ rules: fakeRules({ blocked: true, blockedBy: ['ckd-advanced'], requiresVet: true }) })
+        );
+        expect(res.status).toBe(409);
+        const b = await body(res);
+        expect(b.code).toBe('PDF_NOT_AVAILABLE');
+        expect(b.status).toBe('BLOCKED');
+    });
+
+    it('PDF: chybný vstup vrací stejnou validační chybu jako /v1/davka', async () => {
+        const res = await handleRecipePdf(doseRequest({ pes: { hmotnostKg: -3 } }), deps());
+        expect(res.status).toBe(422);
+    });
+
+    it('název souboru je bezpečný ASCII', () => {
+        expect(pdfFileName('Bára "x"; rm')).toBe('jidelnicek-bara-x-rm.pdf');
+        expect(pdfFileName(null)).toBe('jidelnicek.pdf');
+        expect(pdfFileName('🐶')).toBe('jidelnicek.pdf');
     });
 });

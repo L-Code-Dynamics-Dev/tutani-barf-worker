@@ -44,7 +44,7 @@ export interface ScrapedProduct {
      */
     packGrams: number | null;
     /** Odkud se hmotnost vzala — pro audit a kontrolu kvality dat. */
-    packGramsSource: 'DATALAYER' | 'PARAM' | 'NAME' | null;
+    packGramsSource: 'DATALAYER' | 'PARAM' | 'NAME' | 'EXPORT' | null;
     /**
      * Autoritativní zdroj si odporuje s názvem produktu — chyba v datech
      * e-shopu, kterou musí opravit klient. Systém ji NEOPRAVUJE odhadem,
@@ -65,6 +65,19 @@ export interface ScrapedProduct {
     compositionText: string | null;
     /** Parametry z tabulky na detailu. */
     params: Record<string, string>;
+    /** U varianty Shoptet id hlavního produktu (společné všem variantám). */
+    parentProductId?: string | null;
+    /** U varianty název z tabulky variant („Pivovarské kvasnice: 1 kg"). */
+    variantName?: string | null;
+}
+
+/** Jeden řádek tabulky variant na detailu produktu. */
+export interface ScrapedVariantRow {
+    code: string;
+    priceId: string | null;
+    variantName: string | null;
+    priceWithVat: number | null;
+    stockQuantity: number | null;
 }
 
 /**
@@ -303,13 +316,13 @@ export function resolveBarfGroup(
      * 0. JÁTRA podle názvu mají přednost i před kategorií.
      *
      * Játra jsou v metodice samostatná složka (5 %) oddělená od
-     * ostatních orgánů (5 %) a u hepatopatie s ukládáním měďi se
+     * ostatních orgánů (5 %) a u hepatopatie s ukládáním mědi se
      * limitují zvlášť (max 1 %). Když je e-shop zařadí pod obecné
      * „vnitřnosti", zdravotní limit by je minul.
      *
      * Nález 2026-09-09: `TUT22 Barf Kachní jatýrka 500g` je
      * v kategorii „Barf - Kachní vnitřnosti" → padalo na ORGAN, takže
-     * u omezení měďi by se měď dostala přesně tam, odkud ji
+     * u omezení mědi by se měď dostala přesně tam, odkud ji
      * vyřazujeme.
      *
      * Výjimka platí JEN pro játra a jen když kategorie neříká něco
@@ -474,4 +487,120 @@ function decodeEntities(s: string): string {
         .replace(/&quot;/g, '"')
         .replace(/&#39;|&apos;/g, "'")
         .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(Number(d)));
+}
+
+/**
+ * Řádky tabulky variant (`<tr data-testid="productVariant">`).
+ *
+ * NÁLEZ 2026-09-24: u variantního produktu Shoptet v dataLayeru NEVYPLNÍ
+ * `product.code` (jen pole `codes`), takže `parseProductPage` stránku
+ * zahodil jako „bez kódu". Proto tvrzení z 2026-09-09, že tutani nemá
+ * žádné varianty — varianty se jen nikdy nenačetly. V exportu jich je 35
+ * (např. Pivovarské kvasnice 500 g / 1 kg, Střívkové makarony).
+ *
+ * Každý řádek tabulky má VLASTNÍ formulář do košíku s vlastním
+ * `priceId` — páruje se v rámci řádku (`td.variant-code` + formulář),
+ * nikdy podle pořadí, aby se nemohla prohodit gramáž a cena.
+ */
+export function parseVariantRows(html: string): ScrapedVariantRow[] {
+    const out: ScrapedVariantRow[] = [];
+    for (const m of html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)) {
+        const tr = m[1];
+        const codeCell = tr.match(/class="variant-code"[^>]*>([\s\S]*?)<\/td>/);
+        if (!codeCell) continue;
+        const code = decodeEntities(
+            codeCell[1].replace(/<span>[\s\S]*?<\/span>/g, ' ').replace(/<[^>]+>/g, ' ')
+        )
+            .replace(/\s+/g, ' ')
+            .trim();
+        if (!code) continue;
+
+        const nameCell = tr.match(/data-testid="productVariantName"[^>]*>([\s\S]*?)<\/td>/);
+        const priceCell = tr.match(/data-testid="productVariantPrice"[^>]*>([\s\S]*?)<\/td>/);
+        const amount = tr.match(/data-testid="numberAvailabilityAmount"[^>]*>\s*\((\d+(?:[.,]\d+)?)/);
+        const priceId =
+            tr.match(/<input[^>]*name="priceId"[^>]*value="(\d+)"/i)?.[1] ??
+            tr.match(/<input[^>]*value="(\d+)"[^>]*name="priceId"/i)?.[1] ??
+            null;
+
+        out.push({
+            code,
+            priceId,
+            variantName: nameCell ? htmlToText(nameCell[1]).trim() || null : null,
+            priceWithVat: priceCell ? parseCzk(htmlToText(priceCell[1])) : null,
+            stockQuantity: amount ? parseFloat(amount[1].replace(',', '.')) : null,
+        });
+    }
+    return out;
+}
+
+/** `1 234,50 Kč` → 1234.5. */
+function parseCzk(text: string): number | null {
+    const m = text.replace(/\s/g, '').match(/(\d+(?:,\d+)?)Kč/);
+    return m ? Number(m[1].replace(',', '.')) : null;
+}
+
+/**
+ * Všechny prodejné položky detailu: jeden produkt, nebo každá varianta
+ * jako samostatná položka s vlastním SKU a `priceId`.
+ *
+ * `parseProductPage` zůstává beze změny (non-interference) — pro
+ * produkt bez variant vrací tahle funkce přesně jeho výsledek.
+ */
+export function parseProductPageAll(html: string, url: string): ScrapedProduct[] {
+    const single = parseProductPage(html, url);
+    if (single) return [single];
+    if (!isProductDetail(html)) return [];
+
+    const p = extractProductJson(html);
+    if (!p || p.hasVariants !== true) return [];
+
+    const rows = parseVariantRows(html);
+    if (rows.length === 0) return [];
+
+    const parentId = p.id !== undefined && p.id !== null ? String(p.id) : null;
+    const name = typeof p.name === 'string' ? p.name.trim() : '';
+    const params = parseParams(html);
+    const codes = Array.isArray(p.codes) ? (p.codes as Record<string, unknown>[]) : [];
+    const categoryPath =
+        typeof p.currentCategory === 'string'
+            ? p.currentCategory
+            : typeof p.defaultCategory === 'string'
+              ? p.defaultCategory
+              : null;
+
+    return rows.map((row) => {
+        // Sklad přednostně z dataLayeru (přesné číslo), záloha z tabulky.
+        const fromLayer = codes.find((c) => c?.code === row.code)?.quantity;
+        const layerQty =
+            typeof fromLayer === 'number' ? fromLayer : typeof fromLayer === 'string' ? parseFloat(fromLayer) : NaN;
+
+        /**
+         * Gramáž varianty z JEJÍHO názvu („…: 1 kg"), ne z `codes[].weight`
+         * — to je přepravní hmotnost, stejná past jako u `weight` hlavního
+         * produktu. Autoritativní gramáž dodá export (`packageAmount`).
+         */
+        const grams = row.variantName ? parseGramsFromText(row.variantName) : null;
+
+        return {
+            sku: row.code,
+            name: row.variantName ?? name,
+            url,
+            productId: parentId,
+            priceId: row.priceId,
+            guid: typeof p.guid === 'string' ? p.guid : null,
+            priceWithVat: row.priceWithVat,
+            packGrams: grams,
+            packGramsSource: grams !== null ? ('NAME' as const) : null,
+            packGramsConflict: null,
+            stockQuantity: Number.isFinite(layerQty) ? layerQty : row.stockQuantity,
+            categoryPath,
+            manufacturer: typeof p.manufacturer === 'string' ? p.manufacturer : null,
+            hasVariants: true,
+            compositionText: parseComposition(html),
+            params,
+            parentProductId: parentId,
+            variantName: row.variantName,
+        };
+    });
 }

@@ -13,7 +13,12 @@
 import barfCore from '../tenants/tutani/rules/barf-core.json';
 import tutaniHealth from '../tenants/tutani/rules/tutani-health.json';
 import ingredients from '../tenants/tutani/rules/ingredients.json';
+import fediaf2025 from '../tenants/tutani/rules/fediaf-2025.json';
+import ingredientsNutrition from '../tenants/tutani/rules/ingredients-nutrition.json';
+import tutaniProducts from '../tenants/tutani/rules/tutani-products.json';
 import { TUTANI_TENANT } from '../tenants/tutani/config/tenant.js';
+import { loadFediafAdultTargets } from './engine/nutrient-coverage/loadFediafTargets.js';
+import { loadNutritionData, loadTutaniProducts } from './engine/nutrient-coverage/loadNutritionData.js';
 import { KnowledgeRuleEngine } from './rules/KnowledgeRuleEngine.js';
 import type { TenantConfiguration } from './domain/tenant.js';
 import type { BarfMethodology } from './engine/feeding-calculator/calculateDose.js';
@@ -21,11 +26,13 @@ import type { ConflictResolution, DoseRule } from './engine/feeding-calculator/r
 import type { CompositionGroupProfile } from './engine/feeding-calculator/calculateDose.js';
 import { D1ProductStore } from './infrastructure/D1ProductStore.js';
 import { syncCatalog } from './adapters/tutani-catalog/syncCatalog.js';
+import { syncStock } from './adapters/shoptet-export/syncStock.js';
 import {
     apiError,
     handleDose,
     handleHealth,
     handleKnowledge,
+    handleRecipePdf,
     jsonResponse,
     type Deps,
     type RuleEngine,
@@ -35,7 +42,18 @@ export interface Env {
     DB: D1Database;
     /** Volitelný override tenanta — pro staging bez změny kódu. */
     TENANT_ID?: string;
+    /**
+     * URL admin XLSX exportu produktů VČETNĚ hashe. Secret:
+     *   npx wrangler secret put SHOPTET_EXPORT_URL
+     * Export obsahuje nákupní ceny — URL nesmí do `wrangler.jsonc`, repa
+     * ani logu. Bez ní běží plný sync postaru (jen scraper) a 10min
+     * sync skladu se přeskočí s varováním.
+     */
+    SHOPTET_EXPORT_URL?: string;
 }
+
+/** Cron rychlého syncu skladu — MUSÍ sedět s `triggers.crons` ve `wrangler.jsonc`. */
+export const STOCK_SYNC_CRON = '*/10 * * * *';
 
 /**
  * CORS — POVOLENÉ ORIGINY, ne `*`.
@@ -125,10 +143,33 @@ export default {
         const tenant = resolveTenant(env);
         const store = new D1ProductStore(env.DB);
 
+        /**
+         * RYCHLÝ SYNC SKLADU (každých 10 min) — aktuální zásoba pro výběr
+         * produktů (Lucky 2026-09-24). Plný sync běží zvlášť v noci.
+         */
+        if (event.cron === STOCK_SYNC_CRON) {
+            if (!env.SHOPTET_EXPORT_URL) {
+                console.warn(
+                    JSON.stringify({ level: 'warn', event: 'cron.stock_sync_skipped', reason: 'SHOPTET_EXPORT_URL chybí' })
+                );
+                return;
+            }
+            const stockTask = syncStock(tenant.tenantId, store, {
+                exportUrl: env.SHOPTET_EXPORT_URL,
+                dryRun: false,
+            }).then((r) => {
+                if (r.status === 'FAILED') throw new Error(r.errorText ?? 'sync skladu selhal');
+            });
+            ctx.waitUntil(stockTask);
+            await stockTask;
+            return;
+        }
+
         const task = (async () => {
             const result = await syncCatalog(tenant, store, {
                 dryRun: false,
                 triggerSource: 'CRON',
+                exportUrl: env.SHOPTET_EXPORT_URL ?? null,
             });
             console.log(
                 JSON.stringify({
@@ -165,6 +206,10 @@ async function route(request: Request, path: string, env: Env): Promise<Response
         if (request.method !== 'POST') return apiError('METHOD_NOT_ALLOWED', 405);
         return handleDose(request, deps);
     }
+    if (path === '/v1/jidelnicek.pdf') {
+        if (request.method !== 'POST') return apiError('METHOD_NOT_ALLOWED', 405);
+        return handleRecipePdf(request, deps);
+    }
     if (path === '/v1/knowledge') {
         if (request.method !== 'GET') return apiError('METHOD_NOT_ALLOWED', 405);
         return handleKnowledge(deps);
@@ -175,7 +220,7 @@ async function route(request: Request, path: string, env: Env): Promise<Response
     }
     // Kořen jen řekne, co Worker je — bez výčtu vnitřností.
     if (path === '/') {
-        return jsonResponse({ v: 1, service: 'tutani-barf', endpoints: ['/v1/davka', '/v1/knowledge', '/v1/health'] });
+        return jsonResponse({ v: 1, service: 'tutani-barf', endpoints: ['/v1/davka', '/v1/jidelnicek.pdf', '/v1/knowledge', '/v1/health'] });
     }
     return apiError('NOT_FOUND', 404);
 }
@@ -198,12 +243,26 @@ const RULES: RuleEngine = new KnowledgeRuleEngine({
     barfCore,
 });
 
+/**
+ * Nutriční vrstva (nález auditu 2026-09-12, Fáze 1 — propojení).
+ * Statická data, načtená jednou při startu isolátu — stejný důvod jako
+ * u `METHODOLOGY`/`RULES`. Chybí-li FEDIAF cíle (prázdné pole), engine
+ * to nemá jak zamaskovat — `calculateNutrientCoverage` prostě nedostane
+ * co porovnávat a vrátí prázdný seznam kontrol, nikdy vymyšlený status.
+ */
+const NUTRITION_DEPS = {
+    products: loadTutaniProducts(tutaniProducts),
+    ingredients: loadNutritionData(ingredientsNutrition),
+    targets: loadFediafAdultTargets(fediaf2025),
+};
+
 export function buildDeps(env: Env, rules: RuleEngine = RULES): Deps {
     return {
         tenant: resolveTenant(env),
         store: new D1ProductStore(env.DB),
         methodology: METHODOLOGY,
         rules,
+        nutrition: NUTRITION_DEPS,
     };
 }
 

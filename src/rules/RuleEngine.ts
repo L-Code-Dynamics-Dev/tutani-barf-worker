@@ -69,7 +69,30 @@ export interface UnappliedRule {
         | 'UNKNOWN_RULE_TYPE'
         | 'INVALID_VALUE'
         | 'INVALID_TARGET';
+    /** Technický popis pro audit a vývoj — zákazník ho NEvidí. */
     detailCs: string;
+    target?: string;
+}
+
+/**
+ * Jak se neuplatněné pravidlo řekne ZÁKAZNÍKOVI (Lucky 2026-09-25:
+ * „Katalog neuvádí fatPct…" na webu nikdo nepochopí). Přiznat se to
+ * musí dál (R7), jen lidsky: co neumíme ohlídat a co s tím má udělat.
+ * Technický `detailCs` zůstává v `unappliedRules` pro audit.
+ */
+const CUSTOMER_TARGET_LABEL_CS: Record<string, string> = {
+    fatPct: 'obsah tuku',
+    fosfor: 'obsah fosforu',
+    med: 'obsah mědi',
+};
+
+function customerTextCs(u: UnappliedRule): string {
+    const label = (u.target && CUSTOMER_TARGET_LABEL_CS[u.target]) || null;
+    if ((u.reason === 'NO_DATA_FOR_PRODUCT_ATTR' || u.reason === 'NO_DATA_FOR_NUTRIENT') && label) {
+        return `Přesný ${label} u našich produktů zatím neuvádíme, takže ho v nákupu nedokážeme ohlídat. ` +
+            'Pokud je ho u vašeho psa potřeba hlídat, proberte složení krmení s veterinářem.';
+    }
+    return 'Část doporučení pro tento zdravotní stav jsme nedokázali vyhodnotit. Dávku prosím projděte s veterinářem.';
 }
 
 /**
@@ -464,11 +487,16 @@ export function resolveConstraints(
         });
     }
     for (const u of unappliedRules) {
+        // Chybějící data už vysvětluje vlastní upozornění nemoci (slinivka,
+        // ledviny, měď) → druhá, skoro stejná hláška by zákazníka jen mátla.
+        // V `unappliedRules` (audit) zůstává vždy.
+        const noData = u.reason === 'NO_DATA_FOR_PRODUCT_ATTR' || u.reason === 'NO_DATA_FOR_NUTRIENT';
+        if (noData && ruleWarnings.some((w) => w.cond.id === u.conditionId)) continue;
         const cond = conditionById.get(u.conditionId);
         warnings.push({
             conditionId: u.conditionId,
             severity: 'CAUTION',
-            textCs: u.detailCs,
+            textCs: customerTextCs(u),
             requiresVet: cond?.requiresVet ?? false,
         });
     }
@@ -575,7 +603,7 @@ function unapplied(
     reason: UnappliedRule['reason'],
     detailCs: string
 ): UnappliedRule {
-    return { ruleId: rule.id, conditionId: rule.conditionId, ruleType: rule.ruleType, reason, detailCs };
+    return { ruleId: rule.id, conditionId: rule.conditionId, ruleType: rule.ruleType, reason, detailCs, target: rule.target };
 }
 
 /** Procento 0–100. Mimo rozsah = chyba v datech, ne hodnota k použití. */

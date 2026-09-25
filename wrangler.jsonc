@@ -34,7 +34,11 @@
         // půlky internetu a e-shop klienta by dostal špičku.
         // Doba je zvolená tak, aby scraping 300+ URL proběhl mimo
         // provoz e-shopu.
-        "crons": ["15 3 * * *"]
+        //
+        // `*/10 * * * *` = sync SKLADU z admin exportu (1 request, ~2 s).
+        // Konfigurátor musí pracovat s momentální zásobou (Lucky
+        // 2026-09-24). Řetězec musí sedět se `STOCK_SYNC_CRON` v index.ts.
+        "crons": ["15 3 * * *", "*/10 * * * *"]
     },
 
     "observability": {

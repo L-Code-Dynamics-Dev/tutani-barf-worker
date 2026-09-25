@@ -262,6 +262,8 @@ describe('neznámé id nezmizí potichu (R7)', () => {
         expect(r.productAttrFilters).toEqual([]);
         const u = r.unappliedRules.find((x) => x.ruleId === 'pankreatitida-fat-attr');
         expect(u?.reason).toBe('NO_DATA_FOR_PRODUCT_ATTR');
+        // Zákazník nikdy nevidí název interního pole.
+        expect(r.warnings.map((w) => w.textCs).join(' ')).not.toContain('fatPct');
     });
 
     it('neznámý typ pravidla se přizná, netváří se jako neexistující', () => {
@@ -403,3 +405,38 @@ function serialize(r: ReturnType<typeof resolveConstraints>) {
         preferredIngredientIds: [...r.preferredIngredientIds].sort(),
     });
 }
+
+describe('nemoci doplněné 25. 9. (fáze 1: bez čísel, jen blokace/varování)', () => {
+    const BLOKUJICI = [
+        'oslabena-imunita', 'uratove-kameny', 'struvitove-kameny', 'oxalatove-kameny', 'ibd',
+        'cukrovka', 'hyperlipidemie', 'onemocneni-srdce', 'epi', 'stitna-zlaza',
+    ];
+    const VAROVANI = ['artroza', 'atopicka-dermatitida'];
+
+    it.each(BLOKUJICI)('%s dávku nevydá a pošle k veterináři', (id) => {
+        const r = resolveConstraints([id], [], KB);
+        expect(r.blocked).toBe(true);
+        expect(r.blockedBy).toEqual([id]);
+        expect(r.requiresVet).toBe(true);
+        expect(r.warnings.some((w) => /veterin/i.test(JSON.stringify(w)))).toBe(true);
+    });
+
+    it.each(VAROVANI)('%s dávku spočítá, ale přidá upozornění', (id) => {
+        const r = resolveConstraints([id], [], KB);
+        expect(r.blocked).toBe(false);
+        expect(r.warnings.length).toBeGreaterThan(0);
+    });
+
+    it('žádná nová nemoc nemění složení ani nevylučuje suroviny (čísla až ve 2. fázi)', () => {
+        const zaklad = resolveConstraints([], [], KB);
+        for (const id of [...BLOKUJICI, ...VAROVANI]) {
+            const r = resolveConstraints([id], [], KB);
+            expect([...r.excludedIngredientIds].sort(), id).toEqual([...zaklad.excludedIngredientIds].sort());
+        }
+    });
+
+    it('všechny jsou v nabídce pro majitele (kind DISEASE)', () => {
+        const ids = KB.conditions.filter((c) => c.kind === 'DISEASE').map((c) => c.id);
+        for (const id of [...BLOKUJICI, ...VAROVANI]) expect(ids).toContain(id);
+    });
+});

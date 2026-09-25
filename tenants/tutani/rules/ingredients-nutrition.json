@@ -1,10 +1,10 @@
 {
   "datasetId": "barf-ingredient-nutrition@0.1",
   "displayName": "BARF Ingredient Dataset v0.1",
-  "note": "Nutriční hodnoty surovin na 100 g SUROVÉ jedlé části (as-fed). Zdroj: Lucky 2026-09-09 z USDA FoodData Central. POZOR na jednotky: FEDIAF udává potřeby na 1000 kcal ME, ne na gramy — převod vyžaduje kcal dávky. v0.2: doplněny vitaminy A/D/E a B-komplex (B1,B2,B3,B5,B6,B12), folát a cholin u kuřecích prsou, hovězí ledviny, vepřových jater, lososa a celého vejce; přidána surovina hovězí mleté 80/20; hovězí srdce upřesněno na rozsahové hodnoty. Jód, mangan, hořčík, sodík, draslík, chlorid a EPA/DHA (mimo lososa jako NOT_ANALYZED) stále chybí u všech surovin — viz gaps.",
+  "note": "Nutriční hodnoty surovin na 100 g SUROVÉ jedlé části (as-fed). Zdroj: Lucky 2026-09-09 z USDA FoodData Central. POZOR na jednotky: FEDIAF udává potřeby na 1000 kcal ME, ne na gramy — převod vyžaduje kcal dávky. v0.2: doplněny vitaminy A/D/E a B-komplex (B1,B2,B3,B5,B6,B12), folát a cholin u kuřecích prsou, hovězí ledviny, vepřových jater, lososa a celého vejce; přidána surovina hovězí mleté 80/20; hovězí srdce upřesněno na rozsahové hodnoty. v0.3 (2026-09-12): doplněny sodík, draslík, hořčík a mangan u hovězího mletého 93/7 a 80/20, kuřecích prsou (oba datasety), hovězích jater, vejce a lososa; doplněny EPA/DHA u lososa a DHA u vejce; přidána NOVÁ surovina makrela atlantická (kompletní profil vč. EPA/DHA, Na/K/Mg/Mn). Jód a chlorid ZŮSTÁVAJÍ nepokryté napříč VŠEMI surovinami — USDA SR Legacy i Foundation je pro maso/vejce/ryby systematicky neměří (viz gaps). Sardinka (Atlantic, raw) NEBYLA přidána — USDA nemá raw variantu, jen konzervovanou. POZOR na zdroj v0.3: hodnoty byly dohledány přes sekundární weby (rawpawiq.com, nutritionvalue.org), protože přímé USDA FDC API mělo v době práce vyčerpaný sdílený DEMO_KEY (HTTP 429). Křížově ověřeny proti existujícím v0.1/v0.2 hodnotám (shoda na desetiny u Ca/P/Fe/Zn/Cu/Se), ale NEJSOU to hodnoty stažené přímo z FDC v této session — každý nový záznam nese `sourceRef` s touto výhradou. Před použitím v produkčním doporučení pro klienta ověřit proti FDC API s vlastním klíčem.",
   "basis": "100G_RAW_EDIBLE",
-  "sourceVersion": "0.2",
-  "updatedAt": "2026-09-09",
+  "sourceVersion": "0.3",
+  "updatedAt": "2026-09-12",
   "datasets": {
     "USDA_SR_LEGACY": "USDA FoodData Central — SR Legacy (starší, širší pokrytí živin)",
     "USDA_FOUNDATION": "USDA FoodData Central — Foundation Foods (novější, vzorky s analytickou metodou)",
@@ -71,6 +71,42 @@
           "value": 17.1,
           "unit": "ug",
           "status": "MEASURED"
+        },
+        "sodium": {
+          "value": 66,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 173110 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 336,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 173110 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 21,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 173110 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.01,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 173110 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 173110 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 173110 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         }
       },
       "noteCs": "Ca:P je 10:192, tedy 1:19 — svalovina sama vápník nepokryje (bod 12)."
@@ -188,6 +224,42 @@
           "value": 82.1,
           "unit": "mg",
           "status": "MEASURED"
+        },
+        "sodium": {
+          "value": 45,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171077 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 334,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171077 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 28,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171077 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.01,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171077 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 171077 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 171077 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         }
       },
       "noteCs": "Ca:P je 5:213, tedy 1:43. Extrémně nevyvážené — proto dieta z libového masa naráží na minerální bilanci."
@@ -228,6 +300,42 @@
           "value": null,
           "unit": "kcal",
           "status": "NOT_ANALYZED"
+        },
+        "sodium": {
+          "value": 66,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 2646170 (Foundation Foods) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 330,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 2646170 (Foundation Foods) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 26,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 2646170 (Foundation Foods) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.013,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 2646170 (Foundation Foods) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 2646170 (Foundation Foods) — jód nezveřejněn na dostupné stránce zdroje, ve Foundation datasetu je jód obecně řídce měřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 2646170 (Foundation Foods) — chlorid nezveřejněn na dostupné stránce zdroje — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         }
       },
       "noteCs": "STEJNÁ surovina, JINÝ dataset: tuk 1,9 g proti 2,6 g v SR Legacy. Důvod, proč databáze uchovává dataset a ne jedno „magické číslo“ (bod 4)."
@@ -294,13 +402,49 @@
           "value": 4968,
           "unit": "ug_RAE",
           "status": "MEASURED"
+        },
+        "sodium": {
+          "value": 69,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 169451 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 313,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 169451 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 18,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 169451 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.31,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 169451 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 169451 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 169451 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         }
       },
       "excessRisks": [
         "VITAMIN_A_EXCESS",
         "COPPER_EXCESS"
       ],
-      "noteCs": "Játra NEJSOU zdroj vápníku (5 mg Ca proti 387 mg P). Měď 9,755 mg/100 g je extrémní koncentrace — proto limit u hepatopatie s ukládáním měďi."
+      "noteCs": "Játra NEJSOU zdroj vápníku (5 mg Ca proti 387 mg P). Měď 9,755 mg/100 g je extrémní koncentrace — proto limit u hepatopatie s ukládáním mědi."
     },
     {
       "id": "kureci-jatra",
@@ -736,6 +880,54 @@
           "value": 2.0,
           "unit": "ug",
           "status": "MEASURED"
+        },
+        "sodium": {
+          "value": 142,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 138,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 12,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.03,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen (POZOR: vejce jsou u psů reálně významný zdroj jódu, ale SR Legacy hodnotu nemá — nedosazovat odjinud bez nového sourceRef) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "epa": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy) — EPA neměřeno — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "dha": {
+          "value": 60,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 171287 (SR Legacy), 0.06 g/100g — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         }
       },
       "safetyNotesCs": [
@@ -802,14 +994,52 @@
           "status": "MEASURED"
         },
         "epa": {
-          "value": null,
+          "value": 860,
           "unit": "mg",
-          "status": "NOT_ANALYZED"
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy), 0.86 g/100g — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         },
         "dha": {
+          "value": 1100,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy), 1.10 g/100g — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "sodium": {
+          "value": 59,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 363,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 27,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.01,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
           "value": null,
           "unit": "mg",
-          "status": "NOT_ANALYZED"
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 175167 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         },
         "vitaminA": {
           "value": 58,
@@ -870,7 +1100,7 @@
       "safetyNotesCs": [
         "Některé surové ryby obsahují thiaminázu, která narušuje dostupnost thiaminu (bod 22)."
       ],
-      "noteCs": "EPA a DHA NEZMĚŘENY — a to je právě důvod, proč se losos používá. Bez nich nelze tvrdit, že dieta pokrývá omega-3 (bod 17)."
+      "noteCs": "v0.3: EPA (860 mg) a DHA (1100 mg) doplněny z USDA FDC 175167 — losos je potvrzený zdroj omega-3, dřívější poznámka o neměřených hodnotách byla vázaná na starší SR Legacy záznam bez těchto polí a je zde nahrazena."
     },
     {
       "id": "hovezi-mlete-80-20",
@@ -929,30 +1159,202 @@
           "value": 15.2,
           "unit": "ug",
           "status": "MEASURED"
+        },
+        "sodium": {
+          "value": 66,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 174036 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 270,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 174036 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 17,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 174036 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.01,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 174036 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 174036 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 174036 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
         }
       },
       "noteCs": "Ca:P je 17:160, tedy zhruba 1:9,4 — o něco méně nevyvážené než libové 93/7, ale svalovina sama pořád vápník nepokryje. Vyšší tuk oproti 93/7 (19,1 g vs 7,0 g) mění energetickou hustotu dávky.",
       "updatedAt": "2026-09-09"
+    },
+    {
+      "id": "makrela-atlanticka",
+      "nameCs": "Makrela atlantická, syrová",
+      "aliasesCs": [
+        "makrela",
+        "scomber scombrus"
+      ],
+      "species": "FISH",
+      "part": "FISH_FILLET",
+      "raw": true,
+      "dataset": "USDA_SR_LEGACY",
+      "confidence": "DATABAZE",
+      "nutrients": {
+        "energy": {
+          "value": 205,
+          "unit": "kcal",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "protein": {
+          "value": 18.6,
+          "unit": "g",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "fat": {
+          "value": 13.89,
+          "unit": "g",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "calcium": {
+          "value": 12,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "phosphorus": {
+          "value": 217,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "iron": {
+          "value": 1.63,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "zinc": {
+          "value": 0.63,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "copper": {
+          "value": 0.07,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "selenium": {
+          "value": 44.1,
+          "unit": "ug",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "sodium": {
+          "value": 90,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "potassium": {
+          "value": 314,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "magnesium": {
+          "value": 76,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "manganese": {
+          "value": 0.01,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy) — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "iodine": {
+          "value": null,
+          "unit": "ug",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy) — jód v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "chloride": {
+          "value": null,
+          "unit": "mg",
+          "status": "NOT_ANALYZED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy) — chlorid v SR Legacy pro tuto položku neměřen — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "epa": {
+          "value": 900,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy), 0.90 g/100g — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "dha": {
+          "value": 1400,
+          "unit": "mg",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy), 1.40 g/100g — POZOR: hodnota dohledána přes sekundární zdroj (rawpawiq.com/nutritionvalue.org), NE přímým stažením z FDC API (DEMO_KEY rate-limited 2026-09-12); křížově ověřeno proti existujícím hodnotám v datasetu, ale vyžaduje potvrzení přímo z FDC při příští příležitosti."
+        },
+        "vitaminD": {
+          "value": 16.1,
+          "unit": "ug",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        },
+        "vitaminB12": {
+          "value": 8.71,
+          "unit": "ug",
+          "status": "MEASURED",
+          "sourceRef": "USDA FDC 175119 (SR Legacy)"
+        }
+      },
+      "safetyNotesCs": [
+        "Některé surové ryby obsahují thiaminázu, která narušuje dostupnost thiaminu (bod 22)."
+      ],
+      "noteCs": "NOVÁ surovina v0.3. Nejvyšší EPA+DHA v katalogu (900+1400 mg/100g) a nejvyšší vitamin D3 (16,1 µg/100g) — silný kandidát na doplnění omega-3 vedle lososa. Jód a chlorid nezměřeny (SR Legacy).",
+      "updatedAt": "2026-09-12"
     }
   ],
   "gaps": {
-    "note": "Co v datasetu v0.1 CHYBÍ. Uvedeno záměrně, aby se prázdnota nedala přehlédnout.",
+    "note": "Co v datasetu CHYBÍ. Uvedeno záměrně, aby se prázdnota nedala přehlédnout.",
     "missingIngredients": [
       "krůtí, králičí, jehněčí, koňské maso, zvěřina (svalovina)",
       "vepřové maso (svalovina, na rozdíl od jater)",
       "hovězí slezina, plíce",
-      "kuřecí srdce (máme jen hovězí)",
-      "sardinky, makrela, celé ryby",
+      "kuřecí srdce (máme jen hovězí), hovězí ledvina/srdce/vepřová játra dosud BEZ Na/K/Mg/Mn/jódu (nebyly předmětem dohledání v0.3)",
+      "sardinky — USDA SR Legacy i Foundation NEMAJÍ 'Atlantic sardine, raw'; jediný SR Legacy záznam je 'Fish, sardine, Atlantic, canned in oil, drained solids with bone' (FDC 175139) — konzervovaná, nepoužitelná jako zdroj pro SYROVOU surovinu. Sardinka jako syrová surovina se do katalogu NEPŘIDÁVÁ, dokud se nenajde raw záznam (např. ve Foundation Foods).",
       "rybí olej, lososový olej, lněný olej",
       "mrkev, brokolice, cuketa, dýně, špenát, jablko, borůvky (zelenina/ovoce)",
       "vaječná skořápka, kostní moučka, minerální a vitaminové premixy"
     ],
     "missingNutrients": [
-      "jód — u žádné suroviny",
-      "mangan, hořčík, sodík, draslík, chlorid — u žádné suroviny",
-      "EPA/DHA — jen jako NOT_ANALYZED u lososa, jinde chybí zcela",
-      "aminokyseliny (arginin, lysin, taurin atd.) — u žádné suroviny"
+      "jód — u ŽÁDNÉ suroviny v katalogu není v USDA SR Legacy ani Foundation dostupný (viz v0.3 dohledání níže) — nutné řešit jiným zdrojem (např. NRC 2006 tabulky nebo přímým laboratorním rozborem), USDA jód pro maso/vejce/ryby systematicky NEMĚŘÍ",
+      "chlorid — stejně jako jód: u ŽÁDNÉ dohledávané suroviny není v SR Legacy měřen",
+      "mangan, hořčík, sodík, draslík — DOPLNĚNY v0.3 u: hovězí mleté 93/7 a 80/20, kuřecí prsa (oba datasety), hovězí játra, vejce, losos, makrela (nová surovina)",
+      "EPA/DHA — DOPLNĚNY v0.3 u lososa (860/1100 mg) a makrely (900/1400 mg, nová surovina); vejce má DHA 60 mg ale EPA NOT_ANALYZED; u hovězího/kuřecího/vepřového dosud chybí (u savčí svaloviny jsou hodnoty v USDA obvykle stopové/neměřené)",
+      "aminokyseliny (arginin, lysin, taurin atd.) — u žádné suroviny",
+      "hovězí ledvina, hovězí srdce, vepřová játra, kuřecí játra — Na/K/Mg/Mn/jód/Cl NEDOHLEDÁNY v v0.3 (nejistý mapping na FDC ID přes dostupné zdroje), zůstávají otevřené"
     ],
-    "consequenceCs": "Vitamin A/D/E a B-komplex jsou nyní pokryty u 4 klíčových surovin (kuřecí prsa, hovězí ledvina, vepřová játra, losos) + D u vejce. Dokud ale chybí jód, mangan a EPA/DHA napříč katalogem, nelze vydat 🟢 NUTRIČNĚ KONTROLOVANOU dávku — výsledek zůstává 🟡 ORIENTAČNÍ, dokud tyto živiny nebudou mít alespoň jeden zdroj v katalogu."
+    "consequenceCs": "v0.3 (2026-09-12): jód a chlorid ZŮSTÁVAJÍ nepokryté u VŠECH surovin — USDA je pro maso/vejce/ryby v SR Legacy i Foundation systematicky neměří. To není mezera v research procesu, je to mezera přímo ve zdrojových datech. Pro jód a chlorid je nutné najít jiný autoritativní zdroj (např. NRC 2006, EFSA, nebo laboratorní rozbor konkrétní suroviny) — bez toho nelze nikdy dosáhnout 🟢 u těchto dvou živin čistě z USDA FDC. Mangan/hořčík/sodík/draslík a EPA/DHA jsou nyní pokryty u hovězího mletého (obě varianty), kuřecích prsou (oba datasety), hovězích jater, vejce a lososa; makrela přidána jako nová surovina s kompletním profilem včetně nejvyššího EPA/DHA v katalogu. Výsledek pro TYTO živiny se posouvá k 🟢, ale jód/chlorid drží celkový verdikt na 🟡 ORIENTAČNÍ."
   }
 }

@@ -42,12 +42,26 @@ export interface DogProfile {
     sex: Sex;
     neutered: boolean;
     activity: ActivityLevel;
+    /** Konkrétní aktivita z `tenant.activityOptions` (jen pro zobrazení), úroveň je v `activity`. */
+    activityDetailId?: string;
     bodyCondition: BodyCondition;
     physiologicalState: PhysiologicalState;
     /** Id z `conditions` (kind DISEASE), např. `ckd`. */
     conditionIds: string[];
     /** Id z `ingredients`, na které je pes alergický, např. `kure`. */
     allergyIngredientIds: string[];
+    /**
+     * Karta „Zuby a trávení" (klient 25. 9.). Volitelné kvůli zpětné
+     * kompatibilitě; chybějící = `false`.
+     *
+     * `dentalProblem`: chybějící/bolavé zuby, senior, hltání, dávení →
+     * do nákupu jen MLETÉ kosti (celou kost nemusí rozkousat).
+     */
+    dentalProblem?: boolean;
+    /** Štěně plemene, které v dospělosti přesáhne 25 kg (majitel sám označí). */
+    largeBreedPuppy?: boolean;
+    /** Pes právě přechází z granulí na syrovou stravu. */
+    switchingFromKibble?: boolean;
 }
 
 /**

@@ -162,3 +162,19 @@ function urciSkupinu(popis: string): BarfGroup | null {
     }
     return null;
 }
+
+/**
+ * Deklarovaný podíl kostí v popisu („cca 70 % kostí a chrupavky").
+ * Vrací nejvyšší nalezené procento, `null` = popis kosti v % neuvádí.
+ * Slouží jen k zařazení produktu, když úplný rozpad sestavit nejde.
+ */
+export function declaredBonePct(text: string | null | undefined): number | null {
+    if (!text) return null;
+    const t = text.toLowerCase();
+    let max: number | null = null;
+    for (const m of t.matchAll(/(?:cca\s*)?(\d{1,3})\s*%\s*(?:mlet[ýéých]*\s+)?(?:kost|chrupav)/g)) {
+        const pct = Number(m[1]);
+        if (Number.isFinite(pct) && pct > 0 && pct <= 100) max = max === null ? pct : Math.max(max, pct);
+    }
+    return max;
+}

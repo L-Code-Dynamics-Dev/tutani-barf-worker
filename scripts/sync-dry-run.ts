@@ -8,6 +8,8 @@
  * Spuštění:
  *   npx tsx scripts/sync-dry-run.ts             # celý katalog
  *   npx tsx scripts/sync-dry-run.ts --limit 40  # vzorek
+ *   SHOPTET_EXPORT_URL='…productsComplete.xml?…&hash=…' npx tsx scripts/sync-dry-run.ts
+ *                                               # s admin XML exportem (URL se nevypisuje)
  *
  * Store je TADY v paměti — skript nemá D1 binding a ani ho nechceme:
  * dry-run se nesmí dotknout produkční databáze. Diff je proto vždy
@@ -50,6 +52,8 @@ async function main(): Promise<void> {
     console.log(`e-shop:  ${TUTANI_TENANT.catalog.baseUrl}`);
     console.log(`sitemap: ${TUTANI_TENANT.catalog.sitemapUrl}`);
     if (limitUrls) console.log(`limit:   ${limitUrls} URL (vzorek)`);
+    // Jen ANO/NE — URL obsahuje přístupový hash k nákupním cenám.
+    console.log(`export:  ${process.env.SHOPTET_EXPORT_URL ? 'ANO (admin XML)' : 'NE (jen scraper)'}`);
     console.log();
 
     const store = new InMemoryStore();
@@ -58,6 +62,7 @@ async function main(): Promise<void> {
         dryRun: true,
         triggerSource: 'MANUAL',
         limitUrls,
+        exportUrl: process.env.SHOPTET_EXPORT_URL ?? null,
     });
     const seconds = Math.round((Date.now() - started) / 100) / 10;
 
@@ -77,6 +82,22 @@ async function main(): Promise<void> {
     console.log(`  nezměněno:   ${run.unchanged}`);
     console.log(`  odebrat:     ${run.removed}`);
     console.log(`  nepoužitelné: ${run.unusable}   ← do doporučení nevstoupí`);
+
+    // Košík: každý produkt musí mít OBĚ id (Lucky 2026-09-24).
+    console.log('\n=== ID PRO KOŠÍK (priceId + productId) ===');
+    const oba = result.products.filter((p) => p.priceId && p.productId).length;
+    console.log(`  obě id:        ${oba} / ${result.products.length}`);
+    console.log(`  bez priceId:   ${result.products.filter((p) => !p.priceId).length}`);
+    console.log(`  bez productId: ${result.products.filter((p) => !p.productId).length}`);
+    console.log(`  variant:       ${result.products.filter((p) => p.parentCode).length}`);
+    const exp = (result.run.diffSummary as { export?: { idMismatches: unknown[]; exportOnlyInStock: { code: string; name: string; stockQuantity: number }[]; unmatchedScraped: string[] } } | undefined)?.export;
+    if (exp) {
+        console.log(`  rozpor web×XML: ${exp.idMismatches.length}`);
+        for (const m of exp.idMismatches.slice(0, 20)) console.log(`    ${JSON.stringify(m)}`);
+        console.log(`\n=== SKLADEM V EXPORTU, ALE NA WEBU NENALEZENO (${exp.exportOnlyInStock.length}) ===`);
+        for (const e of exp.exportOnlyInStock.slice(0, 30)) console.log(`  ${e.code.padEnd(10)} ${String(e.stockQuantity).padStart(4)} ks  ${e.name.slice(0, 60)}`);
+        console.log(`\n  scraper bez páru v exportu: ${exp.unmatchedScraped.length} ${exp.unmatchedScraped.slice(0, 10).join(', ')}`);
+    }
 
     // Rozpad do skupin: kontrola, že mapování kategorií funguje.
     console.log('\n=== ROZPAD DO BARF SKUPIN ===');
