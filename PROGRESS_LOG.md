@@ -14,6 +14,8 @@ Nejnovější záznam nahoře.
 - `konfigurator.css`: styly `.tb-seo` (max 900 px, produkty v `<details>` kvůli mobilu). `konfigurator.js` NEZMĚNĚN.
 - Opraveny překlepy v názvech nemocí (nemocná játra, zkrat jaterní cévy, mědi v játrech, časté u dalmatinů) — Worker f4d60a55.
 **Ověřeno naostro:** bez JS (curl Googlebot) 1 473 slov, H2 + 8×H3, tabulka dávek, 122 odkazů na produkty (122/122 HTTP 200), JSON-LD WebApplication + FAQPage platné. S JS (Playwright mobil + desktop): dávka, pravidlo, produkty, cena, text výsledku, výška kalkulačky i šířka stránky SHODNÉ s před úpravou, 0 JS chyb.
+**Košík ověřen (Playwright, mobil):** obal + „Vložit vše do košíku“ → 6/6 volání addCartItem OK, v /kosik/ přesně produkty a počty z výpočtu. Opravena hláška „pro váš pes“ → „pro vašeho psa“ (jediná změna konfigurator.js, verze 4e3aac3ebe08).
+**ChatGPT „nevidí“:** server dává blok i UA ChatGPT-User / OAI-SearchBot / GPTBot (200, robots.txt nic neblokuje) → jde o cache/index Bingu. Otevřeno: ověření webu v Bing Webmaster Tools + Search Console a žádost o přeindexování.
 **Údržba:** při změně katalogu/metodiky: D1 dotaz → `node scripts/seo-obsah.mjs produkty.json > frontend/shoptet/5-seo-obsah.html` → `tut-seo.js` (DRY=1, pak DRY=0).
 
 ## 2026-09-25 (večer) — senior dostane dávku při každé aktivitě

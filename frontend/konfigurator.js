@@ -265,7 +265,8 @@
                     tlacitko.classList.add('tb-tlacitko--hotovo');
                     popisek.textContent = '✓ V košíku';
                     ukazToast(vlozenoKusu + ' ' + sklonuj(vlozenoKusu, 'balení', 'balení', 'balení') +
-                        ' pro ' + jmenoZobrazene() + ' je v košíku');
+                        // 4. pád: „pro vašeho psa“, ne „pro váš pes“ (jméno se neskloňuje).
+                        ' pro ' + ((stav.jmeno || '').trim() || 'vašeho psa') + ' je v košíku');
                     // Bez automatického přesměrování (Lucky 2026-09-25): zákazník
                     // může zůstat (PDF, jiné období) a do košíku jde tlačítkem.
                     // Hlavička Shoptetu (počet/cena) se obnoví až načtením košíku.
