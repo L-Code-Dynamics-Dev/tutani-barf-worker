@@ -27,7 +27,7 @@ import { mergeWithExport } from '../shoptet-export/mergeExport.js';
 import { medianPricePerKg, resolveWeightConflict } from './resolveWeightConflict.js';
 import { detectIngredients } from './detectIngredients.js';
 import { parseUniversalFeed, universalFeedUrl, type FeedDescriptions } from './universalFeed.js';
-import { parseCompositionParts } from './parseComposition.js';
+import { declaredBonePct, parseCompositionParts } from './parseComposition.js';
 
 export interface SyncOptions {
     /** `true` = nic se nezapíše, vrátí se jen diff. */
@@ -322,7 +322,42 @@ export async function syncCatalog(
     const unusable: UnusableProduct[] = [];
 
     for (const p of merged) {
-        const group = groupOf(p);
+        /**
+         * Suroviny se odvodí JEDNOU — `detectIngredients` prochází
+         * ~30 vzorů a volat ho dvakrát na 264 produktů je zbytečné.
+         *
+         * Popis z `universal.xml` se přidává ke složení z detailu:
+         * detail ho má jen u 17 % produktů, feed u 100 %, takže
+         * určení surovin stoupne ze 61 % na 70 % (změřeno 2026-09-09).
+         */
+        const popisFeed = feedPopisy.get(p.url);
+        // Popis z exportu jen když se liší od feedu — stejný text dvakrát
+        // by u parseCompositionParts zdvojil procenta a rozpad zahodil.
+        const popisExport =
+            p.exportDescription && p.exportDescription !== popisFeed ? p.exportDescription : null;
+        const textSlozeni = [p.compositionText, popisFeed ?? popisExport].filter(Boolean).join(' ');
+        const compositionParts = parseCompositionParts(textSlozeni);
+
+        /**
+         * NÁLEZ 2026-09-25 (Hrubý pan Ušák): popis „cca 70 % kostí
+         * a chrupavky", kategorie Králičí → produkt šel jako ČISTÁ
+         * svalovina a pes dostal místo masa hlavně kosti. Rozpad se
+         * z jediného procenta sestavit nedá (nedá 100 %), ale deklarovaný
+         * podíl kostí se ignorovat nesmí:
+         *   ≥ 50 % kostí → BONE (kostní složka),
+         *   30–49 %      → OTHER (do dávky nevstoupí — nevíme, čím je zbytek).
+         * Medián ceny výše se počítá z původního zařazení; jde o jednotky
+         * produktů a na medián skupiny to vliv nemá.
+         */
+        let group = groupOf(p);
+        if (group !== 'BONE' && compositionParts.length === 0) {
+            const kosti = declaredBonePct([textSlozeni, popisExport].filter(Boolean).join(' '));
+            if (kosti !== null && kosti >= 30) {
+                const puvodni = group;
+                group = kosti >= 50 ? 'BONE' : 'OTHER';
+                log('sync.group_by_declared_bone', { sku: p.sku, name: p.name, bonePct: kosti, from: puvodni, to: group });
+            }
+        }
         const decision = resolveWeightConflict(p, medians.get(group) ?? null);
 
         let packGrams: number | null = null;
@@ -372,20 +407,6 @@ export async function syncCatalog(
             });
         }
 
-        /**
-         * Suroviny se odvodí JEDNOU — `detectIngredients` prochází
-         * ~30 vzorů a volat ho dvakrát na 264 produktů je zbytečné.
-         *
-         * Popis z `universal.xml` se přidává ke složení z detailu:
-         * detail ho má jen u 17 % produktů, feed u 100 %, takže
-         * určení surovin stoupne ze 61 % na 70 % (změřeno 2026-09-09).
-         */
-        const popisFeed = feedPopisy.get(p.url);
-        // Popis z exportu jen když se liší od feedu — stejný text dvakrát
-        // by u parseCompositionParts zdvojil procenta a rozpad zahodil.
-        const popisExport =
-            p.exportDescription && p.exportDescription !== popisFeed ? p.exportDescription : null;
-        const textSlozeni = [p.compositionText, popisFeed ?? popisExport].filter(Boolean).join(' ');
         const suroviny = detectIngredients(p.name, [textSlozeni, popisExport].filter(Boolean).join(' '));
 
         products.push({
@@ -415,7 +436,7 @@ export async function syncCatalog(
              * „70 % ořez, 30 % droby" jinak celý objem padne do jedné
              * skupiny a zdravotní limit na játra ho mine.
              */
-            compositionParts: parseCompositionParts(textSlozeni),
+            compositionParts,
             productId: p.productId,
             inStock: (p.stockQuantity ?? 0) > 0,
             stockQuantity: p.stockQuantity,

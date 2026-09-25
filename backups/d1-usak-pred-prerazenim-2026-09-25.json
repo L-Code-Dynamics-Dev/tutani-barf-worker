@@ -1,0 +1,80 @@
+[
+  {
+    "results": [
+      {
+        "tenant_id": "tutani",
+        "sku": "TUT10",
+        "name": "Barf Hrubý pan Ušák 1kg",
+        "url": "https://obchod.tutani.cz/kralici/barf-hruby-pan-usak/",
+        "category_path": "Barf mražené maso - syrové maso pro psy | Barf - králičí maso",
+        "barf_group": "MUSCLE",
+        "pack_grams": 1000,
+        "pack_grams_source": "DATALAYER",
+        "price_czk": 129,
+        "price_id": "3495",
+        "product_id": "2880",
+        "in_stock": 1,
+        "stock_quantity": 18,
+        "ingredients": "[\"kralik\"]",
+        "ingredients_unknown": 0,
+        "is_cooked": 0,
+        "has_variants": 0,
+        "composition_parts": "[]",
+        "weight_conflict": null,
+        "source_feed_at": "2026-09-25T11:51:33.428Z",
+        "updated_at": "2026-09-25T11:51:33.930Z",
+        "guid": "e4ced65c-c859-11e7-ae76-0cc47a6c92bc",
+        "parent_code": null,
+        "variant_name": null,
+        "stock_synced_at": "2026-09-25T13:50:41.624Z",
+        "visible": 1
+      },
+      {
+        "tenant_id": "tutani",
+        "sku": "TUT9/5",
+        "name": "Barf Hrubý pan Ušák 500g",
+        "url": "https://obchod.tutani.cz/kralici/barf-hruby-pan-usak-500g/",
+        "category_path": "Barf mražené maso - syrové maso pro psy | Barf - králičí maso",
+        "barf_group": "MUSCLE",
+        "pack_grams": 500,
+        "pack_grams_source": "RESOLVED_PRICE",
+        "price_czk": 79,
+        "price_id": "7114",
+        "product_id": "4741",
+        "in_stock": 1,
+        "stock_quantity": 52,
+        "ingredients": "[\"kralik\"]",
+        "ingredients_unknown": 0,
+        "is_cooked": 0,
+        "has_variants": 0,
+        "composition_parts": "[]",
+        "weight_conflict": "{\"authoritative\":1000,\"fromName\":500,\"decidedGrams\":500,\"source\":\"NAME\",\"reasonCs\":\"obě varianty jsou cenově možné (158 vs. 79 Kč/kg); použit název, protože ho vidí zákazník — opravit v adminu\"}",
+        "source_feed_at": "2026-09-25T11:51:33.428Z",
+        "updated_at": "2026-09-25T11:51:33.930Z",
+        "guid": "5e6c39ec-cf88-11ec-b459-0cc47a6b4bcc",
+        "parent_code": null,
+        "variant_name": null,
+        "stock_synced_at": "2026-09-25T13:50:41.624Z",
+        "visible": 1
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "EEUR",
+      "served_by_colo": "FRA",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.7813
+      },
+      "duration": 0.7813,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 376832,
+      "rows_read": 269,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]
