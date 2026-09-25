@@ -553,6 +553,8 @@
         var hero = el('section', 'tb-hero');
 
         var text = el('div', 'tb-hero-text');
+        // Pravý sloupec: logo nad fotkou psa (Lucky 2026-09-25).
+        var prava = el('div', 'tb-hero-prava');
         if (nastaveni.logo) {
             var logo = el('img', 'tb-logo');
             logo.src = nastaveni.logo;
@@ -560,7 +562,7 @@
             logo.decoding = 'async';
             // Nedostupné logo nesmí nechat rozbitý obrázek.
             logo.addEventListener('error', function () { logo.remove(); });
-            text.appendChild(logo);
+            prava.appendChild(logo);
         }
         text.appendChild(el('div', 'tb-eyebrow', 'Výpočet krmné dávky · 60 sekund'));
         var h1 = el('h1', 'tb-h1');
@@ -616,7 +618,8 @@
         davka.appendChild(el('span', 'tb-odznak-denne', 'denně'));
         foto.appendChild(davka);
 
-        hero.appendChild(foto);
+        prava.appendChild(foto);
+        hero.appendChild(prava);
         root.appendChild(hero);
         aktualizujHero();
     }
@@ -1516,8 +1519,23 @@
             })
             .then(function (d) {
                 if (!d) return;
-                knowledge.diagnozy = d.diagnozy || [];
-                knowledge.alergie = d.alergie || [];
+                /**
+                 * Worker posílá `diagnoses`/`allergens` s poli layNameCs,
+                 * explainCs, severity (CRITICAL = dávku nevydáme). Náhled
+                 * a starší mock mají české klíče — sjednotí se na jeden tvar.
+                 * CHYBA 25. 9.: frontend četl jen `diagnozy`, na produkci tak
+                 * nemoci ani alergie nebyly vidět vůbec.
+                 */
+                function sjednot(m) {
+                    return {
+                        id: m.id,
+                        nazev: m.nazev || m.layNameCs || m.nameCs,
+                        popis: m.popis || m.explainCs || null,
+                        blokuje: m.blokuje === true || m.severity === 'CRITICAL',
+                    };
+                }
+                knowledge.diagnozy = (d.diagnozy || d.diagnoses || []).map(sjednot);
+                knowledge.alergie = (d.alergie || d.allergens || []).map(sjednot);
                 knowledge.aktivity = d.aktivity || [];
                 // Výchozí volba = první konkrétní aktivita se stejnou úrovní,
                 // jakou má formulář teď (střední → „hodina venku").

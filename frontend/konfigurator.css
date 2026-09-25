@@ -982,3 +982,61 @@
 #tutani-barf .tb-tlacitko--kosik { margin-top: 10px; text-decoration: none; justify-content: center; }
 #tutani-barf .tb-tlacitko--kosik-pripraven { background: var(--tb-zelena); color: #fff; border-color: var(--tb-zelena); box-shadow: 0 12px 28px rgba(63, 122, 46, .35); }
 #tutani-barf .tb-tlacitko--kosik-pripraven:hover { background: var(--tb-zelena); filter: brightness(1.08); }
+
+/* Bez barevných skvrn v pozadí (Lucky 2026-09-25): zůstává klidný béžový podklad a jen tlapky. */
+#tutani-barf .tb-skvrna { display: none; }
+#tutani-barf .tb-tlapka-pozadi--1, #tutani-barf .tb-tlapka-pozadi--5 { opacity: .12; }
+#tutani-barf .tb-tlapka-pozadi--2, #tutani-barf .tb-tlapka-pozadi--3, #tutani-barf .tb-tlapka-pozadi--4 { opacity: .10; }
+
+/* Upozornění musí být vidět (Lucky 2026-09-25): plný podklad, barevný rámeček, ikona. */
+#tutani-barf .tb-upozorneni {
+    position: relative;
+    padding: 16px 18px 16px 54px;
+    background: #fff;
+    border: 1.5px solid #D9C9B8;
+    border-left-width: 6px;
+    box-shadow: 0 6px 18px rgba(60, 30, 20, .08);
+    color: var(--tb-text);
+    font: 600 16px/1.5 var(--tb-font);
+}
+#tutani-barf .tb-upozorneni::before {
+    position: absolute; left: 16px; top: 14px;
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 800 16px/1 var(--tb-font); color: #fff;
+    content: "i"; background: #6B5A4E;
+}
+#tutani-barf .tb-upozorneni--info { border-color: #CDBBA8; border-left-color: #6B5A4E; background: #FFFCF8; }
+#tutani-barf .tb-upozorneni--caution { border-color: #F0B97F; border-left-color: #E07B1F; background: #FFF6EC; }
+#tutani-barf .tb-upozorneni--caution::before { content: "!"; background: #E07B1F; }
+#tutani-barf .tb-upozorneni--serious { border-color: #F1A6A2; border-left-color: var(--tb-cervena); background: #FDECEA; }
+#tutani-barf .tb-upozorneni--serious::before, #tutani-barf .tb-upozorneni--critical::before { content: "!"; background: var(--tb-cervena); }
+#tutani-barf .tb-upozorneni--critical { border-color: #E08A86; border-left-color: var(--tb-bordo); background: #FBE1DF; }
+
+/* Logo vpravo nad fotkou psa (Lucky 2026-09-25). */
+#tutani-barf .tb-hero-prava { display: flex; flex-direction: column; align-items: center; gap: 14px; flex: none; margin: 0 auto; }
+#tutani-barf .tb-hero-prava .tb-logo { margin: 0; height: 84px; }
+#tutani-barf .tb-hero-prava .tb-hero-foto { margin: 0; }
+
+/* Bez podkladu (Lucky 2026-09-25): kalkulačka leží přímo na stránce e-shopu, zůstávají jen tlapky.
+   Karty dostanou jemný rámeček, ať se na bílé neztratí. */
+#tutani-barf { background: transparent; border-radius: 0; padding-left: 24px; padding-right: 24px; }
+@media (max-width: 640px) { #tutani-barf { padding-left: 14px; padding-right: 14px; } }
+#tutani-barf .tb-hero-prava { margin-right: 28px; }
+@media (max-width: 640px) { #tutani-barf .tb-hero-prava { margin-right: auto; } }
+#tutani-barf .tb-karta { border: 1px solid #EADFD3; box-shadow: 0 8px 24px rgba(60, 30, 20, .06); }
+
+/* Text upozornění: styl odstavců e-shopu je jinak přebije (malé šedé písmo). */
+#tutani-barf .tb-upozorneni p { font: 600 16px/1.5 var(--tb-font); color: var(--tb-text); }
+#tutani-barf .tb-upozorneni p.tb-vet { color: var(--tb-cervena-text); font-weight: 700; }
+@media (max-width: 640px) {
+    #tutani-barf .tb-hero-prava .tb-logo { height: 64px; }
+    #tutani-barf .tb-upozorneni p { font-size: 15px; }
+}
+/* Na bílé stránce potřebují dlaždice a volby obrys (dřív je nesl béžový podklad). */
+#tutani-barf .tb-dlazdice,
+#tutani-barf .tb-krokovani button,
+#tutani-barf .tb-volba:not(.tb-volba--aktivni),
+#tutani-barf .tb-radek-check,
+#tutani-barf .tb-cip:not([aria-pressed="true"]),
+#tutani-barf .tb-input { border: 1px solid #E3D5C6; background: #FFFCF9; }
