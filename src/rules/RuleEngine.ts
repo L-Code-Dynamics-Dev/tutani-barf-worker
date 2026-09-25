@@ -90,7 +90,7 @@ function customerTextCs(u: UnappliedRule): string {
     const label = (u.target && CUSTOMER_TARGET_LABEL_CS[u.target]) || null;
     if ((u.reason === 'NO_DATA_FOR_PRODUCT_ATTR' || u.reason === 'NO_DATA_FOR_NUTRIENT') && label) {
         return `Přesný ${label} u našich produktů zatím neuvádíme, takže ho v nákupu nedokážeme ohlídat. ` +
-            'Pokud ho váš pes musí hlídat, proberte složení krmení s veterinářem.';
+            'Pokud je ho u vašeho psa potřeba hlídat, proberte složení krmení s veterinářem.';
     }
     return 'Část doporučení pro tento zdravotní stav jsme nedokázali vyhodnotit. Dávku prosím projděte s veterinářem.';
 }
