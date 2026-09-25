@@ -444,18 +444,21 @@
         d.appendChild(i);
 
         if (o.krokTlacitek) {
+            var krokO = function (smer) {
+                return typeof o.krokTlacitek === 'function' ? o.krokTlacitek(parseFloat(i.value), smer) : o.krokTlacitek;
+            };
             var k = el('div', 'tb-krokovani');
             var minus = el('button', null, '−');
             minus.type = 'button';
             minus.setAttribute('aria-label', o.label + ' méně');
             minus.addEventListener('click', function () {
-                nastav(parseFloat(i.value) - o.krokTlacitek);
+                nastav(parseFloat(i.value) - krokO(-1));
             });
             var plus = el('button', null, '+');
             plus.type = 'button';
             plus.setAttribute('aria-label', o.label + ' více');
             plus.addEventListener('click', function () {
-                nastav(parseFloat(i.value) + o.krokTlacitek);
+                nastav(parseFloat(i.value) + krokO(1));
             });
             k.appendChild(minus);
             k.appendChild(plus);
@@ -674,6 +677,8 @@
         pozn.id = 'tb-vek-pozn';
         dl.appendChild(dlazdicePosuvnik({
             label: 'Věk', min: 1, max: 240, krok: 1,
+            // Pod 2 roky po měsíci (štěně), výš po roce — věk se tam ukazuje v letech.
+            krokTlacitek: function (v, smer) { return (smer > 0 ? v >= 24 : v > 24) ? 12 : 1; },
             hodnota: stav.vekMesicu, formatter: formatVek, poznamka: pozn,
             onChange: function (v) {
                 stav.vekMesicu = v;
