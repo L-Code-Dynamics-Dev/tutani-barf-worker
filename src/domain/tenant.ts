@@ -78,6 +78,18 @@ export interface TenantConfiguration {
      * Chybí-li, UI nabízí přímo 4 úrovně.
      */
     activityOptions?: readonly ActivityOption[];
+    /**
+     * Obal na doručení, který si zákazník v e-shopu MUSÍ vybrat (Tutani:
+     * Přepravka E2 / Thermobox, 0 Kč). Kalkulačka ho vloží do košíku spolu
+     * s nákupem. Chybí-li, volba se nezobrazí.
+     */
+    packagingOptions?: readonly PackagingOption[];
+}
+
+export interface PackagingOption {
+    productId: string;
+    priceId: string;
+    labelCs: string;
 }
 
 export interface ActivityOption {

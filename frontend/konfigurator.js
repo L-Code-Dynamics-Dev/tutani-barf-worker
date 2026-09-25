@@ -83,7 +83,11 @@
     var chyba = null;
     var beziPozadavek = false;
     /** Diagnózy a alergie z Workeru; frontend je nemá natvrdo. */
-    var knowledge = { diagnozy: [], alergie: [], aktivity: [] };
+    var knowledge = { diagnozy: [], alergie: [], aktivity: [], obaly: [] };
+    // Obal doručení (priceId) — e-shop ho vyžaduje u každé objednávky.
+    var zvolenyObal = null;
+    // Obal, který už je v košíku z předchozího vložení — podruhé se nepřidává.
+    var obalVKosiku = null;
     /** Čistě UI stav — přežije překreslení. */
     var ui = { procOtevreno: false, postupOtevreno: false, zobrazenoG: null, animace: 0, toastCasovac: null };
     /** Logo Tutani z jejich vlastního CDN (klient 24. 9.: „nahrát naše logo"). */
@@ -221,6 +225,23 @@
             return;
         }
 
+        // Obal doručení je v e-shopu povinný — bez něj Tutani objednávku
+        // nezabalí. Nevybraný = nic nevkládat a ukázat, co chybí.
+        if (knowledge.obaly.length) {
+            var obal = knowledge.obaly.filter(function (o) { return o.priceId === zvolenyObal; })[0];
+            var volbaObalu = document.getElementById('tb-obal');
+            if (!obal) {
+                if (volbaObalu) {
+                    volbaObalu.classList.add('tb-obal--chyba');
+                    volbaObalu.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            if (obalVKosiku !== obal.priceId) {
+                polozky = polozky.concat([{ productId: obal.productId, priceId: obal.priceId, pocet: 1, nazev: obal.nazev, jeObal: true }]);
+            }
+        }
+
         tlacitko.disabled = true;
         var puvodni = popisek.textContent;
         var vlozeno = 0;
@@ -298,8 +319,12 @@
                 })
                 .then(function (json) {
                     if (jeVlozeno(json, polozka)) {
-                        vlozeno++;
-                        vlozenoKusu += Number(polozka.pocet);
+                        if (polozka.jeObal) {
+                            obalVKosiku = polozka.priceId;
+                        } else {
+                            vlozeno++;
+                            vlozenoKusu += Number(polozka.pocet);
+                        }
                     } else {
                         var duvod = json && json.message ? ' (' + json.message + ')' : '';
                         selhalo.push(polozka.nazev + duvod);
@@ -1228,6 +1253,18 @@
             soucet.appendChild(el('span', 'tb-soucet-cena', formatCislo(vysledek.cena.celkemCzk) + ' Kč'));
             panel.appendChild(soucet);
 
+            if (knowledge.obaly.length) {
+                var obalBox = el('div', 'tb-obal');
+                obalBox.id = 'tb-obal';
+                obalBox.appendChild(el('span', 'tb-label', 'Obal na doručení (povinný, 0 Kč)'));
+                obalBox.appendChild(prepinac(knowledge.obaly.map(function (o) { return [o.priceId, o.nazev]; }), zvolenyObal, function (v) {
+                    zvolenyObal = String(v);
+                    obalBox.classList.remove('tb-obal--chyba');
+                }, { aria: 'Obal na doručení' }));
+                obalBox.appendChild(el('span', 'tb-obal-chyba', 'Vyberte prosím obal — bez něj objednávku nezabalíme.'));
+                panel.appendChild(obalBox);
+            }
+
             var btn = el('button', 'tb-tlacitko');
             btn.type = 'button';
             btn.appendChild(tlapka(22));
@@ -1562,6 +1599,7 @@
                 });
                 knowledge.alergie = (d.alergie || d.allergens || []).map(sjednot);
                 knowledge.aktivity = d.aktivity || [];
+                knowledge.obaly = (d.obaly || []).filter(function (o) { return o.priceId && o.productId; });
                 // Výchozí volba = první konkrétní aktivita se stejnou úrovní,
                 // jakou má formulář teď (střední → „hodina venku").
                 if (!stav.aktivitaDetail && knowledge.aktivity.length) {

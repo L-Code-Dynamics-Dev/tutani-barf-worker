@@ -35,6 +35,15 @@ export const TUTANI_TENANT: TenantConfiguration = {
      * jen podle `level` z jeho tabulky (barf-core adult-low/medium/high/
      * working) — žádné nové procento. Pořadí = pořadí v UI.
      */
+    /**
+     * Povinný obal doručení (lišta e-shopu „DŮLEŽITÉ VYBRAT OBAL DORUČENÍ").
+     * Id ověřena z detailu produktu 2026-09-25 (/obaly-2/…), cena 0 Kč.
+     */
+    packagingOptions: [
+        { productId: '5259', priceId: '8088', labelCs: 'Přepravka E2' },
+        { productId: '5256', priceId: '8085', labelCs: 'Thermobox' },
+    ],
+
     activityOptions: [
         { id: 'gaucak', labelCs: 'gaučák', hintCs: 'hlavně doma, byt', level: 'LOW' },
         { id: 'kratke-prochazky', labelCs: 'krátké procházky', hintCs: 'venčení kolem domu', level: 'LOW' },

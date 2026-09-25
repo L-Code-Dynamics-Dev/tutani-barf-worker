@@ -262,6 +262,8 @@ describe('neznámé id nezmizí potichu (R7)', () => {
         expect(r.productAttrFilters).toEqual([]);
         const u = r.unappliedRules.find((x) => x.ruleId === 'pankreatitida-fat-attr');
         expect(u?.reason).toBe('NO_DATA_FOR_PRODUCT_ATTR');
+        // Zákazník nikdy nevidí název interního pole.
+        expect(r.warnings.map((w) => w.textCs).join(' ')).not.toContain('fatPct');
     });
 
     it('neznámý typ pravidla se přizná, netváří se jako neexistující', () => {

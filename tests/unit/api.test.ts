@@ -657,6 +657,14 @@ describe('GET /v1/knowledge', () => {
         expect(b.ruleSetIds).toEqual(TUTANI_TENANT.ruleSetIds);
     });
 
+    it('posílá povinné obaly doručení s productId i priceId (Přepravka E2 / Thermobox)', async () => {
+        const b = await body(await handleKnowledge(deps({ rules: fakeRules() })));
+        expect(b.obaly).toEqual([
+            { productId: '5259', priceId: '8088', nazev: 'Přepravka E2' },
+            { productId: '5256', priceId: '8085', nazev: 'Thermobox' },
+        ]);
+    });
+
     it('endpoint existuje i bez nasazených pravidel a přizná to', async () => {
         const res = await handleKnowledge(deps({ rules: NOOP_RULE_ENGINE }));
         expect(res.status).toBe(200);

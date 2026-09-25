@@ -1048,3 +1048,10 @@
 #tutani-barf .tb-rozbal-hlava::after{content:"";position:absolute;right:18px;top:50%;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);transition:transform .2s}
 #tutani-barf .tb-rozbal[open] .tb-rozbal-hlava::after{transform:translateY(-30%) rotate(-135deg)}
 #tutani-barf .tb-rozbal .tb-seznam-check--vazne{padding:0 10px 10px}
+
+/* Povinný obal doručení (2026-09-25) */
+#tutani-barf .tb-obal{margin:18px 0 6px;display:flex;flex-direction:column;gap:8px}
+#tutani-barf .tb-obal .tb-prepinac{grid-template-columns:1fr 1fr}
+#tutani-barf .tb-obal-chyba{display:none;color:#b3261e;font-weight:600;font-size:14px}
+#tutani-barf .tb-obal--chyba .tb-obal-chyba{display:block}
+#tutani-barf .tb-obal--chyba .tb-volba{border-color:#b3261e}

@@ -306,7 +306,8 @@ export async function handleKnowledge(deps: Deps): Promise<Response> {
         const catalog = await deps.rules.catalog(deps.tenant);
         // Aktivity jsou konfigurace tenanta (ne pravidla), UI z nich kreslí volby.
         const aktivity = (deps.tenant.activityOptions ?? []).map((o) => ({ id: o.id, nazev: o.labelCs, popis: o.hintCs, uroven: o.level }));
-        return jsonResponse({ v: 1, ...catalog, aktivity }, 200, { 'Cache-Control': 'public, max-age=300' });
+        const obaly = (deps.tenant.packagingOptions ?? []).map((o) => ({ productId: o.productId, priceId: o.priceId, nazev: o.labelCs }));
+        return jsonResponse({ v: 1, ...catalog, aktivity, obaly }, 200, { 'Cache-Control': 'public, max-age=300' });
     } catch (e) {
         logError('knowledge.load_failed', e, { tenantId: deps.tenant.tenantId });
         return apiError('INTERNAL_ERROR', 503);
