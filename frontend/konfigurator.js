@@ -1542,6 +1542,17 @@
         toast.hidden = true;
         root.appendChild(toast);
 
+        // Podpis autora (Lucky 2026-09-27) — nenápadně úplně dole.
+        var autor = el('p', 'tb-autor');
+        autor.appendChild(document.createTextNode('Vytvořil: '));
+        var odkaz = el('a', null);
+        odkaz.href = 'https://l-code-dynamics.com/cs/';
+        odkaz.target = '_blank';
+        odkaz.rel = 'noopener';
+        odkaz.textContent = 'L-Code Dynamics';
+        autor.appendChild(odkaz);
+        root.appendChild(autor);
+
         vykresliVysledek();
     }
 

@@ -2,6 +2,9 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-09-27 — podpis „Vytvořil: L-Code Dynamics“
+Lucky: „někam dolů schovat Vytvořil: L-Code Dynamics a dát tam proklik na web“. Malý šedý řádek vpravo pod upozorněním, odkaz https://l-code-dynamics.com/cs/ (nová karta, noopener). `konfigurator.js` (prekresliVse) + `.tb-autor` v CSS. Nasazeno FTP verze a968fbbeed9d, ověřeno naživo desktop i mobil, 0 JS chyb.
+
 
 
 ## 2026-09-25 (noc) — kalkulačka čitelná pro Google a AI bez JS (bez změny kalkulačky)
