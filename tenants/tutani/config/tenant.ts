@@ -208,6 +208,8 @@ export const TUTANI_TENANT: TenantConfiguration = {
         { match: 'srnec', barfGroup: 'MUSCLE' },
         { match: 'daněk', barfGroup: 'MUSCLE' },
         { match: 'jelen', barfGroup: 'MUSCLE' },
+        { match: 'vysok', barfGroup: 'MUSCLE' },
+        { match: 'zvěřin', barfGroup: 'MUSCLE' },
         { match: 'klokan', barfGroup: 'MUSCLE' },
 
         { match: 'jazyk', barfGroup: 'MUSCLE' },

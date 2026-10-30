@@ -16,6 +16,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { buildKnowledgeBase, resolveConstraints } from '../../src/rules/RuleEngine.js';
 import { matchProducts, type CatalogProduct } from '../../src/engine/product-matching/matchProducts.js';
+import { detectIngredients } from '../../src/adapters/tutani-catalog/detectIngredients.js';
 import type { CompositionItem } from '../../src/engine/feeding-calculator/calculateDose.js';
 
 const json = (p: string) => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf-8'));
@@ -147,5 +148,36 @@ describe('alergie doplněné na přání klienta (L. Švihel, 24. 9. 2026)', () 
         ], c, 30);
         expect(r.products.map((p) => p.sku)).toEqual(['OK']);
         expect(r.excluded.find((e) => e.sku === 'ALERGEN')).toBeTruthy();
+    });
+});
+
+describe('detekce zvěřiny Tutani (brand paní Vysoká a kategorie Zvěřina)', () => {
+    it('detekuje zvěřinu z názvů produktů paní Vysoká', () => {
+        expect(detectIngredients('Barf Hrubá paní Vysoká 1kg')).toEqual(['zverina']);
+        expect(detectIngredients('Barf Chrupavka paní Vysoké 500g')).toEqual(['zverina']);
+        expect(detectIngredients('Ořez paní Vysoké 1 kg')).toEqual(['zverina']);
+        expect(detectIngredients('Kosti paní Vysoké')).toEqual(['zverina']);
+    });
+
+    it('detekuje zvěřinu i z categoryPath', () => {
+        expect(
+            detectIngredients('Mleté maso 1kg', null, 'Barf mražené maso | Barf - Zvěřina | Svalovina')
+        ).toEqual(['zverina']);
+    });
+
+    it('marketingový text o hypoalergennosti neobsahuje falešně kuře a hovězí', () => {
+        const desc =
+            'Zvěřina se v BARFu velmi často využívá jako eliminační dieta u psů s potravními alergiemi (na rozdíl od kuřecího či hovězího masa). 100% srnec a jelen';
+        expect(detectIngredients('Barf Hrubá paní Vysoká 1kg', desc)).toEqual(['zverina']);
+    });
+
+    it('syrová zvěřina se nabídne psovi s alergií na drůbež a hovězí (nevyřadí se jako neznámá)', () => {
+        const catalog = [
+            prod({ sku: 'TUT7', name: 'Barf Hrubá paní Vysoká 1kg', ingredientIds: ['zverina'], priceCzk: 129 }),
+            prod({ sku: 'KURE', name: 'Barf Kuřecí', ingredientIds: ['kure'], priceCzk: 99 }),
+        ];
+        const c = resolveConstraints([], ['alergie-drubez', 'alergie-hovezi'], KB);
+        const r = matchProducts(MUSCLE, catalog, c, 14);
+        expect(r.products.map((p) => p.sku)).toEqual(['TUT7']);
     });
 });

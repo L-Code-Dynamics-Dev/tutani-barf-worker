@@ -2,6 +2,20 @@
 
 Nejnovější záznam nahoře.
 
+## 2026-10-30 — oprava detekce zvěřiny („paní Vysoká“) a čištění negací v popisech
+- **Problém:** Klient (Láďa Švihel) hlásil, že zákazníkovi při potřebě zvěřiny (např. alergie na drůbež a hovězí) vyběhnou jen konzervy (MAX deluxe) a žádné syrové maso.
+- **Příčina:**
+  1. V popisu produktu na e-shopu byla věta: „...eliminační dieta u psů s alergiemi... (na rozdíl od kuřecího či hovězího masa)“. Naivní regex zachytil „kuřecího“ a „hovězího“ a přiřadil je mezi obsažené suroviny.
+  2. Brand Tutani „paní Vysoká“ chyběl ve vzorech `detectIngredients` a do detekce se nepředávala `categoryPath`.
+  3. Kvůli falešně přiřazenému kuřeti a hovězímu filtr alergií syrovou zvěřinu TUT7 i TUT25 vyřadil – prošla jen konzerva MAX deluxe, která v popisu tuto marketingovou větu neměla.
+- **Oprava:**
+  1. `detectIngredients.ts`: přidána funkce `cleanNegations`, která před analýzou odstraní srovnávací a negující fráze („na rozdíl od...“, „alergii na...“, „neobsahuje...“, „bez...“).
+  2. Do vzorů zvěřiny doplněno `vysok` a do `detectIngredients` se předává i `categoryPath`.
+  3. `tenant.ts`: doplněno mapování pro `vysok` a `zvěřin` do `categoryMap`.
+  4. Unit testy doplněny v `alergieKontrakt.test.ts` (405/405 testů PASS), worker nasazen na Cloudflare, D1 opraveno.
+  5. Ověřeno naživo: `/v1/davka` u psa s alergiemi na běžná masa nyní správně nabízí `Barf Hrubá paní Vysoká 1kg` (svalovina) + `Barf Zvěřinové napínáky 500g` (kosti).
+
+
 ## 2026-09-27 — podpis „Vytvořil: L-Code Dynamics“
 Lucky: „někam dolů schovat Vytvořil: L-Code Dynamics a dát tam proklik na web“. Malý šedý řádek vpravo pod upozorněním, odkaz https://l-code-dynamics.com/cs/ (nová karta, noopener). `konfigurator.js` (prekresliVse) + `.tb-autor` v CSS. Nasazeno FTP verze a968fbbeed9d, ověřeno naživo desktop i mobil, 0 JS chyb.
 

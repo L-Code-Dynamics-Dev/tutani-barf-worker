@@ -38,7 +38,7 @@ const VZORY: Record<string, readonly string[]> = {
     kralik: ['králič', 'kralic', 'ušák', 'usak', 'zajíc', 'zajic'],
     jehneci: ['jehněč', 'jehnec', 'ovč', 'ovc', 'skopov'],
     kun: ['koňsk', 'konsk', 'kůň', 'kun ', 'šemík', 'semik'],
-    zverina: ['zvěřin', 'zverin', 'srnec', 'srnč', 'srnc', 'daněk', 'danek', 'jelen', 'divoč', 'divoc', 'muflon'],
+    zverina: ['zvěřin', 'zverin', 'srnec', 'srnč', 'srnc', 'daněk', 'danek', 'jelen', 'divoč', 'divoc', 'muflon', 'vysok'],
     ryba: ['ryb', 'treska', 'sardin', 'makrel', 'tuňák', 'tunak', 'šprot', 'sprot'],
     losos: ['losos', 'salmo salar', 'salmo'],
     klokan: ['klokan'],
@@ -85,6 +85,16 @@ function norm(s: string): string {
 }
 
 /**
+ * Odstraní z marketingového textu fráze s negací nebo srovnáním alergenů
+ * („na rozdíl od kuřecího či hovězího masa", „vhodné při alergii na kuřecí",
+ * „neobsahuje kuřecí"), aby se surovina vylučovaná z krmení chybně
+ * nepřidala mezi složky produktu.
+ */
+function cleanNegations(text: string): string {
+    return text.replace(/(?:na rozd[íi]l od|alternativ\p{L}* k|alerg\p{L}* na|neobsahuje|bez|m[íi]sto)\s+[^.,;)\n]{2,80}/giu, ' ');
+}
+
+/**
  * Vrátí id surovin, které se v názvu nebo složení daly rozpoznat.
  * Prázdné pole = surovinu nelze určit (NE „neobsahuje nic").
  *
@@ -93,9 +103,11 @@ function norm(s: string): string {
  */
 export function detectIngredients(
     name: string | null | undefined,
-    compositionText?: string | null
+    compositionText?: string | null,
+    categoryPath?: string | null
 ): string[] {
-    const text = norm([name ?? '', compositionText ?? ''].join(' '));
+    const raw = [name ?? '', categoryPath ?? '', compositionText ?? ''].join(' ');
+    const text = norm(cleanNegations(raw));
     if (text.length === 0) return [];
 
     const nalezeno = new Set<string>();

@@ -407,7 +407,11 @@ export async function syncCatalog(
             });
         }
 
-        const suroviny = detectIngredients(p.name, [textSlozeni, popisExport].filter(Boolean).join(' '));
+        const suroviny = detectIngredients(
+            p.name,
+            [textSlozeni, popisExport].filter(Boolean).join(' '),
+            p.categoryPath
+        );
 
         products.push({
             sku: p.sku,
